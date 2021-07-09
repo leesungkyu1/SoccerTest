@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.soccer.web.channel.board.dao.ChannelBoardMapper;
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
 
-@Service("channelBoard")
+@Service("channelBoardService")
 public class ChannelBoardServiceImpl implements ChannelBoardService{
 	
 	@Autowired
