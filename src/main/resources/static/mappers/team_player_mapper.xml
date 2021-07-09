@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.soccer.web.channel.member.dao.TeamPlayerMapper">
+<mapper namespace="com.soccer.web.channel.play.dao.TeamPlayerMapper">
 	
+	<resultMap type="com.soccer.web.channel.play.vo.TeamPlayerVO" id="teamPlayerVO">
+		<result property="teamPlayerIdx" column="team_player_idx"/>
+		<result property="userIdx" column="user_idx"/>
+		<result property="teamPlayerPosition" column="team_player_position"/>
+	</resultMap>
 	
+	<!-- 경기에 선수를 추가할 때 사용되는 쿼리문 (play_idx와 연결) -->
+	<!-- 채널의 전체 멤버에서 하나를 선택  -->
+	<insert id="insertTeamPlayer" parameterType="java.util.HashMap">
+		INSERT INTO team_player 
+		VALUES 
+				(
+					default, 
+					#{userIdx}, 
+					#{teamPlayerPosition}
+				)
+	</insert> 
 	
 </mapper>
