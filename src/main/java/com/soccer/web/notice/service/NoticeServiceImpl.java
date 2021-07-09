@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.soccer.web.notice.dao.NoticeMapper;
 import com.soccer.web.notice.vo.NoticeVO;
 
-@Service
+@Service("noticeService")
 public class NoticeServiceImpl implements NoticeService{
 	
 	@Autowired
