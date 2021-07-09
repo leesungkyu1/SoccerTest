@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soccer.web.notice.dao.NoticeMapper">
+	
+	<resultMap type="com.soccer.web.notice.vo.NoticeVO" id="noticeVO">
+		<result property="noticeIdx" column="notice_idx" />
+		<result property="userIdx" column="user_idx" />
+		<result property="noticeTitle" column="notice_title" />
+		<result property="noticeType" column="notice_type" />
+		<result property="noticeDesc" column="notice_desc" />
+		<result property="noticeDate" column="notice_date" />
+	</resultMap>
+	
+	<!-- 공지사항의 리스트 -->
+	<select id="selectNoticeList" parameterType="com.soccer.web.notice.vo.NoticeVO" resultMap="noticeVO">
+		SELECT * 
+		FROM notice 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY NOTICE_IDX DESC 
+		limit #{recordCountPerPage} offset #{firstIndex}
+	</select>
+	
+	<select id="selectNoticeListTotCnt" parameterType="com.soccer.web.notice.vo.NoticeVO" resultType="int">
+		SELECT COUNT(*) totcnt 
+		FROM notice 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+	</select>
+	
+	<!-- 공지사항의 상세 페이지 -->
+	<select id="selectNoticeDetail" parameterType="int" resultMap="noticeVO">
+		SELECT * 
+		FROM notice 
+		WHERE NOTICE_IDX=#{noticeIdx}
+	</select>
+	
+	<!-- 공지사항 추가 -->
+	<insert id="insertNotice" parameterType="com.soccer.web.notice.vo.NoticeVO">
+		<![CDATA[
+			INSERT INTO notice 
+			VALUES (
+					default,
+					#{userIdx},
+					#{noticeTitle},
+					#{noticeType},
+					#{noticeDesc},
+					default
+			)
+		]]>
+	</insert>
+	
+	<!-- 공지사항 수정 -->
+	<update id="updateNotice" parameterType="com.soccer.web.notice.vo.NoticeVO" >
+		<![CDATA[
+			UPDATE notice
+			SET 
+				NOTICE_TITLE = #{noticeTitle},
+				NOTICE_TYPE = #{noticeType},
+				NOTICE_DESC = #{noticeDesc},
+				NOTICE_DATE = default 
+				WHERE NOTICE_IDX=#{noticeIdx}
+		]]>
+	</update>
+	
+	<!-- 공지사항 삭제 -->
+	<delete id="deleteNotice" parameterType="int">
+		DELETE FROM notice 
+		WHERE NOTICE_IDX=#{noticeIdx}
+	</delete>
+	
+</mapper>
