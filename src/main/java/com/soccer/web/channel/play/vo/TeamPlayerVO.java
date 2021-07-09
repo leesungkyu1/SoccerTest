@@ -6,5 +6,6 @@ public @Data class TeamPlayerVO {
 
 	private int teamPlayerIdx;
 	private int userIdx;
+	private int channelPlayIdx;
 	private String TeamPlayerPosition;
 }
