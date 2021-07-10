@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.soccer.web.channel.play.dao.TeamPlayerMapper">
 	
+	<!-- teamPlayer resultMap -->
 	<resultMap type="com.soccer.web.channel.play.vo.TeamPlayerVO" id="teamPlayerVO">
 		<result property="teamPlayerIdx" column="team_player_idx"/>
 		<result property="userIdx" column="user_idx"/>
@@ -9,21 +10,150 @@
 		<result property="teamPlayerPosition" column="team_player_position"/>
 	</resultMap>
 	
+	<!-- playresult resultMap -->
+	<resultMap type="com.soccer.web.channel.play.vo.PlayresultVO" id="playresultVO">
+		<result property="playresultIdx" column="playresult_idx"/>
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="teamPlayerIdx" column="team_player_idx"/>
+		<result property="playresultTotaltackle" column="playresult_totaltackle"/>
+		<result property="playresultSuccesstackle" column="playresult_successtackle"/>
+		<result property="playresultTotalcross" column="playresult_totalcross"/>
+		<result property="playresultSuccesscross" column="playresult_successcross"/>
+		<result property="playresultTotalcornerkick" column="playresult_totalcornerkick"/>
+		<result property="playresultSuccesscornerkick" column="playresult_successcornerkick"/>
+		<result property="playresultTotalfreekick" column="playresult_totalfreekick"/>
+		<result property="playresultSuccessfreekick" column="playresult_successfreekick"/>
+		<result property="playresultTotalshooting" column="playresult_totalshooting"/>
+		<result property="playresultSuccessshooting" column="playresult_successshooting"/>
+		<result property="playresultTotalassist" column="playresult_totalassist"/>
+		<result property="playresultSuccessassist" column="playresult_successassist"/>
+		<result property="playresultTotalpass" column="playresult_totalpass"/>
+		<result property="playresultSuccesspass" column="playresult_successpass"/>
+		<result property="playresultTotalcontention" column="playresult_totalcontention"/>
+		<result property="playresultSuccesscontention" column="playresult_successcontention"/>
+	</resultMap>
+	
+	<!-- 경기에 선수 리스트를 가져오는 쿼리문 -->
+	<select id="selectTeamPlayerList" resultMap="teamPlayerVO">
+		SELECT * FROM team_player 
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</select>
+	
+	<!-- 경기에 선수 리스트에 해당하는 playresult를 가져오는 쿼리문 -->
+	<select id="selectPlayerResultList" parameterType="int" resultMap="playresultVO">
+		SELECT * FROM playresult 
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</select>
+	
 	<!-- 경기에 선수를 추가할 때 사용되는 쿼리문 (play_idx, channel_play_idx 와 연결) -->
 	<!-- 채널의 전체 멤버에서 하나를 선택  -->
-	<insert id="insertTeamPlayer" parameterType="java.util.HashMap">
+	<insert id="insertTeamPlayer" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="teamPlayerIdx">
 		INSERT INTO team_player 
 		VALUES 
 				(
 					default, 
-					#{userIdx}, 
-					#{channelPlayIdx}, 
+					CONVERT(#{userIdx}, UNSIGNED INTEGER), 
+					CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER), 
 					#{teamPlayerPosition}
 				)
 	</insert> 
 	
-	<!-- 한 경기의 선수에 결과기록 추가 -->
+	<!-- 경기에 선수를 추가할 때 playresult를 추가하는 쿼리문 -->
+	<insert id="insertPlayresult" parameterType="java.util.HashMap">
+		INSERT INTO playresult 
+		VALUES 
+				(
+					default,
+					#{channelPlayIdx},
+					#{teamPlayerIdx},
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default
+				)
+	</insert>
 	
-	<!-- 채널의 member를 눌렀을 때 -->
+	<!-- 경기에 선수의 포지션을 변경할 때 사용되는 쿼리문 -->
+	<update id="updateTeamPlayerPosition" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO">
+		UPDATE team_player 
+		SET 
+			team_player_position = #{teamPlayerPosition}
+		WHERE team_player_idx = #{teamPlayerIdx}
+	</update>
+	
+	<!-- 경기에 선수를 삭제할 때 사용되는 쿼리문 -->
+	<delete id="deleteTeamPlayer" parameterType="int">
+		DELETE * FROM team_player 
+		WHERE team_player_idx=#{teamPlayerIdx}
+	</delete>
+	
+	<!-- 선수 목록에서 선수를 눌렀을 때 선수의 정보를 받아오는 쿼리문 -->
+	<select id="selectTeamPlayerDetail" parameterType="java.util.HashMap" resultMap="teamPlayerVO">
+		SELECT * FROM team_player 
+		WHERE
+			channel_play_idx = #{channelPlayIdx}
+			AND team_player_idx = #{teamPlayerIdx}
+	</select>
+	
+	<!-- 선수의 최근 5경기 기록 가져오는 query -->
+	<!-- 테스트 해봐야 함 + 되면 service쪽에서 합연산 해줘야 함 -->
+	<select id="selectTeamPlayerCurrentResult" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO" resultMap="playresultVO">
+		SELECT * FROM playresult 
+		INNER JOIN (
+					<!-- 해당 유저가 등록된 선수번호화 그 선수번호로 뛰었던 경기 번호 추출 -->
+					SELECT team_player_idx, channel_play_idx FROM team_player
+					WHERE user_idx = (
+						               <!-- 유저 번호 추출 -->
+										SELECT user_idx FROM team_player
+										WHERE team_player_idx = #{teamPlayerIdx}
+						               		AND channel_play_idx = #{channelPlayIdx}
+			            				) 
+					) AS playInfo 
+					ON (
+						playresult.team_player_idx = playInfo.team_player_idx
+							AND playresult.channel_play_idx = playInfo.channel_play_idx
+						)
+		ORDER BY playresult.playresult_idx DESC
+		LIMIT 5
+	</select>
+	
+	<!-- 한 경기의 선수에 결과기록 수정 -->
+	<update id="updatePlayerPlayresult" parameterType="PlayresultVO">
+		UPDATE playresult 
+		SET 
+			playresult_totaltackle = #{playresultTotaltackle},
+			playresult_successtackle = #{playresultSuccesstackle},
+			playresult_totalcross = #{playresultTotalcross},
+			playresult_successcross = #{playresultSuccesscross},
+			playresult_totalcornerkick = #{playresultTotalcornerkick},
+			playresult_successcornerkick = #{playresultSuccesscornerkick},
+			playresult_totalfreekick = #{playresultTotalfreekick},
+			playresult_successfreekick = #{playresultSuccessfreekick},
+			playresult_totalshooting = #{playresultTotalshooting},
+			playresult_successshooting = #{playresultSuccessshooting},
+			playresult_totalassist = #{playresultTotalassist},
+			playresult_successassist = #{playresultSuccessassist},
+			playresult_totalpass = #{playresultTotalpass},
+			playresult_successpass = #{playresultSuccesspass},
+			playresult_totalcontention = #{playresultTotalcontention},
+			playresult_successcontention = #{playresultSuccesscontention}
+		WHERE playresult_idx = #{playresultIdx}
+			
+	</update>
+	
+	<!-- 채널의 member를 눌렀을 때 --> <!-- member쪽에서 쓰는게 더 좋을듯 -->
+	
 	
 </mapper>
