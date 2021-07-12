@@ -12,5 +12,7 @@ public interface MemberService {
 	void memberDelete(Integer memberIdx, Integer channelVO) throws Exception;
 
 	int checkMember(MemberVO memberVO) throws Exception;
+
+	Integer memberCount(Integer channelIdx) throws Exception;
 	
 }

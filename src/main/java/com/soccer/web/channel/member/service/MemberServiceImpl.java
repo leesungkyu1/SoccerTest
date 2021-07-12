@@ -32,5 +32,11 @@ public class MemberServiceImpl implements MemberService{
 	public int checkMember(MemberVO memberVO) throws Exception{
 		return memberDAO.checkMember(memberVO);
 	}
+	
+	//채널 회원 수
+	@Override
+	public Integer memberCount(Integer channelIdx) throws Exception{
+		return memberDAO.memberCount(channelIdx);
+	}
 
 }

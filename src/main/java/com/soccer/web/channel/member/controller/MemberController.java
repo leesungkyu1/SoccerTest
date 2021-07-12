@@ -18,11 +18,13 @@ import com.soccer.web.channel.member.apply.service.ApplyServiceImpl;
 import com.soccer.web.channel.member.apply.vo.ApplyVO;
 import com.soccer.web.channel.member.service.MemberServiceImpl;
 import com.soccer.web.channel.member.vo.MemberVO;
+import com.soccer.web.channel.servicec.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
 
 //채널 + 로 매핑
 @Controller
 public class MemberController {
+	//추후 멤버 이미지용 경로 지정
 	private final String MEMBER_IMAGE_DIR = "c:";
 	
 	@Autowired
@@ -30,6 +32,9 @@ public class MemberController {
 	
 	@Autowired
 	ApplyServiceImpl applyService;
+	
+	@Autowired
+	ChannelServiceImpl channelService;
 	
 	//회원 목록 + 신청 목록
 	@RequestMapping(value = "" , method = RequestMethod.GET)
@@ -80,7 +85,7 @@ public class MemberController {
 			saveDir.forceMkdir(new File(MEMBER_IMAGE_DIR + "/" + memberVO.getChannelIdx() + "/" + memberVO.getMemberIdx()));
 			
 			String fileName = imageFile.getOriginalFilename();
-			String saveImageFileDir = MEMBER_IMAGE_DIR + "/" + memberVO.getChannelIdx() + "/" + memberVO.getMemberIdx() + fileName;
+			String saveImageFileDir = MEMBER_IMAGE_DIR + "/" + memberVO.getChannelIdx() + "/" + memberVO.getMemberIdx() + "/" + fileName;
 			
 			File saveImageFile = new File(saveImageFileDir); 
 			
@@ -114,12 +119,20 @@ public class MemberController {
 	}
 	
 	//회원 가입신청 승인
-	@RequestMapping(value = "{applyIdx}", method = RequestMethod.PUT)
-	public String memberAccept(@PathVariable("applyIdx") Integer applyIdx, RedirectAttributes attributes) throws Exception{
+	@RequestMapping(value = "{applyIdx}/{channelIdx}", method = RequestMethod.PUT)
+	public String memberAccept(@PathVariable("applyIdx") Integer applyIdx, @PathVariable("channelIdx") Integer channelIdx,
+			RedirectAttributes attributes) throws Exception{
 		try {
-			applyService.memberAccept(applyIdx);
+			Integer memberMax = channelService.channelMemeberMax(channelIdx);
+			Integer memberCount = memberService.memberCount(channelIdx);
 			
-			attributes.addAttribute("message", "회원가입이 승인되었습니다.");
+			if(memberCount != null && memberCount >= memberMax) {
+				attributes.addAttribute("message", "채널 최대 회원수를 초과합니다.");
+			}else {
+				applyService.memberAccept(applyIdx);
+				
+				attributes.addAttribute("message", "회원가입이 승인되었습니다.");				
+			}
 		}catch(Exception e) {
 			attributes.addAttribute("code", 302);
 			attributes.addAttribute("message", "회원가입이 승인 처리중 에러가 발생했습니다.");

@@ -18,5 +18,4 @@ public class PlayServiceImpl implements PlayService{
 		playdao.insertVideo(fileInfo);
 		System.out.println(fileInfo);
 	}
-
 }

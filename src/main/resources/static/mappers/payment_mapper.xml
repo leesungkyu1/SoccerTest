@@ -18,7 +18,7 @@
 		)	
 	</insert>
 	
-	<select id="payCheck" parameterType="integer" resultType="int">
+	<select id="payCheck" parameterType="integer" resultType="integer">
 		SELECT * FROM payment
 		WHERE user_idx = #{userIdx}
 			AND payment_count >= 1

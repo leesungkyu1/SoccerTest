@@ -7,6 +7,6 @@ public interface PaymentService {
 
 	void payment(Integer userIdx) throws Exception;
 
-	int payCheck(Integer userIdx) throws Exception;
+	Integer payCheck(Integer userIdx) throws Exception;
 
 }

@@ -21,5 +21,8 @@ public interface MemberMapper {
 	
 	//회원 저장
 	void memberInsert(MemberVO memberVO) throws Exception;
+	
+	//회원수 
+	Integer memberCount(Integer channelIdx) throws Exception;
 
 }
