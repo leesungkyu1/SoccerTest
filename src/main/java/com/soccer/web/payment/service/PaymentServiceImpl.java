@@ -1,0 +1,23 @@
+package com.soccer.web.payment.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.soccer.web.payment.dao.PaymentMapper;
+
+public class PaymentServiceImpl implements PaymentService{
+	
+	@Autowired
+	PaymentMapper paymentDAO;
+	
+	//결제
+	@Override
+	public void payment(Integer userIdx) throws Exception{
+		paymentDAO.payment(userIdx);
+	}
+	
+	//중복결제 방지
+	@Override
+	public int payCheck(Integer userIdx) throws Exception{
+		return paymentDAO.payCheck(userIdx);
+	}
+}
