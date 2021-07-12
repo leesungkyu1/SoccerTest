@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.dao.ChannelPlayMapper;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 
@@ -22,6 +23,11 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	@Override
 	public List<ChannelPlayVO> selectChannelPlayList(ChannelPlayVO channelPlayVO) throws Exception {
 		return channelPlayMapper.selectChannelPlayList(channelPlayVO);
+	}
+	
+	@Override
+	public List<ChannelPlayVO> selectChannelPlayList(ChannelBoardVO ChannelBoardVO) throws Exception {
+		return channelPlayMapper.selectChannelMainPlayList(ChannelBoardVO);
 	}
 
 	@Override

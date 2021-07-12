@@ -20,8 +20,13 @@
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY channel_board_idx DESC 
-		limit #{recordCountPerPage} offset #{firstIndex}
+		ORDER BY channel_board_idx DESC
+		<if test="recordCountPerPage != null">
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}		
+		</if>
+		<if test="recordCountPerPage == null">
+			LIMIT 10		
+		</if>
 	</select>
 	
 	<select id="selectChannelBoardListTotCnt" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultType="int">
