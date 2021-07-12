@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 						"com.soccer.web.notice.dao", 
 						"com.soccer.web.payment.dao", 
 						"com.soccer.web.region.dao", 
-						"com.soccer.web.user.dao"})
+						"com.soccer.web.user.dao",
+						"com.soccer.web.channel.dao",
+						"com.soccer.web.channel.member.apply.dao"
+						})
 @EnableTransactionManagement
 public class MybatisConfig {
 	

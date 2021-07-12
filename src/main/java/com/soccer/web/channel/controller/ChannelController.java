@@ -18,7 +18,7 @@ import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.member.service.MemberServiceImpl;
 import com.soccer.web.channel.play.service.ChannelPlayServiceImpl;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
-import com.soccer.web.channel.servicec.ChannelServiceImpl;
+import com.soccer.web.channel.service.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.payment.service.PaymentServiceImpl;
 
@@ -153,12 +153,10 @@ public class ChannelController {
 	
 	//채널 상세
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String channelInfo(ChannelBoardVO channelBoardVO, Model model) throws Exception{
-		List<ChannelBoardVO> channelBoardList = channelBoardService.selectChannelBoardList(channelBoardVO);
-		List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelBoardVO);
+	public String channelInfo(ChannelVO channelVO, Model model) throws Exception{
+		ChannelVO channelInfoVO = channelService.channelInfo(channelVO);
 		
-		model.addAttribute("channelBoardList", channelBoardList);
-		model.addAttribute("channelPlayList", channelPlayList);
+		model.addAttribute("channelInfo", channelInfoVO);
 		
 		return "";
 	}

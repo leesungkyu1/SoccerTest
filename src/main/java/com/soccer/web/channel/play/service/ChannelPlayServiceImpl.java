@@ -24,11 +24,6 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	public List<ChannelPlayVO> selectChannelPlayList(ChannelPlayVO channelPlayVO) throws Exception {
 		return channelPlayMapper.selectChannelPlayList(channelPlayVO);
 	}
-	
-	@Override
-	public List<ChannelPlayVO> selectChannelPlayList(ChannelBoardVO ChannelBoardVO) throws Exception {
-		return channelPlayMapper.selectChannelMainPlayList(ChannelBoardVO);
-	}
 
 	@Override
 	public ChannelPlayVO selectChannelPlayDetail(int channelPlayIdx) throws Exception {
@@ -49,4 +44,5 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	public void deleteChannelPlay(int channelPlayIdx) throws Exception {
 		channelPlayMapper.deleteChannelPlay(channelPlayIdx);
 	}
+
 }

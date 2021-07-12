@@ -130,7 +130,7 @@
 	</select>
 	
 	<!-- 한 경기의 선수에 결과기록 수정 -->
-	<update id="updatePlayerPlayresult" parameterType="PlayresultVO">
+	<update id="updatePlayerPlayresult" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO">
 		UPDATE playresult 
 		SET 
 			playresult_totaltackle = #{playresultTotaltackle},

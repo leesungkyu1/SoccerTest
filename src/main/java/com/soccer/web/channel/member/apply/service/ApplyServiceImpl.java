@@ -3,6 +3,7 @@ package com.soccer.web.channel.member.apply.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.soccer.web.channel.member.apply.dao.ApplyMapper;
 import com.soccer.web.channel.member.apply.vo.ApplyVO;
@@ -10,6 +11,7 @@ import com.soccer.web.channel.member.dao.MemberMapper;
 import com.soccer.web.channel.member.vo.MemberVO;
 import com.soccer.web.channel.vo.ChannelVO;
 
+@Service
 public class ApplyServiceImpl implements ApplyService{
 	
 	@Autowired

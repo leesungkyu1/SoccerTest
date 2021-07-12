@@ -1,4 +1,4 @@
-package com.soccer.web.channel.servicec;
+package com.soccer.web.channel.service;
 
 import java.util.List;
 
@@ -13,4 +13,6 @@ public interface ChannelService {
 	void channelInsert(ChannelVO channelVO) throws Exception;
 
 	void channelUpdate(ChannelVO channelVO) throws Exception;
+
+	ChannelVO channelInfo(ChannelVO channelVO) throws Exception;
 }
