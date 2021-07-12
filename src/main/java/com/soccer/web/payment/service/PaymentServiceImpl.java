@@ -17,7 +17,7 @@ public class PaymentServiceImpl implements PaymentService{
 	
 	//중복결제 방지
 	@Override
-	public int payCheck(Integer userIdx) throws Exception{
+	public Integer payCheck(Integer userIdx) throws Exception{
 		return paymentDAO.payCheck(userIdx);
 	}
 }

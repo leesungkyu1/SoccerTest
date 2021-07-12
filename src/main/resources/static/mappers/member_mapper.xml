@@ -47,4 +47,9 @@
 			   #{member_image}
 		)
 	</insert>
+	
+	<select id="memberCount" parameterType="integer" resultType="integer">
+		SELECT COUNT(*) FROM member
+		WHERE channel_idx = #{channelIdx}
+	</select>
 </mapper>
