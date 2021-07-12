@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.soccer.web.payment.dao.PaymentMapper;
 
-@Service("paymentService")
+@Service
 public class PaymentServiceImpl implements PaymentService{
 	
 	@Autowired

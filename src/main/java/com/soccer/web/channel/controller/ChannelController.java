@@ -153,12 +153,10 @@ public class ChannelController {
 	
 	//채널 상세
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String channelInfo(ChannelBoardVO channelBoardVO, Model model) throws Exception{
-		List<ChannelBoardVO> channelBoardList = channelBoardService.selectChannelBoardList(channelBoardVO);
-		List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelBoardVO);
+	public String channelInfo(ChannelVO channelVO, Model model) throws Exception{
+		ChannelVO channelInfoVO = channelService.channelInfo(channelVO);
 		
-		model.addAttribute("channelBoardList", channelBoardList);
-		model.addAttribute("channelPlayList", channelPlayList);
+		model.addAttribute("channelInfo", channelInfoVO);
 		
 		return "";
 	}

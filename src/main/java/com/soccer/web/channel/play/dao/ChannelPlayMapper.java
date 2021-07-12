@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
+import com.soccer.web.channel.vo.ChannelVO;
 
 @Mapper
 public interface ChannelPlayMapper {
@@ -29,5 +30,5 @@ public interface ChannelPlayMapper {
 	void deleteChannelPlay(int channelPlayIdx) throws Exception;
 
 	//채널 Info용 PlayList
-	List<ChannelPlayVO> selectChannelMainPlayList(ChannelBoardVO channelBoardVO) throws Exception;
+	List<ChannelPlayVO> selectChannelMainPlayList(ChannelVO channelVO) throws Exception;
 }

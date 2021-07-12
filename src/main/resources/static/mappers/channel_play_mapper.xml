@@ -25,7 +25,7 @@
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
 	
-	<select id="selectChannelMainPlayList" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultMap="channelPlayVO">
+	<select id="selectChannelMainPlayList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelPlayVO">
 		SELECT * 
 		FROM channel_play
 		WHERE channel_idx = #{channelIdx} 
@@ -33,12 +33,7 @@
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
 		ORDER BY channel_play_idx DESC
-		<if test="recordCountPerPage != null">
-			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}		
-		</if>
-		<if test="recordCountPerPage == null">
-			LIMIT 10		
-		</if>
+		LIMIT 10			
 	</select>
 	
 	<!-- 영상 게시글 리스트의 size 확인 -->

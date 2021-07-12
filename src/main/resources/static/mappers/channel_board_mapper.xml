@@ -29,6 +29,17 @@
 		</if>
 	</select>
 	
+	<select id="selectChannelMainBoardList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelBoardVO">
+		SELECT * 
+		FROM channel_board 
+		WHERE channel_idx = #{channelIdx} 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY channel_board_idx DESC
+		LIMIT 10		
+	</select>
+	
 	<select id="selectChannelBoardListTotCnt" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultType="int">
 		SELECT COUNT(*) totcnt 
 		FROM channel_board 

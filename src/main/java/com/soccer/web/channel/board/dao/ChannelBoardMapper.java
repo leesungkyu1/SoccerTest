@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
+import com.soccer.web.channel.vo.ChannelVO;
 
 @Mapper
 public interface ChannelBoardMapper {
@@ -20,5 +21,7 @@ public interface ChannelBoardMapper {
 	void updateChannelBoard(ChannelBoardVO channelBoardVO);
 	
 	void deleteChannelBoard(int channelBoardIdx);
+
+	List<ChannelBoardVO> selectChannelMainBoardList(ChannelVO channelVO);
 	
 }

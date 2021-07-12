@@ -13,4 +13,6 @@ public interface ChannelService {
 	void channelInsert(ChannelVO channelVO) throws Exception;
 
 	void channelUpdate(ChannelVO channelVO) throws Exception;
+
+	ChannelVO channelInfo(ChannelVO channelVO) throws Exception;
 }

@@ -19,5 +19,4 @@ public interface ChannelPlayService {
 	
 	void deleteChannelPlay(int channelPlayIdx) throws Exception;
 
-	List<ChannelPlayVO> selectChannelPlayList(ChannelBoardVO ChannelBoardVO) throws Exception;
 }
