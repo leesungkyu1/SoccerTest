@@ -1,4 +1,4 @@
-package com.soccer.web.channel.servicec;
+package com.soccer.web.channel.service;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.soccer.web.channel.dao.ChannelMapper;
 import com.soccer.web.channel.vo.ChannelVO;
 
-@Service
+@Service("channelService")
 public class ChannelServiceImpl implements ChannelService{
 	
 	@Autowired

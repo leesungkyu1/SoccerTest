@@ -1,9 +1,11 @@
 package com.soccer.web.payment.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.soccer.web.payment.dao.PaymentMapper;
 
+@Service("paymentService")
 public class PaymentServiceImpl implements PaymentService{
 	
 	@Autowired

@@ -18,7 +18,7 @@ import com.soccer.web.channel.member.apply.service.ApplyServiceImpl;
 import com.soccer.web.channel.member.apply.vo.ApplyVO;
 import com.soccer.web.channel.member.service.MemberServiceImpl;
 import com.soccer.web.channel.member.vo.MemberVO;
-import com.soccer.web.channel.servicec.ChannelServiceImpl;
+import com.soccer.web.channel.service.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
 
 //채널 + 로 매핑

@@ -18,7 +18,7 @@ import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.member.service.MemberServiceImpl;
 import com.soccer.web.channel.play.service.ChannelPlayServiceImpl;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
-import com.soccer.web.channel.servicec.ChannelServiceImpl;
+import com.soccer.web.channel.service.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.payment.service.PaymentServiceImpl;
 
@@ -44,12 +44,12 @@ public class ChannelController {
 	private final String CHANNEL_IMAGE_DIR = "c:"; 
 	
 	//채널 목록, 검색 목록 (페이징 처리 안했음) 쿼리 전달
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@RequestMapping(value = "/main/channel", method = RequestMethod.GET)
 	public String channelList(ChannelVO channelVO, Model model) throws Exception {
 		List<ChannelVO> channelList = channelService.channelList(channelVO);
 		
 		if(channelList == null) {
-			model.addAttribute("message", "검색 결과거 없습니다.");
+			model.addAttribute("message", "검색 결과가 없습니다.");
 		}else {
 			model.addAttribute("channelList", channelList);			
 		}

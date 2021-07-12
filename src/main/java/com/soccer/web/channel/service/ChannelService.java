@@ -1,4 +1,4 @@
-package com.soccer.web.channel.servicec;
+package com.soccer.web.channel.service;
 
 import java.util.List;
 

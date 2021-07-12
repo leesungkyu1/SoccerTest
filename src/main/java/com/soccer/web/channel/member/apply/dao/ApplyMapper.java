@@ -2,11 +2,14 @@ package com.soccer.web.channel.member.apply.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.soccer.web.channel.member.apply.vo.ApplyVO;
 import com.soccer.web.channel.member.vo.MemberVO;
 import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.user.vo.UserVO;
 
+@Mapper
 public interface ApplyMapper {
 	
 	//채널 회원가입 신청 목록

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.soccer.web.user.dao.UserMapper;
 import com.soccer.web.user.vo.UserVO;
 
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
