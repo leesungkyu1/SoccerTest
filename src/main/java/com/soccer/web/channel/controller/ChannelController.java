@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.soccer.web.channel.board.service.ChannelBoardServiceImpl;
+import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.member.service.MemberServiceImpl;
+import com.soccer.web.channel.play.service.ChannelPlayServiceImpl;
+import com.soccer.web.channel.play.vo.ChannelPlayVO;
 import com.soccer.web.channel.servicec.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.payment.service.PaymentServiceImpl;
@@ -29,6 +33,12 @@ public class ChannelController {
 	
 	@Autowired
 	MemberServiceImpl memberService;
+	
+	@Autowired
+	ChannelBoardServiceImpl channelBoardService;
+	
+	@Autowired
+	ChannelPlayServiceImpl channelPlayService;
 	
 	//추후 채널용 이미지 파일 경로
 	private final String CHANNEL_IMAGE_DIR = "c:"; 
@@ -139,5 +149,17 @@ public class ChannelController {
 			return "redirect:";
 		}
 		return "redirect:";
+	}
+	
+	//채널 상세
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String channelInfo(ChannelBoardVO channelBoardVO, Model model) throws Exception{
+		List<ChannelBoardVO> channelBoardList = channelBoardService.selectChannelBoardList(channelBoardVO);
+		List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelBoardVO);
+		
+		model.addAttribute("channelBoardList", channelBoardList);
+		model.addAttribute("channelPlayList", channelPlayList);
+		
+		return "";
 	}
 }

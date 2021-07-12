@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 
 @Mapper
@@ -20,4 +21,7 @@ public interface ChannelPlayMapper {
 	
 	// 영상 게시글을 추가할 때 사용되는 메서드
 	void insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
+
+	//채널 Info용 PlayList
+	List<ChannelPlayVO> selectChannelMainPlayList(ChannelBoardVO channelBoardVO) throws Exception;
 }

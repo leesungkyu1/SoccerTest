@@ -2,6 +2,7 @@ package com.soccer.web.channel.play.service;
 
 import java.util.List;
 
+import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 
 public interface ChannelPlayService {
@@ -13,4 +14,6 @@ public interface ChannelPlayService {
 	ChannelPlayVO selectChannelPlayDetail(int channelPlayIdx) throws Exception;
 	
 	void insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
+
+	List<ChannelPlayVO> selectChannelPlayList(ChannelBoardVO ChannelBoardVO) throws Exception;
 }
