@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soccer.web.channel.play.vo.ChannelPlayVO">
+
+	<!-- channelPlayVO resultMap -->
+	<resultMap type="com.soccer.web.channel.play.vo.ChannelPlayVO" id="channelPlayVO">
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="memberIdx" column="member_idx"/>
+		<result property="channelIdx" column="channel_idx"/>
+		<result property="channelPlayTitle" column="channel_play_title"/>
+		<result property="channelPlayDate" column="channel_play_date"/>
+		<result property="channelPlayImage" column="channel_play_image"/>
+		<result property="channelPlayVideo" column="channel_play_video"/>
+		<result property="channelPlayStep" column="channel_play_step"/>
+	</resultMap>
+	
+	<!-- 영상 게시글의 리스트를 출력 -->
+	<select id="selectChannelPlayList" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" resultMap="channelPlayVO">
+		SELECT * 
+		FROM channel_play 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY channel_play_idx DESC 
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<!-- 영상 게시글 리스트의 size 확인 -->
+	<select id="selectChannelPlayListTotCnt" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" resultType="int">
+		SELECT COUNT(*) totcnt 
+		FROM channel_play
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+	</select>
+	
+	<!-- 영상 게시글의 세부사항을 출력하는 쿼리문 -->
+	<select id="selectChannelPlayDetail" parameterType="int" resultType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+		SELECT * 
+		FROM channel_play 
+		WHERE channel_play_idx = #{channelPlayIdx};
+	</select>
+	
+	<!-- 영상 게시글을 추가하는 메서드(승인 전) -->
+	<insert id="insertChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+		INSERT INTO channel_play
+		VALUES 
+				(
+					default,
+					#{memberIdx},
+					#{channelIdx},
+					#{channelPlayTitle},
+					default,
+					#{channelPlayImage},
+					#{channelPlayVideo},
+					default
+				)
+	</insert>
+	
+	<!-- 영상 게시글을 수정하는 메서드(승인 전으로 다시 바꾸어야 함) -->
+	<!-- <update id="updateChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+		UPDATE channel_play 
+		SET 
+			channel_play_title = #{channelPlayTitle},
+			channel_play_date = default,
+			channel_play_image = #{channelPlayImage},
+			channel_play_video = #{channelPlayVideo},
+			channel_play_step = default
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</update> -->
+
+</mapper>

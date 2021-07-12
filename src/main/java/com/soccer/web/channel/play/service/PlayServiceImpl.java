@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.soccer.web.channel.play.dao.PlayMapper;
 
-@Service
+@Service("playService")
 public class PlayServiceImpl implements PlayService{
 
 	@Autowired
