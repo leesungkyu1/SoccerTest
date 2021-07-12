@@ -19,5 +19,11 @@ public interface ChannelPlayMapper {
 	ChannelPlayVO selectChannelPlayDetail(int channelPlayIdx) throws Exception;
 	
 	// 영상 게시글을 추가할 때 사용되는 메서드
-	void insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
+	int insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
+	
+	// 영상 게시글을 수정할 때 사용되는 메서드
+	void updateChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
+	
+	// 영상 게시글을 삭제할 때 사용되는 메서드
+	void deleteChannelPlay(int channelPlayIdx) throws Exception;
 }

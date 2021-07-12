@@ -15,7 +15,7 @@ public interface ChannelBoardMapper {
 	
 	ChannelBoardVO selectChannelBoardDetail(int channelBoardIdx);
 	
-	void insertChannelBoard(ChannelBoardVO channelBoardVO);
+	int insertChannelBoard(ChannelBoardVO channelBoardVO);
 	
 	void updateChannelBoard(ChannelBoardVO channelBoardVO);
 	

@@ -30,7 +30,17 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	}
 	
 	@Override
-	public void insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception {
-		channelPlayMapper.insertChannelPlay(channelPlayVO);
+	public int insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception {
+		return channelPlayMapper.insertChannelPlay(channelPlayVO);
+	}
+	
+	@Override
+	public void updateChannelPlay(ChannelPlayVO channelPlayVO) throws Exception {
+		channelPlayMapper.updateChannelPlay(channelPlayVO);
+	}
+	
+	@Override
+	public void deleteChannelPlay(int channelPlayIdx) throws Exception {
+		channelPlayMapper.deleteChannelPlay(channelPlayIdx);
 	}
 }

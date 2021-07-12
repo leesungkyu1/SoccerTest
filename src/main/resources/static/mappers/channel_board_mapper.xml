@@ -5,6 +5,7 @@
 	<resultMap type="com.soccer.web.channel.board.vo.ChannelBoardVO" id="channelBoardVO">
 		<result property="channelBoardIdx" column="channel_board_idx" />
 		<result property="memberIdx" column="member_idx" />
+		<result property="channelIdx" column="channel_idx" />
 		<result property="channelBoardTitle" column="channel_board_title" />
 		<result property="channelBoardType" column="channel_board_type" />
 		<result property="channelBoardDesc" column="channel_board_desc" />
@@ -15,6 +16,7 @@
 	<select id="selectChannelBoardList" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultMap="channelBoardVO">
 		SELECT * 
 		FROM channel_board 
+		WHERE channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
@@ -25,6 +27,7 @@
 	<select id="selectChannelBoardListTotCnt" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultType="int">
 		SELECT COUNT(*) totcnt 
 		FROM channel_board 
+		WHERE channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
@@ -38,12 +41,13 @@
 	</select>
 	
 	<!-- 채널 일반 게시글 추가 -->
-	<insert id="insertChannelBoard" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO">
+	<insert id="insertChannelBoard" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" useGeneratedKeys="true" keyProperty="channelBoardIdx">
 		<![CDATA[
 			INSERT INTO channel_board 
 			VALUES (
 					default,
 					#{memberIdx},
+					#{channelIdx},
 					#{channelBoardTitle},
 					#{channelBoardType},
 					#{channelBoardDesc},

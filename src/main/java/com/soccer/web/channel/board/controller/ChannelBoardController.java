@@ -20,8 +20,11 @@ public class ChannelBoardController {
 	@Autowired
 	private ChannelBoardService channelBoardService;
 	
-	@RequestMapping(value = "/channel/board", method = RequestMethod.GET)
-	public String selectChannelBoardList(ChannelBoardVO channelBoardVO, Model model, @RequestParam(required = false) String message) {
+	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.GET)
+	public String selectChannelBoardList(	ChannelBoardVO channelBoardVO,
+											@PathVariable int channelIdx,
+											Model model,
+											@RequestParam(required = false) String message) {
 		int totcnt = channelBoardService.selectChannelBoardListTotCnt(channelBoardVO);
 		
 		List<ChannelBoardVO> channelBoardList = channelBoardService.selectChannelBoardList(channelBoardVO);
@@ -33,8 +36,8 @@ public class ChannelBoardController {
 		return "";
 	}
 	
-	@RequestMapping(value = "/channel/board/{channelBoardIdx}", method = RequestMethod.GET)
-	public String selectChannelBoardDetail(@PathVariable("channelBoardIdx") int channelBoardIdx, Model model) {
+	@RequestMapping(value = "/channel/{channelIdx}/board/{channelBoardIdx}", method = RequestMethod.GET)
+	public String selectChannelBoardDetail(@PathVariable int channelIdx, @PathVariable("channelBoardIdx") int channelBoardIdx, Model model) {
 		
 		ChannelBoardVO channelBoardVO = channelBoardService.selectChannelBoardDetail(channelBoardIdx);
 		
@@ -43,21 +46,22 @@ public class ChannelBoardController {
 		return "";
 	}
 	
-	@RequestMapping(value = "/channel/board", method = RequestMethod.POST)
-	public String insertChannelBoard(ChannelBoardVO channelBoardVO, RedirectAttributes attributes) {
+	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.POST)
+	public String insertChannelBoard(@PathVariable int channelIdx, ChannelBoardVO channelBoardVO, RedirectAttributes attributes) {
+		int channelBoardIdx = 0;
 		try {
-			channelBoardService.insertChannelBoard(channelBoardVO);			
+			 channelBoardIdx = channelBoardService.insertChannelBoard(channelBoardVO);			
 		}catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
 		}
 		attributes.addAttribute("message","게시글을 추가했습니다.");
 		
-		return "redirect:/channel/board";
+		return "redirect:/channel/" + channelIdx + "/board/" + channelBoardIdx;
 	}
 	
-	@RequestMapping(value = "/channel/board", method = RequestMethod.PUT)
-	public String updateChannelBoard(ChannelBoardVO channelBoardVO, RedirectAttributes attributes) {
+	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.PUT)
+	public String updateChannelBoard(@PathVariable int channelIdx, ChannelBoardVO channelBoardVO, RedirectAttributes attributes) {
 		try {
 			channelBoardService.updateChannelBoard(channelBoardVO);
 		} catch (Exception e) {
@@ -68,8 +72,8 @@ public class ChannelBoardController {
 		return "redirect:/channel/board/" + channelBoardVO.getChannelBoardIdx();
 	}
 	
-	@RequestMapping(value = "/channel/board", method = RequestMethod.DELETE)
-	public String deleteChannelBoard(int channelBoardIdx, RedirectAttributes attributes) {
+	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.DELETE)
+	public String deleteChannelBoard(@PathVariable int channelIdx, int channelBoardIdx, RedirectAttributes attributes) {
 		try {
 			channelBoardService.deleteChannelBoard(channelBoardIdx);			
 		} catch (Exception e) {
@@ -77,6 +81,6 @@ public class ChannelBoardController {
 			attributes.addAttribute("message", "에러가 발생했습니다.");
 		}
 		attributes.addAttribute("message","게시글을 삭제했습니다.");
-		return "redirect:/channel/board";
+		return "redirect:/channel/" + channelIdx + "/board";
 	}
 }

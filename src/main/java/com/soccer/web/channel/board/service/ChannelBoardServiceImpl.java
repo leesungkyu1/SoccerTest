@@ -30,8 +30,8 @@ public class ChannelBoardServiceImpl implements ChannelBoardService{
 	}
 
 	@Override
-	public void insertChannelBoard(ChannelBoardVO channelBoardVO) {
-		channelBoardMapper.insertChannelBoard(channelBoardVO);
+	public int insertChannelBoard(ChannelBoardVO channelBoardVO) {
+		return channelBoardMapper.insertChannelBoard(channelBoardVO);
 		
 	}
 

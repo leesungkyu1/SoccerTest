@@ -42,7 +42,7 @@
 	</select>
 	
 	<!-- 영상 게시글을 추가하는 메서드(승인 전) -->
-	<insert id="insertChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+	<insert id="insertChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" useGeneratedKeys="true" keyProperty="channelPlayIdx">
 		INSERT INTO channel_play
 		VALUES 
 				(
@@ -58,7 +58,7 @@
 	</insert>
 	
 	<!-- 영상 게시글을 수정하는 메서드(승인 전으로 다시 바꾸어야 함) -->
-	<!-- <update id="updateChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+	<update id="updateChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO">
 		UPDATE channel_play 
 		SET 
 			channel_play_title = #{channelPlayTitle},
@@ -67,6 +67,13 @@
 			channel_play_video = #{channelPlayVideo},
 			channel_play_step = default
 		WHERE channel_play_idx = #{channelPlayIdx}
-	</update> -->
+	</update>
+	
+	<!-- 영상 게시글을 삭제하는 메서드 -->
+	<delete id="deleteChannelPlay" parameterType="int">
+		DELETE * FROM channel_play 
+		WHERE 
+			channel_play_idx = #{channelPlayIdx}
+	</delete>
 
 </mapper>

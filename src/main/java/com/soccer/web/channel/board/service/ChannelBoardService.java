@@ -12,7 +12,7 @@ public interface ChannelBoardService {
 	
 	ChannelBoardVO selectChannelBoardDetail(int channelBoardIdx);
 	
-	void insertChannelBoard(ChannelBoardVO channelBoardVO);
+	int insertChannelBoard(ChannelBoardVO channelBoardVO);
 	
 	void updateChannelBoard(ChannelBoardVO channelBoardVO);
 	
