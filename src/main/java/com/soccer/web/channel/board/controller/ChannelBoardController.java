@@ -57,7 +57,8 @@ public class ChannelBoardController {
 		}
 		attributes.addAttribute("message","게시글을 추가했습니다.");
 		
-		return "redirect:/channel/" + channelIdx + "/board/" + channelBoardIdx;
+		return "redirect:/channel/" + channelIdx + "board/" + channelBoardIdx;
+		// return "redirect:/channel/board/" + channelIdx + "/" + channelBoardIdx;
 	}
 	
 	@RequestMapping(value = "/channel/board/{channelIdx}/{channelBoardIdx}", method = RequestMethod.PUT)
@@ -82,5 +83,6 @@ public class ChannelBoardController {
 		}
 		attributes.addAttribute("message","게시글을 삭제했습니다.");
 		return "redirect:/channel/" + channelIdx + "/board";
+		// return "redirect:/channel/board/" + channelIdx;
 	}
 }

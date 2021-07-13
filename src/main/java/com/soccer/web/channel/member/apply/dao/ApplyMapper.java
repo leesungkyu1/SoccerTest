@@ -25,7 +25,7 @@ public interface ApplyMapper {
 	void memberAccept(Integer applyIdx) throws Exception;
 
 	//채널 회원가입 거절
-	void memberDinie(Integer applyIdx) throws Exception;
+	void memberDenie(Integer applyIdx) throws Exception;
 	
 	//채널 회원가입 신청 유저 고유번호, 채널 고유번호 추출
 	MemberVO searchMember(Integer applyIdx);

@@ -56,8 +56,8 @@ public class NoticeController {
 		return "redirect:/main/notice";
 	}
 	
-	@RequestMapping(value = "/main/notice", method = RequestMethod.PUT)
-	public String updateNotice(NoticeVO noticeVO, RedirectAttributes attributes) {
+	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.PUT)
+	public String updateNotice(@PathVariable int noticeIdx, NoticeVO noticeVO, RedirectAttributes attributes) {
 		try {
 			noticeService.updateNotice(noticeVO);
 		} catch (Exception e) {
@@ -65,11 +65,11 @@ public class NoticeController {
 			attributes.addAttribute("message", "에러가 발생했습니다.");
 		}
 		attributes.addAttribute("message","공지를 수정했습니다.");
-		return "redirect:/main/notice/" + noticeVO.getNoticeIdx();
+		return "redirect:/main/notice/" + noticeIdx;
 	}
 	
-	@RequestMapping(value = "/main/notice", method = RequestMethod.DELETE)
-	public String deleteNotice(int noticeIdx, RedirectAttributes attributes) {
+	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.DELETE)
+	public String deleteNotice(@PathVariable int noticeIdx, RedirectAttributes attributes) {
 		try {
 			noticeService.deleteNotice(noticeIdx);			
 		} catch (Exception e) {
