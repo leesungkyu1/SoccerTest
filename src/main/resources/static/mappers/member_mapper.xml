@@ -50,6 +50,10 @@
 	
 	<select id="memberCount" parameterType="integer" resultType="integer">
 		SELECT COUNT(*) FROM member
-		WHERE channel_idx = #{channelIdx}
+		INNER JOIN apply
+			ON member.channel_idx = apply.channel_idx
+		WHERE member.channel_idx = #{channelIdx}
+			AND apply.apply_step = "ok"
 	</select>
+	
 </mapper>
