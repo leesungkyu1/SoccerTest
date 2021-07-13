@@ -13,16 +13,15 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@MapperScan(value = {	"com.soccer.web.channel.board.dao",
+@MapperScan(value = {	"com.soccer.web.channel.dao",
+						"com.soccer.web.channel.board.dao",
 						"com.soccer.web.channel.member.dao", 
 						"com.soccer.web.channel.play.dao", 
 						"com.soccer.web.notice.dao", 
 						"com.soccer.web.payment.dao", 
 						"com.soccer.web.region.dao", 
 						"com.soccer.web.user.dao",
-						"com.soccer.web.channel.dao",
-						"com.soccer.web.channel.member.apply.dao"
-						})
+						"com.soccer.web.channel.member.apply.dao"})
 @EnableTransactionManagement
 public class MybatisConfig {
 	

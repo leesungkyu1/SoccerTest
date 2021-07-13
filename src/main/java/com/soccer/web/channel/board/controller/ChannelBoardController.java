@@ -20,7 +20,7 @@ public class ChannelBoardController {
 	@Autowired
 	private ChannelBoardService channelBoardService;
 	
-	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/board/{channelIdx}", method = RequestMethod.GET)
 	public String selectChannelBoardList(	ChannelBoardVO channelBoardVO,
 											@PathVariable int channelIdx,
 											Model model,
@@ -36,7 +36,7 @@ public class ChannelBoardController {
 		return "";
 	}
 	
-	@RequestMapping(value = "/channel/{channelIdx}/board/{channelBoardIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/board/{channelIdx}/{channelBoardIdx}", method = RequestMethod.GET)
 	public String selectChannelBoardDetail(@PathVariable int channelIdx, @PathVariable("channelBoardIdx") int channelBoardIdx, Model model) {
 		
 		ChannelBoardVO channelBoardVO = channelBoardService.selectChannelBoardDetail(channelBoardIdx);
@@ -46,7 +46,7 @@ public class ChannelBoardController {
 		return "";
 	}
 	
-	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.POST)
+	@RequestMapping(value = "/channel/board/{channelIdx}", method = RequestMethod.POST)
 	public String insertChannelBoard(@PathVariable int channelIdx, ChannelBoardVO channelBoardVO, RedirectAttributes attributes) {
 		int channelBoardIdx = 0;
 		try {
@@ -57,11 +57,12 @@ public class ChannelBoardController {
 		}
 		attributes.addAttribute("message","게시글을 추가했습니다.");
 		
-		return "redirect:/channel/" + channelIdx + "/board/" + channelBoardIdx;
+		return "redirect:/channel/" + channelIdx + "board/" + channelBoardIdx;
+		// return "redirect:/channel/board/" + channelIdx + "/" + channelBoardIdx;
 	}
 	
-	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.PUT)
-	public String updateChannelBoard(@PathVariable int channelIdx, ChannelBoardVO channelBoardVO, RedirectAttributes attributes) {
+	@RequestMapping(value = "/channel/board/{channelIdx}/{channelBoardIdx}", method = RequestMethod.PUT)
+	public String updateChannelBoard(@PathVariable int channelIdx, @PathVariable int channelBoardIdx, ChannelBoardVO channelBoardVO, RedirectAttributes attributes) {
 		try {
 			channelBoardService.updateChannelBoard(channelBoardVO);
 		} catch (Exception e) {
@@ -72,8 +73,8 @@ public class ChannelBoardController {
 		return "redirect:/channel/board/" + channelBoardVO.getChannelBoardIdx();
 	}
 	
-	@RequestMapping(value = "/channel/{channelIdx}/board", method = RequestMethod.DELETE)
-	public String deleteChannelBoard(@PathVariable int channelIdx, int channelBoardIdx, RedirectAttributes attributes) {
+	@RequestMapping(value = "/channel/board/{channelIdx}/{channelBoardIdx}", method = RequestMethod.DELETE)
+	public String deleteChannelBoard(@PathVariable int channelIdx,@PathVariable int channelBoardIdx, RedirectAttributes attributes) {
 		try {
 			channelBoardService.deleteChannelBoard(channelBoardIdx);			
 		} catch (Exception e) {
@@ -82,5 +83,6 @@ public class ChannelBoardController {
 		}
 		attributes.addAttribute("message","게시글을 삭제했습니다.");
 		return "redirect:/channel/" + channelIdx + "/board";
+		// return "redirect:/channel/board/" + channelIdx;
 	}
 }

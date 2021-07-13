@@ -37,8 +37,10 @@ public class MemberController {
 	ChannelServiceImpl channelService;
 	
 	//회원 목록 + 신청 목록
-	@RequestMapping(value = "" , method = RequestMethod.GET)
-	public String channelMemberList(ChannelVO channelVO, Model model) throws Exception{
+	@RequestMapping(value = "/channel/member/{channelIdx}" , method = RequestMethod.GET)
+	public String channelMemberList(@PathVariable Integer channelIdx, ChannelVO channelVO, Model model) throws Exception{
+		channelVO.setChannelIdx(channelIdx);
+		
 		List<MemberVO> memberList = memberService.memberList(channelVO); 
 		List<ApplyVO> applyList = applyService.applyList(channelVO);
 		
@@ -49,8 +51,10 @@ public class MemberController {
 	}
 	
 	//회원 강퇴
-	@RequestMapping(value = "{memberIdx}", method = RequestMethod.DELETE)
-	public String memberDelete (@PathVariable("memberIdx") Integer memberIdx, ChannelVO channelVO, RedirectAttributes attributes ) throws Exception{
+	@RequestMapping(value = "/channel/member/{channelIdx}/{memberIdx}", method = RequestMethod.DELETE)
+	public String memberDelete (@PathVariable Integer channelIdx, @PathVariable("memberIdx") Integer memberIdx, ChannelVO channelVO, RedirectAttributes attributes ) throws Exception{
+		channelVO.setChannelIdx(channelIdx);
+		
 		try {
 			memberService.memberDelete(memberIdx, channelVO.getChannelIdx());
 			applyService.applyDelete(memberIdx, channelVO.getChannelIdx());
@@ -63,7 +67,7 @@ public class MemberController {
 				imageFile.delete();
 			}
 			
-			attributes.addAttribute("message", "회원을 탈퇴시켰습니다..");
+			attributes.addAttribute("message", "회원을 탈퇴시켰습니다.");
 		}catch(Exception e) {
 			attributes.addAttribute("code", 301);
 			attributes.addAttribute("message", "회원탈퇴 처리 중 에러가 발생했습니다.");
@@ -76,7 +80,7 @@ public class MemberController {
 	
 	//회원가입 신청
 	@SuppressWarnings("static-access")
-	@RequestMapping(value ="" , method = RequestMethod.POST)
+	@RequestMapping(value ="/channel/member" , method = RequestMethod.POST)
 	public String memberApply(MemberVO memberVO, @RequestParam("imageFile")MultipartFile imageFile, 
 			RedirectAttributes attributes) throws Exception{
 		FileUtils saveDir = new FileUtils();
@@ -119,7 +123,7 @@ public class MemberController {
 	}
 	
 	//회원 가입신청 승인
-	@RequestMapping(value = "{applyIdx}/{channelIdx}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/channel/apply/{channelIdx}/{applyIdx}", method = RequestMethod.PUT)
 	public String memberAccept(@PathVariable("applyIdx") Integer applyIdx, @PathVariable("channelIdx") Integer channelIdx,
 			RedirectAttributes attributes) throws Exception{
 		try {
@@ -144,10 +148,10 @@ public class MemberController {
 	}
 	
 	//회원 가입신청 거절 
-	@RequestMapping(value = "{applyIdx}" , method = RequestMethod.DELETE)
-	public String memberDinie (@PathVariable("applyIdx") Integer applyIdx, RedirectAttributes attributes) throws Exception{
+	@RequestMapping(value = "/channel/apply/{channelIdx}/{applyIdx}" , method = RequestMethod.DELETE)
+	public String memberDenie (@PathVariable("applyIdx") Integer applyIdx, RedirectAttributes attributes) throws Exception{
 		try {
-			applyService.memberDinie(applyIdx);
+			applyService.memberDenie(applyIdx);
 			
 			attributes.addAttribute("message", "회원가입이 거절되었습니다.");
 		}catch(Exception e) {

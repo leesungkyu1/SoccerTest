@@ -9,7 +9,7 @@ import com.soccer.web.channel.member.dao.MemberMapper;
 import com.soccer.web.channel.member.vo.MemberVO;
 import com.soccer.web.channel.vo.ChannelVO;
 
-@Service
+@Service("memberService")
 public class MemberServiceImpl implements MemberService{
 	
 	@Autowired

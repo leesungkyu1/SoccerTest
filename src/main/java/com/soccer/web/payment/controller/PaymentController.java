@@ -18,7 +18,7 @@ public class PaymentController {
 	PaymentServiceImpl paymentService;
 	
 	//결제
-	@RequestMapping(value = "" , method = RequestMethod.POST)
+	@RequestMapping(value = "/payment" , method = RequestMethod.POST)
 	public String payment(UserVO userVO, RedirectAttributes attributes) throws Exception{
 		try {
 			int payCheck = paymentService.payCheck(userVO.getUserIdx());
@@ -29,7 +29,6 @@ public class PaymentController {
 			}else {
 				attributes.addAttribute("message", "결제가 완료되었습니다.");				
 			}
-			
 		}catch (Exception e) {
 			e.printStackTrace();
 			

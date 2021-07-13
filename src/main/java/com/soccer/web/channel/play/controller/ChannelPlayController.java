@@ -27,7 +27,7 @@ public class ChannelPlayController {
 	private TeamPlayerService teamPlayerService;
 	
 	// 채널 게시글의 리스트를 보여주는 메서드 (페이징처리는 나중에)
-	@RequestMapping(value = "channel/{channelIdx}/play", method = RequestMethod.GET)
+	@RequestMapping(value = "channel/play/{channelIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayList(@PathVariable int channelIdx,
 										ChannelPlayVO channelPlayVO,
 										Model model,
@@ -48,7 +48,7 @@ public class ChannelPlayController {
 	}
 	
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
-	@RequestMapping(value = "channel/{channelIdx}/play/{channelPlayIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayDetail(	@PathVariable int channelIdx,
 											@PathVariable int channelPlayIdx,
 											RedirectAttributes attributes,
@@ -66,13 +66,13 @@ public class ChannelPlayController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
-			return "redirect:/channel/" + channelIdx + "/play";
+			return "redirect:/channel/play/" + channelIdx;
 		}
 		return "";
 	}
 	
 	// 영상 게시글을 추가하는 메서드
-	@RequestMapping(value = "channel/{channelIdx}/play", method = RequestMethod.POST)
+	@RequestMapping(value = "channel/play/{channelIdx}", method = RequestMethod.POST)
 	public String insertChannelPlay(@PathVariable int channelIdx,
 									ChannelPlayVO channelPlayVO,
 									RedirectAttributes attributes) throws Exception {
@@ -86,11 +86,11 @@ public class ChannelPlayController {
 			attributes.addAttribute("message", "에러가 발생했습니다");
 		}
 		attributes.addAttribute("message", "영상이 성공적으로 등록되었습니다.");
-		return "redirect:/channel/" + channelIdx + "/play/" + channelPlayIdx;
+		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
 	}
 	
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)
-	@RequestMapping(value = "channel/{channelIdx}/play/{channelPlayIdx}", method = RequestMethod.PUT)
+	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.PUT)
 	public String updateChannelPlay(@PathVariable int channelIdx,
 									@PathVariable int channelPlayIdx,
 									ChannelPlayVO channelPlayVO,
@@ -103,11 +103,11 @@ public class ChannelPlayController {
 			attributes.addAttribute("message", "에러가 발생했습니다");
 		}
 		attributes.addAttribute("message", "영상이 성공적으로 수정되었습니다.");
-		return "redirect:/channel/" + channelIdx + "/play/" + channelPlayIdx;
+		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
 	}
 	
 	// 영상 게시글을 삭제하는 메서드
-	@RequestMapping(value = "channel/{channelIdx}/play/{channelPlayIdx}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.DELETE)
 	public String deleteChannelPlay(@PathVariable int channelIdx,
 									@PathVariable int channelPlayIdx,
 									RedirectAttributes attributes) throws Exception {
@@ -119,6 +119,6 @@ public class ChannelPlayController {
 			attributes.addAttribute("message", "에러가 발생했습니다");
 		}
 		attributes.addAttribute("message", "영상이 삭제되었습니다.");
-		return "redirect:/channel/" + channelIdx + "/play";
+		return "redirect:/channel/play/" + channelIdx;
 	}
 }

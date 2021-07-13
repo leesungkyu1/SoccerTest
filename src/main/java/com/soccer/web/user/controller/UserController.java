@@ -20,7 +20,7 @@ public class UserController {
 	UserServiceImpl userService;
 	
 	//회원가입
-	@RequestMapping(value = "" , method = RequestMethod.POST)
+	@RequestMapping(value = "/user" , method = RequestMethod.POST)
 	public String userJoin(UserVO userVO, RedirectAttributes attributes) throws Exception{
 		try {
 			userService.userJoin(userVO);
@@ -40,7 +40,7 @@ public class UserController {
 	}
 	
 	//로그인
-	@RequestMapping(value = "" , method = RequestMethod.POST)
+	@RequestMapping(value = "/user/login" , method = RequestMethod.POST)
 	public String userLogin(UserVO userVO, Model model, HttpSession session) throws Exception{
 		UserVO authUser = null;
 		
@@ -64,8 +64,7 @@ public class UserController {
 		return "";
 	}
 	
-	//마이 페이지 정보 {} 동적 파라미터 알아보기
-	@RequestMapping(value = "/{userIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "user/{userIdx}", method = RequestMethod.GET)
 	public String userInfo(@PathVariable("userIdx") Integer userIdx, Model model,
 			HttpSession session) throws Exception{
 		
@@ -83,7 +82,7 @@ public class UserController {
 	}
 	
 	//마이페이지 정보 수정
-	@RequestMapping(value = "/{userIdx}", method = RequestMethod.PUT)
+	@RequestMapping(value = "user/{userIdx}", method = RequestMethod.PUT)
 	public String userInfoUpdate(@PathVariable("userIdx") Integer userIdx, RedirectAttributes attributes,
 			UserVO userVO, HttpSession session) throws Exception{
 		

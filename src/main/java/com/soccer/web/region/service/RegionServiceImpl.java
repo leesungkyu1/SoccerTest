@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.soccer.web.region.dao.RegionMapper;
 import com.soccer.web.region.vo.RegionVO;
 
-@Service
+@Service("regionService")
 public class RegionServiceImpl implements RegionService{
 	
 	@Autowired

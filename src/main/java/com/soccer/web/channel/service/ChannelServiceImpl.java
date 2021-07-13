@@ -10,7 +10,7 @@ import com.soccer.web.channel.dao.ChannelMapper;
 import com.soccer.web.channel.play.dao.ChannelPlayMapper;
 import com.soccer.web.channel.vo.ChannelVO;
 
-@Service
+@Service("channelService")
 public class ChannelServiceImpl implements ChannelService{
 	
 	@Autowired

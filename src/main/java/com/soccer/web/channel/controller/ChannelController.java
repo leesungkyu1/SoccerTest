@@ -7,6 +7,7 @@ import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,12 +45,12 @@ public class ChannelController {
 	private final String CHANNEL_IMAGE_DIR = "c:"; 
 	
 	//채널 목록, 검색 목록 (페이징 처리 안했음) 쿼리 전달
-	@RequestMapping(value = "", method = RequestMethod.GET)
+	@RequestMapping(value = "/main/channel", method = RequestMethod.GET)
 	public String channelList(ChannelVO channelVO, Model model) throws Exception {
 		List<ChannelVO> channelList = channelService.channelList(channelVO);
 		
 		if(channelList == null) {
-			model.addAttribute("message", "검색 결과거 없습니다.");
+			model.addAttribute("message", "검색 결과가 없습니다.");
 		}else {
 			model.addAttribute("channelList", channelList);			
 		}
@@ -59,7 +60,7 @@ public class ChannelController {
 	
 	//채널 생성
 	@SuppressWarnings("static-access")
-	@RequestMapping(value = "", method = RequestMethod.POST)
+	@RequestMapping(value = "/channel", method = RequestMethod.POST)
 	public String channelInsert (ChannelVO channelVO, @RequestParam("imageFile")MultipartFile imageFile, 
 			RedirectAttributes attributes) throws Exception {
 		FileUtils saveDir = new FileUtils();
@@ -110,9 +111,11 @@ public class ChannelController {
 	
 	//채널 수정
 	@SuppressWarnings("static-access")
-	@RequestMapping(value = "", method = RequestMethod.PUT)
-	public String channelUpdate(ChannelVO channelVO, @RequestParam("imageFile")MultipartFile imageFile, 
+	@RequestMapping(value = "channel/{channelIdx}", method = RequestMethod.PUT)
+	public String channelUpdate(@PathVariable Integer channelIdx, ChannelVO channelVO, @RequestParam("imageFile")MultipartFile imageFile, 
 			RedirectAttributes attributes) throws Exception {
+		channelVO.setChannelIdx(channelIdx);
+		
 		FileUtils saveDir = new FileUtils();
 		
 		try {
@@ -152,8 +155,10 @@ public class ChannelController {
 	}
 	
 	//채널 상세
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String channelInfo(ChannelVO channelVO, Model model) throws Exception{
+	@RequestMapping(value = "channel/{channelIdx}", method = RequestMethod.GET)
+	public String channelInfo(@PathVariable Integer channelIdx, ChannelVO channelVO, Model model) throws Exception{
+		channelVO.setChannelIdx(channelIdx);
+		
 		ChannelVO channelInfoVO = channelService.channelInfo(channelVO);
 		
 		model.addAttribute("channelInfo", channelInfoVO);
