@@ -12,12 +12,16 @@
 		<result property="channelPlayImage" column="channel_play_image"/>
 		<result property="channelPlayVideo" column="channel_play_video"/>
 		<result property="channelPlayStep" column="channel_play_step"/>
+		<result property="memberNick" column="member_nick"/>
 	</resultMap>
 	
 	<!-- 영상 게시글의 리스트를 출력 -->
 	<select id="selectChannelPlayList" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" resultMap="channelPlayVO">
 		SELECT * 
 		FROM channel_play 
+		INNER JOIN member 
+			ON channel_play.member_idx = member.member_idx 
+		WHERE channel_idx = #{channelIdx}
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
@@ -27,7 +31,9 @@
 	
 	<select id="selectChannelMainPlayList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelPlayVO">
 		SELECT * 
-		FROM channel_play
+		FROM channel_play 
+		INNER JOIN member 
+			ON channel_play.member_idx = member.member_idx 
 		WHERE channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -49,6 +55,8 @@
 	<select id="selectChannelPlayDetail" parameterType="int" resultType="com.soccer.web.channel.play.vo.ChannelPlayVO">
 		SELECT * 
 		FROM channel_play 
+		INNER JOIN member 
+			ON channel_play.member_idx = member.member_idx 
 		WHERE channel_play_idx = #{channelPlayIdx};
 	</select>
 	

@@ -11,4 +11,5 @@ public @Data class ChannelBoardVO extends ChannelBoardDefaultVO{
 	private String channelBoardType;
 	private String channelBoardDesc;
 	private String channelBoardDate;
+	private String memberNick;
 }

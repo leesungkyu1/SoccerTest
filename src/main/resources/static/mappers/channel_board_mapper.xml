@@ -10,28 +10,35 @@
 		<result property="channelBoardType" column="channel_board_type" />
 		<result property="channelBoardDesc" column="channel_board_desc" />
 		<result property="channelBoardDate" column="channel_board_date" />
+		<result property="memberNick" column="member_nick" />
 	</resultMap>
 	
 	<!-- 채널 일반 게시글의 리스트 -->
 	<select id="selectChannelBoardList" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultMap="channelBoardVO">
 		SELECT * 
 		FROM channel_board 
+		INNER JOIN member 
+			ON channel_board.member_idx = member.member_idx 
 		WHERE channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY channel_board_idx DESC
+		ORDER BY 
+				channel_board_type ASC, 
+				channel_board_idx DESC
 		<if test="recordCountPerPage != null">
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}		
 		</if>
 		<if test="recordCountPerPage == null">
-			LIMIT 10		
+			LIMIT 10
 		</if>
 	</select>
 	
 	<select id="selectChannelMainBoardList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelBoardVO">
 		SELECT * 
 		FROM channel_board 
+		INNER JOIN member 
+			ON channel_board.member_idx = member.member_idx 
 		WHERE channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -53,6 +60,8 @@
 	<select id="selectChannelBoardDetail" parameterType="int" resultMap="channelBoardVO">
 		SELECT * 
 		FROM channel_board 
+		INNER JOIN member 
+			ON channel_board.member_idx = member.member_idx 
 		WHERE channel_board_idx=#{channelBoardIdx}
 	</select>
 	

@@ -12,4 +12,5 @@ public @Data class ChannelPlayVO extends ChannelPlayDefaultVO{
 	private String channelPlayImage;
 	private String channelPlayVideo;
 	private String channelPlayStep;
+	private String memberNick;
 }

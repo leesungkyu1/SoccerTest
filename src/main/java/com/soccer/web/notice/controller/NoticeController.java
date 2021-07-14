@@ -3,18 +3,18 @@ package com.soccer.web.notice.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.notice.service.NoticeService;
 import com.soccer.web.notice.vo.NoticeVO;
 
-@RestController
+@Controller
 public class NoticeController {
 
 	@Autowired
@@ -45,15 +45,17 @@ public class NoticeController {
 	
 	@RequestMapping(value = "/main/notice", method = RequestMethod.POST)
 	public String insertNotice(NoticeVO noticeVO, RedirectAttributes attributes) {
+		int noticeIdx = 0;
 		try {
-			noticeService.insertNotice(noticeVO);			
+			noticeIdx = noticeService.insertNotice(noticeVO);
 		}catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
 		}
 		attributes.addAttribute("message","공지를 추가했습니다.");
 		
-		return "redirect:/main/notice";
+		return "redirect:/main/notice/" + noticeIdx;
+//		return "test";
 	}
 	
 	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.PUT)
