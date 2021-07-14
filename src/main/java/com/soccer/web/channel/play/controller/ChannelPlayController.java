@@ -55,6 +55,7 @@ public class ChannelPlayController {
 		return "";
 	}
 	
+	//이쪽 
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
 	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayDetail(	@PathVariable int channelIdx,
@@ -97,6 +98,7 @@ public class ChannelPlayController {
 		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
 	}
 	
+	// 연동 끊기
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)
 	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.PUT)
 	public String updateChannelPlay(@PathVariable int channelIdx,
