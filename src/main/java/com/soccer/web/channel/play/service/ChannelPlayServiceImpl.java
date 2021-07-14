@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.dao.ChannelPlayMapper;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
+import com.soccer.web.channel.play.vo.PlayMatchingVO;
 
 @Service("channelPlayService")
 public class ChannelPlayServiceImpl implements ChannelPlayService {
@@ -43,6 +44,36 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	@Override
 	public void deleteChannelPlay(int channelPlayIdx) throws Exception {
 		channelPlayMapper.deleteChannelPlay(channelPlayIdx);
+	}
+
+	@Override
+	public List<ChannelPlayVO> opponentList(Integer channelIdx) throws Exception {
+		return channelPlayMapper.opponentList(channelIdx);
+	}
+
+	@Override
+	public void insertMatching(PlayMatchingVO playMatchingVO) throws Exception {
+		channelPlayMapper.insertMatching(playMatchingVO);
+	}
+
+	@Override
+	public PlayMatchingVO waitingMatchingList(Integer channelIdx) throws Exception {
+		PlayMatchingVO waitingMatchingList = new PlayMatchingVO();
+		
+		waitingMatchingList.setApplyingList(channelPlayMapper.applyingMatchingList(channelIdx));
+		waitingMatchingList.setWaitingList(channelPlayMapper.waitingMatchingList(channelIdx));
+		
+		return waitingMatchingList;
+	}
+
+	@Override
+	public void applyMatching(Integer matchingIdx) throws Exception {
+		channelPlayMapper.applyMatching(matchingIdx);
+	}
+
+	@Override
+	public void denieMatching(Integer matchingIdx) throws Exception {
+		channelPlayMapper.denieMatching(matchingIdx);
 	}
 
 }

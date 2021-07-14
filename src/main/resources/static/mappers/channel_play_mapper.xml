@@ -14,6 +14,13 @@
 		<result property="channelPlayStep" column="channel_play_step"/>
 	</resultMap>
 	
+	<resultMap type="com.soccer.web.channel.play.vo.PlayMatchingVO" id="playMatchingVO">
+		<result property="channelPlayMatchingIdx" column="channel_play_matching_idx"/>
+		<result property="channelPlayMatchingPlay1" column="channel_play_matching_play1"/>
+		<result property="channelPlayMatchingPlay2" column="channel_play_matching_play2"/>
+		<result property="channelPlayMatchingStep" column="channel_play_matching_step"/>
+	</resultMap>
+	
 	<!-- 영상 게시글의 리스트를 출력 -->
 	<select id="selectChannelPlayList" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" resultMap="channelPlayVO">
 		SELECT * 
@@ -86,5 +93,67 @@
 		WHERE 
 			channel_play_idx = #{channelPlayIdx}
 	</delete>
-
+	
+	<!-- 작동 안할시 not in 기능 사용 -->
+	<select id="opponentList" parameterType="integer" resultMap="channelPlayVO">
+		SELECT * FROM channel_play AS play
+		WHERE channel_idx = #{channelIdx}
+			AND NOT EXISTS(SELECT 
+							matching.channel_play_matching_play1, 
+							matching.channel_play_matching_play2 
+						   FROM 
+						   	channel_play_matching as matching
+						   WHERE 
+						   	play.channel_play_idx = matching.channel_play_matching_play1
+						   OR
+						   	play.channel_play_idx = matching.channel_play_matching_play2
+						   )
+	</select>
+	
+	<insert id="insertMatching" parameterType="com.soccer.web.channel.play.vo.PlayMatchingVO">
+		INSERT INTO channel_play_matching
+		VALUES (
+				default,
+				#{channelPlayMatchingPlay1},
+				#{channelPlayMatchingPlay2},
+				'applying'
+				)
+	</insert>
+	
+	<select id="applyingMatchingList" parameterType="integer" resultMap="playMatchingVO">
+		SELECT 
+			channel_play_matching.channel_play_matching_idx,
+			channel_play_matching.channel_play_matching_play1,
+			channel_play_matching.channel_play_matching_play2,
+			channel_play_matching.channel_play_matching_step, 
+		FROM channel_play_matching
+		INNER JOIN channel_play 
+			ON channel_play_matching.channel_play_matching_play1 = channel_play.channel_play_idx
+		WHERE channel_play.channel_idx = #{channelIdx}
+			AND channel_play_matching.channel_play_matching_step = "applying"
+	</select>
+	
+	<select id="waitingMatchingList" parameterType="integer" resultMap="playMatchingVO">
+		SELECT 
+			channel_play_matching.channel_play_matching_idx,
+			channel_play_matching.channel_play_matching_play1,
+			channel_play_matching.channel_play_matching_play2,
+			channel_play_matching.channel_play_matching_step, 
+		FROM channel_play_matching
+		INNER JOIN channel_play 
+			ON channel_play_matching.channel_play_matching_play2 = channel_play.channel_play_idx
+		WHERE channel_play.channel_idx = #{channelIdx}
+			AND channel_play_matching.channel_play_matching_step = "applying"
+	</select>
+	
+	<update id="applyMatching" parameterType="integer">
+		UPDATE channel_play_matching
+			SET channel_play_matching_step = 'OK'
+		WHERE channel_play_matching_idx = #{matchingIdx}
+	</update>
+	
+	<delete id="denieMatching" parameterType="integer">
+		DELETE FROM channel_play_matching
+		WHERE channel_play_matching_idx = #{matchingIdx}
+	</delete>
 </mapper>

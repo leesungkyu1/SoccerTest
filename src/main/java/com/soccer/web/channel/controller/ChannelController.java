@@ -3,6 +3,8 @@ package com.soccer.web.channel.controller;
 import java.io.File;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,9 +21,12 @@ import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.member.service.MemberServiceImpl;
 import com.soccer.web.channel.play.service.ChannelPlayServiceImpl;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
+import com.soccer.web.channel.play.vo.ViewResultColumnVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.payment.service.PaymentServiceImpl;
+import com.soccer.web.payment.vo.PaymentVO;
+import com.soccer.web.user.vo.UserVO;
 
 @Controller
 public class ChannelController {
@@ -66,13 +71,6 @@ public class ChannelController {
 		FileUtils saveDir = new FileUtils();
 		
 		try {
-			Integer memberCount = memberService.memberCount(channelVO.getChannelIdx());
-			
-			if(channelVO.getChannelMax() < memberCount) {
-				attributes.addAttribute("message", "채널에 가입한 회원수가 수정하신 최대 멤버수를 초과합니다.");
-				return "redirect:";
-			}
-			
 			saveDir.forceMkdir(new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx()));
 			
 			String fileName = imageFile.getOriginalFilename();
@@ -85,15 +83,20 @@ public class ChannelController {
 			channelVO.setChannelImage(saveImageFileDir);
 			
 			//페이 체크
-			Integer payCheck = paymentService.payCheck(channelVO.getUserIdx());
+			PaymentVO payCheck = paymentService.payCheck(channelVO.getUserIdx());
 			
-			if(payCheck == null) {
+			if(payCheck.getPaymentCount() == null || payCheck.getPaymentCount() == 0) {
 				attributes.addAttribute("message", "결제가 필요한 서비스입니다.");
 			}else {
-				channelService.channelInsert(channelVO);
+				paymentService.paymentUpdate(channelVO);
+
+				int channelIdx = channelService.channelInsert(channelVO);
+				
+				channelVO.setChannelIdx(channelIdx);
+				channelService.insertViewResultColumn(channelVO);
 				
 				attributes.addAttribute("message", "채널이 생성되었습니다.");
-			}
+			}			
 		}catch (Exception e) {
 			e.printStackTrace();
 			
@@ -119,6 +122,13 @@ public class ChannelController {
 		FileUtils saveDir = new FileUtils();
 		
 		try {
+			Integer memberCount = memberService.memberCount(channelVO.getChannelIdx());
+			
+			if(channelVO.getChannelMax() < memberCount) {
+				attributes.addAttribute("message", "채널에 가입한 회원수가 수정하신 최대 멤버수를 초과합니다.");
+				return "redirect:";
+			}
+			
 			File deleteDir = new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx());
 			
 			if(deleteDir.exists()) {
@@ -165,4 +175,45 @@ public class ChannelController {
 		
 		return "";
 	}
+	
+	//결과 컬럼 설정
+	@RequestMapping(value ="channel/viewResultColumn/{channelIdx}", method = RequestMethod.GET)
+	public String viewResultColumn(@PathVariable Integer channelIdx, HttpSession session, 
+			Model model, RedirectAttributes attributes) throws Exception{
+		UserVO loginUser = (UserVO)session.getAttribute("loginUser");
+		
+		ChannelVO channelVO = channelService.channelSelect(channelIdx);
+		
+		if(loginUser.getUserIdx() != channelVO.getChannelIdx()) {
+			attributes.addAttribute("message", "권한이 없습니다.");
+			
+			return "redirect:";
+		}else {
+			ViewResultColumnVO colVO = channelService.selectViewResultColumn(channelIdx);
+			
+			model.addAttribute("viewResultColumn", colVO);
+			
+			return "";
+		}		
+	}
+	
+	//결과 컬럼 수정
+	@RequestMapping(value = "channel/viewResultColumn/{channelIdx}/{viewResultColumnIdx}" , method = RequestMethod.PUT)
+	public String viewResultColumnUpdate(@PathVariable Integer channelIdx, @PathVariable Integer viewResultColumnIdx, 
+			ViewResultColumnVO colVO, RedirectAttributes attributes) throws Exception {
+		colVO.setChannelIdx(viewResultColumnIdx);
+		
+		try {
+			channelService.viewResultColumnUpdate(colVO);
+			
+			attributes.addAttribute("message", "보여줄 행 정보를 수정했습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("message", "에러가 발생했습니다.");
+		}
+		
+		return "redirect:";
+	}
+	
 }

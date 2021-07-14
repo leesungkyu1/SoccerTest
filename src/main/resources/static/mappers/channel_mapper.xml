@@ -11,6 +11,19 @@
 		<result property="channelMax" column="channel_max" />
 	</resultMap>
 	
+	<resultMap id="col" type="com.soccer.web.channel.play.vo.ViewResultColumnVO">
+		<result property="viewResultColumnIdx" column="viewresultcolumn_idx" />
+		<result property="channelIdx" column="channel_idx" />
+		<result property="viewResultColumnTackle" column="viewresultcolumn_tackle" />
+		<result property="viewResultColumnCross" column="viewresultcolumn_cross" />
+		<result property="viewResultColumnCornerKick" column="viewresultcolumn_cornerKick" />
+		<result property="viewResultColumnFreeKick" column="viewresultcolumn_freekick" />
+		<result property="viewResultColumnShooting" column="viewresultcolumn_shooting" />
+		<result property="viewResultColumnAssist" column="viewresultcolumn_assist" />
+		<result property="viewResultColumnPass" column="viewresultcolumn_pass" />
+		<result property="viewResultColumnContention" column="viewresultcolumn_contention" />
+	</resultMap>
+	
 	<select id="channelList" resultMap="channel">
 		SELECT * FROM channel
 		<if test='searchWord != null or searchWord != ""'>
@@ -27,6 +40,9 @@
 	</select>
 	
 	<insert id="channelInsert" parameterType="com.soccer.web.channel.vo.ChannelVO">
+		<selectKey resultType="int" keyProperty="channelIdx" order="AFTER">
+			SELECT MAX(channel_idx) FROM channel;
+		</selectKey>
 		INSERT INTO channel
 		VALUES(
 				default,
@@ -45,5 +61,44 @@
 				region_idx = #{regionIdx},
 				channel_max = #{channelMax}
 		WHERE channel_idx = #{channelIdx}
+	</update>
+	
+	<insert id="insertViewResultColumn" parameterType="com.soccer.web.channel.vo.ChannelVO">
+		INSERT INTO viewresultcolumn
+		VALUES (
+				default,
+				#{channelIdx},
+				'Y',
+				'Y',
+				'Y',
+				'Y',
+				'Y',
+				'Y',
+				'Y',
+				'Y'
+		)
+	</insert>
+	
+	<select id="channelSelect" parameterType="integer" resultMap="channel">
+		SELECT * FROM channel
+		WHERE channel_idx = #{channelIdx}
+	</select>
+	
+	<select id="selectViewResultColumn" parameterType="int" resultMap="col">
+		SELECT * FROM viewresultcolumn
+		WHERE channel_idx = #{channelIdx}
+	</select>
+	
+	<update id="viewResultColumnUpdate" parameterType="com.soccer.web.channel.play.vo.ViewResultColumnVO">
+		UPDATE viewResultColumnUpdate
+			SET viewresultcolumn_tackle = #{viewResultColumnTackle},
+				viewresultcolumn_cross = #{viewResultColumnCross},		
+				viewresultcolumn_cornerKick = #{viewResultColumnCornerKick},
+				viewresultcolumn_freekick = #{viewResultColumnFreeKick},
+				viewresultcolumn_shooting = #{viewResultColumnShooting},
+				viewresultcolumn_assist = #{viewResultColumnAssist},
+				viewresultcolumn_pass = #{viewResultColumnPass},
+				viewresultcolumn_contention = #{viewResultColumnContention}
+		WHERE channel_idx = #{channelIdx}				
 	</update>
 </mapper>

@@ -5,5 +5,5 @@ import lombok.Data;
 public @Data class PaymentVO {
 	private int paymentIdx;
 	private int userIdx;
-	private int paymentCount;
+	private Integer paymentCount;
 }
