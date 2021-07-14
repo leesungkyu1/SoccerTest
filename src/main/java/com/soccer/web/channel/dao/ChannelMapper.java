@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.soccer.web.channel.play.vo.ViewResultColumnVO;
 import com.soccer.web.channel.vo.ChannelVO;
 
 @Mapper
@@ -16,8 +17,20 @@ public interface ChannelMapper {
 	Integer channelMemeberMax(Integer channelIdx) throws Exception;
 	
 	//채널 생성
-	void channelInsert(ChannelVO channelVO) throws Exception;
+	int channelInsert(ChannelVO channelVO) throws Exception;
 
 	//채널 수정
 	void channelUpdate(ChannelVO channelVO) throws Exception;
+	
+	//컬럼 보여주는 설정 정보 저장
+	void insertViewResultColumn(ChannelVO channelVO) throws Exception;
+
+	//채널 기본 정보 가져오기
+	ChannelVO channelSelect(Integer channelIdx) throws Exception;
+
+	//채널 컬럼 정보 가져오기
+	ViewResultColumnVO selectViewResultColumn(Integer channelIdx) throws Exception;
+	
+	//채널 컬럼 정보 수정
+	void viewResultColumnUpdate(ViewResultColumnVO colVO) throws Exception;
 }

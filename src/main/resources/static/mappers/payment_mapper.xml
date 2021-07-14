@@ -18,9 +18,21 @@
 		)	
 	</insert>
 	
-	<select id="payCheck" parameterType="integer" resultType="integer">
+	<select id="payCheck" parameterType="integer" resultMap="payment">
 		SELECT * FROM payment
 		WHERE user_idx = #{userIdx}
-			AND payment_count >= 1
+		ORDER BY payment_idx DESC
+		LIMIT 1
 	</select>
+	
+	<update id="paymentUpdate" parameterType="com.soccer.web.channel.vo.ChannelVO">
+		UPDATE payment
+			SET payment_count = payment_count - 1 
+		WHERE payment_idx = (SELECT p.payment_idx FROM 
+								(SELECT payment_idx FROM payment
+								 WHERE user_idx = #{user_idx} 
+								 ORDER BY payment_idx DESC 
+								 LIMIT 1) 
+							 AS p)
+	</update>
 </mapper>

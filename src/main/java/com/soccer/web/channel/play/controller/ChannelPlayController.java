@@ -1,6 +1,7 @@
 package com.soccer.web.channel.play.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -8,14 +9,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.play.service.ChannelPlayService;
 import com.soccer.web.channel.play.service.TeamPlayerService;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
+import com.soccer.web.channel.play.vo.PlayMatchingVO;
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
+import com.soccer.web.channel.service.ChannelServiceImpl;
+import com.soccer.web.channel.vo.ChannelVO;
 
 @RestController
 public class ChannelPlayController {
@@ -25,6 +30,9 @@ public class ChannelPlayController {
 	
 	@Autowired
 	private TeamPlayerService teamPlayerService;
+	
+	@Autowired
+	ChannelServiceImpl channelService;
 	
 	// 채널 게시글의 리스트를 보여주는 메서드 (페이징처리는 나중에)
 	@RequestMapping(value = "channel/play/{channelIdx}", method = RequestMethod.GET)
@@ -120,5 +128,83 @@ public class ChannelPlayController {
 		}
 		attributes.addAttribute("message", "영상이 삭제되었습니다.");
 		return "redirect:/channel/play/" + channelIdx;
+	}
+	
+	// step1 상대 채널 검색 쿼리로 전달
+	@ResponseBody
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public List<ChannelVO> searchChannel(ChannelVO channelVO) throws Exception {
+		List<ChannelVO> channelList = channelService.channelList(channelVO);
+		
+		//null이 넘어갈시 template으로 처리			
+		return channelList;
+	}
+	
+	// step2 상대 경기 검색
+	@ResponseBody
+	@RequestMapping(value = "{상대채널 idx}", method = RequestMethod.GET)
+	public List<ChannelPlayVO> selectMatchingList(@PathVariable Integer channelIdx) throws Exception {
+		//null이 넘어갈시 template으로 처리
+		List<ChannelPlayVO> playList = channelPlayService.opponentList(channelIdx);  
+		return playList;
+	}
+	
+	// step3 매칭 신청
+	@RequestMapping(value = "{내 경기 idx}/{상대 경기 idx}", method = RequestMethod.POST)
+	public String insertMatching(@PathVariable Integer playIdx, @PathVariable Integer opponentPlayIdx,
+			Model model) throws Exception {
+		PlayMatchingVO playMatchingVO = new PlayMatchingVO();
+		
+		playMatchingVO.setChannelPlayMatchingPlay1(playIdx);
+		playMatchingVO.setChannelPlayMatchingPlay2(opponentPlayIdx);
+		
+		channelPlayService.insertMatching(playMatchingVO);
+		
+		model.addAttribute("message", "경기 정보 연동이 신청되었습니다.");
+		
+		return "";
+	}
+	
+	//step4 상대가 신청 목록 확인 및 대기중 목록 확인
+	@RequestMapping(value = "{채널 idx}", method = RequestMethod.GET)
+	public String waitingMatching(@PathVariable Integer channelIdx, Model model) throws Exception {
+		PlayMatchingVO matchingListVO = channelPlayService.waitingMatchingList(channelIdx); 
+		
+		model.addAttribute("matchingList", matchingListVO);
+		return "";
+	}
+	
+	//step5 승인
+	@RequestMapping(value = "{matchingIdx}", method = RequestMethod.PUT)
+	public String applyMatching(@PathVariable Integer matchingIdx, RedirectAttributes attributes) throws Exception {
+		try {
+			channelPlayService.applyMatching(matchingIdx);			
+			
+			attributes.addAttribute("message", "매칭이 승인되었습니다.");
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("message", "에러가 발생했습니다.");
+			return "redirect:";
+		}
+		
+		return "redirect:";
+	}
+	
+	//step6 거절
+	@RequestMapping(value = "{matchingIdx}", method = RequestMethod.DELETE)
+	public String denieMatching(@PathVariable Integer matchingIdx, RedirectAttributes attributes) throws Exception {
+		try {
+			channelPlayService.denieMatching(matchingIdx);			
+			
+			attributes.addAttribute("message", "매칭이 거절되었습니다.");
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("message", "에러가 발생했습니다.");
+			return "redirect:";
+		}
+		
+		return "redirect:";
 	}
 }

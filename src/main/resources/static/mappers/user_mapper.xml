@@ -13,6 +13,15 @@
 		<result property="userNick" column="user_nick" />
 	</resultMap>
 	
+	<resultMap id="channel" type="com.soccer.web.channel.vo.ChannelVO">
+		<result property="channelIdx" column="channel_idx" />
+		<result property="userIdx" column="user_idx" />
+		<result property="channelName" column="channel_name" />
+		<result property="channelImage" column="channel_image" />
+		<result property="regionIdx" column="region_idx" />
+		<result property="channelMax" column="channel_max" />
+	</resultMap>
+	
 	<insert id="userJoin" parameterType="com.soccer.web.user.vo.UserVO">
 		INSERT INTO user 
 			VALUES (
@@ -39,12 +48,22 @@
 	
 	<update id="userInfoUpdate" parameterType="com.soccer.web.user.vo.UserVO">
 		UPDATE user
-		SET user_id = #{userId},
-			user_password = #{userPassword},
+		SET user_password = #{userPassword},
 			region_idx = #{regionIdx},
 			user_mobile = #{userMobile},
 			user_name = #{userName},
 			user_nick = #{userNick}
 		WHERE user_idx = #{userIdx}
 	</update>
+	
+	<select id="checkId" parameterType="com.soccer.web.user.vo.UserVO" resultType="integer">
+		SELECT COUNT(*) FROM user
+		WHERE user_id = #{userId}
+	</select>
+	
+	<select id="joinChannelList" parameterType="integer" resultMap="channel">
+		SELECT * FROM channel
+		WHERE channel_idx IN (SELECT channel_idx FROM member
+							  WHERE user_idx = #{userIdx})
+	</select>
 </mapper>

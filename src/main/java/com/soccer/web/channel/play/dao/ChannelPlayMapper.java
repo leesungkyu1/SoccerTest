@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
+import com.soccer.web.channel.play.vo.PlayMatchingVO;
 import com.soccer.web.channel.vo.ChannelVO;
 
 @Mapper
@@ -31,4 +32,22 @@ public interface ChannelPlayMapper {
 
 	//채널 Info용 PlayList
 	List<ChannelPlayVO> selectChannelMainPlayList(ChannelVO channelVO) throws Exception;
+	
+	//경기 수락이 신청되지 않은 경기 목록 가져오기
+	List<ChannelPlayVO> opponentList(Integer playIdx) throws Exception;
+	
+	//경기 매칭(경기 게시판 연동) 신청
+	void insertMatching(PlayMatchingVO playMatchingVO) throws Exception;
+	
+	//내가 신청한 매칭 목록
+	List<PlayMatchingVO> applyingMatchingList(Integer channelIdx) throws Exception;
+
+	//상대가 신청한 매칭 목록
+	List<PlayMatchingVO> waitingMatchingList(Integer channelIdx) throws Exception;
+
+	//매칭 수락
+	void applyMatching(Integer matchingIdx) throws Exception;
+	
+	//매칭 거절
+	void denieMatching(Integer matchingIdx) throws Exception;
 }
