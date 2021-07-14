@@ -2,9 +2,11 @@ package com.soccer.web.channel.play.service;
 
 import java.util.List;
 
-import com.soccer.web.channel.board.vo.ChannelBoardVO;
+import com.soccer.web.channel.play.vo.ChannelPlayGoalVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
-import com.soccer.web.channel.play.vo.PlayMatchingVO;
+import com.soccer.web.channel.play.vo.PlayresultVO;
+import com.soccer.web.channel.play.vo.TeamPlayerVO;
+import com.soccer.web.channel.play.vo.TeamVO;
 
 public interface ChannelPlayService {
 
@@ -20,14 +22,15 @@ public interface ChannelPlayService {
 	
 	void deleteChannelPlay(int channelPlayIdx) throws Exception;
 
-	List<ChannelPlayVO> opponentList(Integer playIdx) throws Exception;
+	void insertGoal(ChannelPlayGoalVO goalVO) throws Exception;
 
-	void insertMatching(PlayMatchingVO playMatchingVO) throws Exception;
+	List<ChannelPlayGoalVO> goalList(int channelPlayIdx) throws Exception;
 
-	PlayMatchingVO waitingMatchingList(Integer channelIdx) throws Exception;
+	void updateGoal(ChannelPlayGoalVO goalVO) throws Exception;
 
-	void applyMatching(Integer matchingIdx) throws Exception;
+	void deleteGoal(int channelPlayGoalIdx) throws Exception;
 
-	void denieMatching(Integer matchingIdx) throws Exception;
+	PlayresultVO totalScore(int channelPlayIdx) throws Exception;
 
+	void createPlayInfo(TeamVO teamVO, List<TeamPlayerVO> playerList) throws Exception;
 }

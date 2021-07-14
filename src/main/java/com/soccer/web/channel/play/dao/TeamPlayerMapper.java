@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
+import com.soccer.web.channel.play.vo.TeamVO;
 
 @Mapper
 public interface TeamPlayerMapper {
@@ -37,5 +38,17 @@ public interface TeamPlayerMapper {
 	
 	// 경기를 뛴 선수의 기록을 변경하는 메서드
 	void updatePlayerPlayresult(PlayresultVO playresultVO) throws Exception;
+	
+	//선수를 리스트로 입력
+	void insertPlayerList(List<TeamPlayerVO> playerList) throws Exception;
+	
+	//입력한 선수 인덱스 출력
+	List<Integer> playerIndexList(TeamVO teamVO) throws Exception;
+	
+	//임시 선수기록 입력
+	void tempPlayresult(List<PlayresultVO> tempPlayresultList) throws Exception;
+
+	//선수 기록 한번에 넣기
+	void resultUpdate(List<PlayresultVO> resultVO) throws Exception;
 	
 }

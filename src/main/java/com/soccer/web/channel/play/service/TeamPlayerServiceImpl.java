@@ -153,5 +153,10 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 	public void updatePlayresult(PlayresultVO playresultVO) throws Exception {
 		teamPlayerMapper.updatePlayerPlayresult(playresultVO);
 	}
+
+	@Override
+	public void resultUpdate(List<PlayresultVO> resultVO) throws Exception {
+		teamPlayerMapper.resultUpdate(resultVO);
+	}
 	
 }

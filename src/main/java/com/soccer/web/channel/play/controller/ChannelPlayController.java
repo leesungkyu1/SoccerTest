@@ -1,7 +1,6 @@
 package com.soccer.web.channel.play.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -9,18 +8,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.play.service.ChannelPlayService;
 import com.soccer.web.channel.play.service.TeamPlayerService;
+import com.soccer.web.channel.play.vo.ChannelPlayGoalVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
-import com.soccer.web.channel.play.vo.PlayMatchingVO;
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
+import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
-import com.soccer.web.channel.vo.ChannelVO;
 
 @RestController
 public class ChannelPlayController {
@@ -55,7 +53,6 @@ public class ChannelPlayController {
 		return "";
 	}
 	
-	//이쪽 
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
 	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayDetail(	@PathVariable int channelIdx,
@@ -98,7 +95,6 @@ public class ChannelPlayController {
 		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
 	}
 	
-	// 연동 끊기
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)
 	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.PUT)
 	public String updateChannelPlay(@PathVariable int channelIdx,
@@ -132,81 +128,92 @@ public class ChannelPlayController {
 		return "redirect:/channel/play/" + channelIdx;
 	}
 	
-	// step1 상대 채널 검색 쿼리로 전달
-	@ResponseBody
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<ChannelVO> searchChannel(ChannelVO channelVO) throws Exception {
-		List<ChannelVO> channelList = channelService.channelList(channelVO);
+	//득점 정보 입력
+	@RequestMapping(value = "{channelPlayIdx}", method = RequestMethod.POST)
+	public String insertGoal(@PathVariable int channelPlayIdx, ChannelPlayGoalVO goalVO,
+			RedirectAttributes attributes) throws Exception {
+		goalVO.setChannelPlayIdx(channelPlayIdx);
 		
-		//null이 넘어갈시 template으로 처리			
-		return channelList;
+		channelPlayService.insertGoal(goalVO);
+		
+		attributes.addAttribute("message", "득점 정보를 입력했습니다.");
+				
+		return "redirect:";
 	}
 	
-	// step2 상대 경기 검색
-	@ResponseBody
-	@RequestMapping(value = "{상대채널 idx}", method = RequestMethod.GET)
-	public List<ChannelPlayVO> selectMatchingList(@PathVariable Integer channelIdx) throws Exception {
-		//null이 넘어갈시 template으로 처리
-		List<ChannelPlayVO> playList = channelPlayService.opponentList(channelIdx);  
-		return playList;
-	}
-	
-	// step3 매칭 신청
-	@RequestMapping(value = "{내 경기 idx}/{상대 경기 idx}", method = RequestMethod.POST)
-	public String insertMatching(@PathVariable Integer playIdx, @PathVariable Integer opponentPlayIdx,
-			Model model) throws Exception {
-		PlayMatchingVO playMatchingVO = new PlayMatchingVO();
+	//우리팀, 상대팀 득점 정보 얻어오기
+	@RequestMapping(value = "{channelPlayIdx}", method = RequestMethod.GET)
+	public String goalList(@PathVariable int channelPlayIdx, Model model) throws Exception {
+		//프론트에서 뿌릴때 나눌필요 없이 순서대로 뿌리되 타입에 따라 위치 조절
+		List<ChannelPlayGoalVO> sortedByTimeGoalList = channelPlayService.goalList(channelPlayIdx);
 		
-		playMatchingVO.setChannelPlayMatchingPlay1(playIdx);
-		playMatchingVO.setChannelPlayMatchingPlay2(opponentPlayIdx);
-		
-		channelPlayService.insertMatching(playMatchingVO);
-		
-		model.addAttribute("message", "경기 정보 연동이 신청되었습니다.");
+		model.addAttribute("goalList", sortedByTimeGoalList);
 		
 		return "";
 	}
 	
-	//step4 상대가 신청 목록 확인 및 대기중 목록 확인
-	@RequestMapping(value = "{채널 idx}", method = RequestMethod.GET)
-	public String waitingMatching(@PathVariable Integer channelIdx, Model model) throws Exception {
-		PlayMatchingVO matchingListVO = channelPlayService.waitingMatchingList(channelIdx); 
+	//득점 기록 수정
+	@RequestMapping(value = "{channelPlayIdx}/{channelPlayGoalIdx}", method = RequestMethod.PUT)
+	public String updateGoal(@PathVariable int channelPlayGoalIdx, ChannelPlayGoalVO goalVO,
+			RedirectAttributes attributes) throws Exception {
+		goalVO.setChannelPlayGoalIdx(channelPlayGoalIdx);
 		
-		model.addAttribute("matchingList", matchingListVO);
+		channelPlayService.updateGoal(goalVO);
+		
+		attributes.addAttribute("message", "득점 기록을 수정했습니다.");
 		return "";
 	}
 	
-	//step5 승인
-	@RequestMapping(value = "{matchingIdx}", method = RequestMethod.PUT)
-	public String applyMatching(@PathVariable Integer matchingIdx, RedirectAttributes attributes) throws Exception {
-		try {
-			channelPlayService.applyMatching(matchingIdx);			
-			
-			attributes.addAttribute("message", "매칭이 승인되었습니다.");
-		}catch(Exception e) {
-			e.printStackTrace();
-			
-			attributes.addAttribute("message", "에러가 발생했습니다.");
-			return "redirect:";
-		}
+	//득점 기록 삭제
+	@RequestMapping(value = "{channelPlayIdx}/{channelPlayGoalIdx}", method = RequestMethod.DELETE)
+	public String deleteGoal(@PathVariable int channelPlayGoalIdx, RedirectAttributes attributes) throws Exception {
+		channelPlayService.deleteGoal(channelPlayGoalIdx);
 		
-		return "redirect:";
+		attributes.addAttribute("message", "득점 기록을 삭제했습니다.");
+		
+		return "";
 	}
 	
-	//step6 거절
-	@RequestMapping(value = "{matchingIdx}", method = RequestMethod.DELETE)
-	public String denieMatching(@PathVariable Integer matchingIdx, RedirectAttributes attributes) throws Exception {
-		try {
-			channelPlayService.denieMatching(matchingIdx);			
-			
-			attributes.addAttribute("message", "매칭이 거절되었습니다.");
-		}catch(Exception e) {
-			e.printStackTrace();
-			
-			attributes.addAttribute("message", "에러가 발생했습니다.");
-			return "redirect:";
+	//우리팀 총점 상대팀 총점 기능
+	@RequestMapping(value = "{channelPlayIdx}", method = RequestMethod.GET)
+	public String totalScore(@PathVariable int channelPlayIdx, Model model) throws Exception {
+		PlayresultVO totalScoreAndTeamInfo = channelPlayService.totalScore(channelPlayIdx);
+		
+		model.addAttribute("totalScoreAndTeamInfo", totalScoreAndTeamInfo);
+		return "";
+	}
+	
+	//채널 검색 기능 channelController에 존재
+	//채널 멤버 목록 가져오기 memberController 에 존재
+	//팀 생성 , player 생성, result 생성만 default로  
+	//result 수정 기능 
+	//상대팀 생성 로직도 똑같음
+	
+	//팀 생성(상대팀도 같음 테스트 필요!!!)
+	@RequestMapping(value = "{channelIdx}/{playIdx}", method = RequestMethod.POST)
+	public String createPlayInfo(
+			@PathVariable int channelIdx, @PathVariable int playIdx,
+			TeamVO teamVO, List<TeamPlayerVO> playerList, RedirectAttributes attributes) throws Exception {
+		teamVO.setChannelIdx(channelIdx);
+		teamVO.setChannelPlayIdx(playIdx);
+		
+		for(int i = 0; i<playerList.size(); i++) {
+			playerList.get(i).setChannelPlayIdx(playIdx);
 		}
 		
-		return "redirect:";
+		channelPlayService.createPlayInfo(teamVO, playerList);
+		
+		attributes.addAttribute("message", "경기 기록을 등록했습니다.");
+		
+		return "";
+	}
+	
+	//선수 개별 기록 한번에 수정
+	@RequestMapping(value = "", method = RequestMethod.PUT)
+	public String resultUpdate(List<PlayresultVO> resultVO, RedirectAttributes attributes) throws Exception {
+		teamPlayerService.resultUpdate(resultVO);
+		
+		attributes.addAttribute("message", "선수 기록을 수정했습니다.");
+		return "";
 	}
 }

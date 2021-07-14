@@ -6,14 +6,18 @@
 	<resultMap type="com.soccer.web.channel.play.vo.TeamPlayerVO" id="teamPlayerVO">
 		<result property="teamPlayerIdx" column="team_player_idx"/>
 		<result property="userIdx" column="user_idx"/>
+		<result property="teamIdx" column="team_idx"/>
 		<result property="channelPlayIdx" column="channel_play_idx"/>
 		<result property="teamPlayerPosition" column="team_player_position"/>
+		<result property="teamPlayerFormationNumber" column="team_player_formation_number"/>
+		<result property="memberImage" column="member_image"/>
 	</resultMap>
 	
 	<!-- playresult resultMap -->
 	<resultMap type="com.soccer.web.channel.play.vo.PlayresultVO" id="playresultVO">
 		<result property="playresultIdx" column="playresult_idx"/>
 		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="teamIdx" column="team_idx"/>
 		<result property="teamPlayerIdx" column="team_player_idx"/>
 		<result property="playresultTotaltackle" column="playresult_totaltackle"/>
 		<result property="playresultSuccesstackle" column="playresult_successtackle"/>
@@ -34,15 +38,51 @@
 	</resultMap>
 	
 	<!-- 경기에 선수 리스트를 가져오는 쿼리문 -->
-	<select id="selectTeamPlayerList" resultMap="teamPlayerVO">
-		SELECT * FROM team_player 
-		WHERE channel_play_idx = #{channelPlayIdx}
+	<select id="selectTeamPlayerList" parameterType="int" resultMap="teamPlayerVO">
+		SELECT 
+			team_player.team_player_idx,
+			team_player.user_idx,
+			team_player.team_idx,
+			team_player.channel_play_idx,
+			team_player.team_player_position,
+			team_player.team_player_formation_number,
+			member.member_image
+		FROM team_player
+		INNER JOIN member
+			ON team_player.user_idx = member.user_idx
+		WHERE team_player.channel_play_idx = #{channelPlayIdx}
 	</select>
 	
 	<!-- 경기에 선수 리스트에 해당하는 playresult를 가져오는 쿼리문 -->
-	<select id="selectPlayerResultList" parameterType="int" resultMap="playresultVO">
-		SELECT * FROM playresult 
-		WHERE channel_play_idx = #{channelPlayIdx}
+	<select id="selectPlayerResultList" parameterType="int" resultMap="playresultVO"> 
+	    SELECT 
+	    	playresult.playresult_idx,
+	    	playresult.channel_play_idx,
+	    	playresult.team_idx,
+	    	playresult.team_player_idx,
+	    	playresult.playresult_totaltackle,
+	    	playresult.playresult_successtackle,
+	    	playresult.playresult_totalcross,
+	    	playresult.playresult_successcross,
+	    	playresult.playresult_totalcornerkick,
+	    	playresult.playresult_successcornerkick,
+	    	playresult.playresult_totalfreekick,
+	    	playresult.playresult_successfreekick,
+	    	playresult.playresult_totalshooting,
+	    	playresult.playresult_successshooting,
+	    	playresult.playresult_totalassist,
+	    	playresult.playresult_successassist,
+	    	playresult.playresult_totalpass,
+	    	playresult.playresult_successpass,
+	    	playresult.playresult_totalcontention,
+	    	playresult.playresult_successcontention,
+	    	member.member_nick
+	    FROM playresult
+	    INNER JOIN team_player
+	    	ON playresult.team_player_idx = team_player.team_player_idx
+	    RIGHT JOIN member
+	    	ON team_player.user_idx = member.user_idx
+	    WHERE playresult.channel_play_idx = #{channelPlayIdx}
 	</select>
 	
 	<!-- 경기에 선수를 추가할 때 사용되는 쿼리문 (play_idx, channel_play_idx 와 연결) -->
@@ -150,10 +190,77 @@
 			playresult_totalcontention = #{playresultTotalcontention},
 			playresult_successcontention = #{playresultSuccesscontention}
 		WHERE playresult_idx = #{playresultIdx}
-			
 	</update>
-	
 	<!-- 채널의 member를 눌렀을 때 --> <!-- member쪽에서 쓰는게 더 좋을듯 -->
 	
+	<insert id="insertPlayerList" parameterType="List">
+		<foreach item="item" collection="list">
+			INSERT INTO team_player
+			VALUES(
+				default,
+				#{item.userIdx},
+				#{item.teamIdx},
+				#{item.channelPlayIdx},
+				null,
+				null
+			)
+		</foreach>
+	</insert>
 	
+	<select id="playerIndexList" parameterType="com.soccer.web.channel.play.vo.TeamVO" resultType="integer">
+		SELECT team_player_idx FROM team_player
+		WHERE team_idx = #{teamIdx}
+			AND channel_play_idx = #{channelPlayIdx}
+	</select>
+	
+	<insert id="tempPlayresult" parameterType="list">
+		<foreach item="item" collection="list">
+			INSERT INTO playresult
+			VALUES(
+					default,
+					#{item.channelPlayIdx},
+					#{item.teamIdx},
+					#{item.teamPlayerIdx},
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+					default,
+			)
+		</foreach>
+	</insert>
+	
+	<update id="resultUpdate" parameterType="list">
+		<foreach item="item" collection="list" open="" close="" separator=";">
+			UPDATE playresult
+				SET playresult_totaltackle = #{item.playresultTotaltackle},
+					playresult_successtackle = #{item.playresultSuccesstackle},
+					playresult_totalcross = #{item.playresultTotalcross},
+					playresult_successcross = #{item.playresultSuccesscross},
+					playresult_totalcornerkick = #{item.playresultTotalcornerkick},
+					playresult_successcornerkick = #{item.playresultSuccesscornerkick},
+					playresult_totalfreekick = #{item.playresultTotalfreekick},
+					playresult_successfreekick = #{item.playresultSuccessfreekick},
+					playresult_totalshooting = #{item.playresultTotalshooting},
+					playresult_successshooting = #{item.playresultSuccessshooting},
+					playresult_totalassist = #{item.playresultTotalassist},
+					playresult_successassist = #{item.playresultSuccessassist},
+					playresult_totalpass = #{item.playresultTotalpass},
+					playresult_successpass = #{item.playresultSuccesspass},
+					playresult_totalcontention = #{item.playresultTotalcontention},
+					playresult_successcontention = #{item.playresultSuccesscontention}
+			WHERE playresult_idx = #{item.playresultIdx}
+		</foreach>
+	</update>
 </mapper>

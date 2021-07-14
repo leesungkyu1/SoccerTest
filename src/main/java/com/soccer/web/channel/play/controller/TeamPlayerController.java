@@ -28,6 +28,7 @@ public class TeamPlayerController {
 	@Autowired
 	private MemberService memberService;
 	
+	//이거 수정해서 선수 목록 가져오기로 
 	// 영상 게시글에서 Player를 추가할 때 나오는 채널 멤버의 리스트 출력
 	@RequestMapping(value = "channel/play/member/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectMemberList(@PathVariable int channelIdx, @PathVariable int channelPlayIdx, Model model) throws Exception {
@@ -43,6 +44,7 @@ public class TeamPlayerController {
 		return "";
 	}
 	
+	//삭제
 	// 영상 게시글에서 Player를 추가하는 메서드
 	@RequestMapping(value = "channel/play/player/{channelIdx}/{channelPlayIdx}", method = RequestMethod.POST)
 	public String insertTeamPlayer(RedirectAttributes attributes,
@@ -71,6 +73,7 @@ public class TeamPlayerController {
 		attributes.addAttribute("message", "선수가 등록되었습니다.");
 		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
 	}
+	
 	
 	// 영상 게시글에서 Player의 position을 변경하는 메서드
 	@RequestMapping(value = "channel/play/player/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.PUT)

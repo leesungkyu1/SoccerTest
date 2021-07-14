@@ -56,4 +56,19 @@
 			AND apply.apply_step = "ok"
 	</select>
 	
+	<select id="searchByChannel" parameterType="integer" resultMap="member">
+		SELECT
+			   member.member_idx,
+			   member.user_idx,
+			   member.channel_idx,
+			   member.member_date,
+			   member.member_nick,
+			   member.member_position,
+			   member.member_image,
+		FROM member
+		INNER JOIN apply
+			ON member.user_idx = apply.user_idx
+		WHERE member.channel_idx = #{channelIdx}
+			AND apply.apply_step = "ok"
+	</select>
 </mapper>

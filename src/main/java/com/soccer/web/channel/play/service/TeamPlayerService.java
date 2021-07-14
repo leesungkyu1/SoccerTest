@@ -27,4 +27,6 @@ public interface TeamPlayerService {
 	PlayresultVO selectPlayerResultVO(int channelPlayIdx) throws Exception;
 	
 	void updatePlayresult(PlayresultVO playresultVO) throws Exception;
+
+	void resultUpdate(List<PlayresultVO> resultVO) throws Exception;
 }
