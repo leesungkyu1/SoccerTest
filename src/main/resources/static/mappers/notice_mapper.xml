@@ -18,7 +18,9 @@
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY NOTICE_IDX DESC 
+		ORDER BY
+				notice_type ASC,
+				notice_idx DESC 
 		limit #{recordCountPerPage} offset #{firstIndex}
 	</select>
 	
@@ -34,11 +36,11 @@
 	<select id="selectNoticeDetail" parameterType="int" resultMap="noticeVO">
 		SELECT * 
 		FROM notice 
-		WHERE NOTICE_IDX=#{noticeIdx}
+		WHERE notice_idx = #{noticeIdx}
 	</select>
 	
 	<!-- 공지사항 추가 -->
-	<insert id="insertNotice" parameterType="com.soccer.web.notice.vo.NoticeVO">
+	<insert id="insertNotice" parameterType="com.soccer.web.notice.vo.NoticeVO" useGeneratedKeys="true" keyProperty="noticeIdx">
 		<![CDATA[
 			INSERT INTO notice 
 			VALUES (
@@ -57,18 +59,18 @@
 		<![CDATA[
 			UPDATE notice
 			SET 
-				NOTICE_TITLE = #{noticeTitle},
-				NOTICE_TYPE = #{noticeType},
-				NOTICE_DESC = #{noticeDesc},
-				NOTICE_DATE = default 
-				WHERE NOTICE_IDX=#{noticeIdx}
+				notice_title = #{noticeTitle},
+				notice_type = #{noticeType},
+				notice_desc = #{noticeDesc},
+				notice_date = default 
+			WHERE notice_idx = #{noticeIdx}
 		]]>
 	</update>
 	
 	<!-- 공지사항 삭제 -->
 	<delete id="deleteNotice" parameterType="int">
 		DELETE FROM notice 
-		WHERE NOTICE_IDX=#{noticeIdx}
+		WHERE notice_idx=#{noticeIdx}
 	</delete>
 	
 </mapper>
