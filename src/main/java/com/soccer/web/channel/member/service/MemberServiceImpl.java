@@ -30,7 +30,7 @@ public class MemberServiceImpl implements MemberService{
 	//채널 회원 존재여부
 	@Override
 	public int checkMember(MemberVO memberVO) throws Exception{
-		return memberDAO.checkMember(memberVO);
+		return memberDAO.memberCheck(memberVO);
 	}
 	
 	//채널 회원 수

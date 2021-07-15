@@ -9,6 +9,9 @@
 		<result property="channelIdx" column="channel_idx" />
 		<result property="applyDate" column="apply_date" />
 		<result property="applyStep" column="apply_step" />
+		
+		<result property="memberNick" column="member_nick" />
+		<result property="memberImage" column="member_image" />
 	</resultMap>
 	
 	<resultMap id="member" type="com.soccer.web.channel.member.vo.MemberVO">
@@ -22,9 +25,19 @@
 	</resultMap>
 	
 	<select id="applyList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="apply">
-		SELECT * FROM apply
-		WHERE channel_idx = #{channelIdx}
-			AND apply_step = 'applying'
+		SELECT 
+			apply.apply_idx,
+			apply.user_idx,
+			apply.channel_idx,
+			apply.apply_step,
+			member.member_nick,
+			member.member_image
+		FROM apply
+		INNER JOIN member
+			ON apply.user_idx = member.user_idx
+				AND apply.channel_idx = member.channel_idx
+		WHERE apply.channel_idx = 1
+			AND apply.apply_step = 'applying';
 	</select>
 	
 	<insert id="memberApply" parameterType="com.soccer.web.channel.member.vo.MemberVO">
@@ -34,23 +47,27 @@
 			   #{userIdx},
 			   #{channelIdx},
 			   default,
-			   #{memberNick},
-			   #{memberPosition},
-			   #{memberImage}	
+			   'applying'	
 			   )
 	</insert>
+	
+	<update id="memberDenie" parameterType="integer">
+		UPDATE apply
+			SET apply_step = "denie"
+		WHERE apply_idx = #{apply_idx}
+	</update>
 	
 	<delete id="applyDelete" parameterType="integer">
 		DELETE FROM apply
 		WHERE user_idx = (
 						  SELECT user_idx FROM member
-						  WEHRE member_idx = #{memberIdx}
+						  WHERE member_idx = #{memberIdx}
 						)
 			AND channel_idx = #{channelIdx}
 	</delete>
 	
 	<update id="memberAccept" parameterType="integer">
-		UPDATE FROM apply
+		UPDATE apply
 			SET apply_step = "ok"
 		WHERE apply_idx = #{applyIdx}
 	</update>

@@ -44,7 +44,7 @@ public class PaymentTest {
 		loginUser.setUserNick("똘똘이");
 		
 		MockHttpSession session = new MockHttpSession();
-		session.setAttribute("userInfo", session);
+		session.setAttribute("userInfo", loginUser);
 		
 		mvc.perform(post("/payment")
 				.session(session))
