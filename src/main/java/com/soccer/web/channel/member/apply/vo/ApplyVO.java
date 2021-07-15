@@ -8,4 +8,7 @@ public @Data class ApplyVO {
 	private int channelIdx;
 	private String applyDate;
 	private String applyStep;
+	
+	private String memberNick;
+	private String memberImage;
 }

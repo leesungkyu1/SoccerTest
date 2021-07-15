@@ -29,7 +29,7 @@
 			AND channel_idx = #{channelIdx}
 	</delete>
 	
-	<select id="memberCheck" parameterType="com.soccer.web.channel.member.vo.MemberVO" resultType="boolean">
+	<select id="memberCheck" parameterType="com.soccer.web.channel.member.vo.MemberVO" resultType="int">
 		SELECT COUNT(*) FROM member
 		WHERE member_idx = #{memberIdx}
 			AND channel_idx = #{channelIdx}
@@ -39,12 +39,12 @@
 		INSERT INTO member
 		VALUES(
 			   default,
-			   #{user_idx},
-			   #{channel_idx},
+			   #{userIdx},
+			   #{channelIdx},
 			   default,
-			   #{member_nick},
-			   #{member_position},
-			   #{member_image}
+			   #{memberNick},
+			   #{memberPosition},
+			   #{memberImage}
 		)
 	</insert>
 	
@@ -52,6 +52,7 @@
 		SELECT COUNT(*) FROM member
 		INNER JOIN apply
 			ON member.channel_idx = apply.channel_idx
+				AND member.user_idx = apply.user_idx
 		WHERE member.channel_idx = #{channelIdx}
 			AND apply.apply_step = "ok"
 	</select>
@@ -64,7 +65,7 @@
 			   member.member_date,
 			   member.member_nick,
 			   member.member_position,
-			   member.member_image,
+			   member.member_image
 		FROM member
 		INNER JOIN apply
 			ON member.user_idx = apply.user_idx

@@ -17,7 +17,7 @@ public interface MemberMapper {
 	void memberDelete(Integer memberIdx, Integer channelIdx) throws Exception;
 	
 	//채널 회원 존재여부
-	int checkMember(MemberVO memberVO) throws Exception;
+	int memberCheck(MemberVO memberVO) throws Exception;
 	
 	//회원 저장
 	void memberInsert(MemberVO memberVO) throws Exception;

@@ -12,6 +12,7 @@ public @Data class TeamPlayerVO {
 	private int channelPlayIdx;
 	private String teamPlayerPosition;
 	private int teamPlayerFormationNumber;
+	private String teamPlayerName;
 	
 	private List<TeamPlayerVO> teamPlayerVOList;
 	private String memberImage;

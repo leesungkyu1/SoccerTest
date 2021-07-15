@@ -226,7 +226,13 @@
 				#{item.teamIdx},
 				#{item.channelPlayIdx},
 				null,
-				null
+				null,
+				<if test="teamPlayerName != null">
+					#{item.teamPlayerName}
+				</if>
+				<if test="teamPlayerName == null">
+					null
+				</if>
 			)
 		</foreach>
 	</insert>

@@ -28,7 +28,7 @@ public class PaymentController {
 		try {
 			PaymentVO payCheck = paymentService.payCheck(userVO.getUserIdx());
 			
-			if(payCheck.getPaymentCount() == null || payCheck.getPaymentCount() == 0) {
+			if(payCheck == null || payCheck.getPaymentCount() == 0) {
 				paymentService.payment(userVO.getUserIdx());
 				attributes.addAttribute("message", "결제가 완료되었습니다.");								
 			}else {

@@ -37,6 +37,7 @@ public class MemberController {
 	@Autowired
 	ChannelServiceImpl channelService;
 	
+	//여기
 	//회원 목록 + 신청 목록
 	@RequestMapping(value = "/channel/member/{channelIdx}" , method = RequestMethod.GET)
 	public String channelMemberList(@PathVariable Integer channelIdx, ChannelVO channelVO, Model model) throws Exception{
@@ -48,12 +49,13 @@ public class MemberController {
 		model.addAttribute("memberList", memberList);
 		model.addAttribute("applyList", applyList);
 				
-		return "";
+		return "test";
 	}
 	
 	//회원 강퇴
 	@RequestMapping(value = "/channel/member/{channelIdx}/{memberIdx}", method = RequestMethod.DELETE)
-	public String memberDelete (@PathVariable Integer channelIdx, @PathVariable("memberIdx") Integer memberIdx, ChannelVO channelVO, RedirectAttributes attributes ) throws Exception{
+	public String memberDelete (@PathVariable Integer channelIdx, @PathVariable("memberIdx") Integer memberIdx, ChannelVO channelVO, 
+			RedirectAttributes attributes) throws Exception{
 		channelVO.setChannelIdx(channelIdx);
 		
 		try {
@@ -70,6 +72,8 @@ public class MemberController {
 			
 			attributes.addAttribute("message", "회원을 탈퇴시켰습니다.");
 		}catch(Exception e) {
+			e.printStackTrace();
+			
 			attributes.addAttribute("code", 301);
 			attributes.addAttribute("message", "회원탈퇴 처리 중 에러가 발생했습니다.");
 			
@@ -81,7 +85,7 @@ public class MemberController {
 	
 	//회원가입 신청
 	@SuppressWarnings("static-access")
-	@RequestMapping(value ="/channel/member" , method = RequestMethod.POST)
+	@RequestMapping(value ="/channel/member/{channelIdx}" , method = RequestMethod.POST)
 	public String memberApply(MemberVO memberVO, @RequestParam("imageFile")MultipartFile imageFile, 
 			RedirectAttributes attributes) throws Exception{
 		FileUtils saveDir = new FileUtils();
@@ -109,17 +113,19 @@ public class MemberController {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+			FileUtils fileUtils = new FileUtils();
 			
-			File deleteDir = new File(MEMBER_IMAGE_DIR + "/" + memberVO.getMemberIdx());
+			File deleteDir = new File(MEMBER_IMAGE_DIR + "/" + memberVO.getChannelIdx() + "/" + memberVO.getMemberIdx());
+			
 			if(deleteDir.exists()) {
-				deleteDir.delete();
+				fileUtils.forceDelete(deleteDir);
 			}
 			
+			attributes.addAttribute("code", 301);
 			attributes.addAttribute("message", "채널가입 신청 중 에러가 발생했습니다.");
 			
 			return "redirect:";
 		}
-		
 		return "redirect:";
 	}
 	
@@ -131,6 +137,9 @@ public class MemberController {
 			Integer memberMax = channelService.channelMemeberMax(channelIdx);
 			Integer memberCount = memberService.memberCount(channelIdx);
 			
+			System.out.println("memberMax = " + memberMax);
+			System.out.println("memberCount = " + memberCount);
+			
 			if(memberCount != null && memberCount >= memberMax) {
 				attributes.addAttribute("message", "채널 최대 회원수를 초과합니다.");
 			}else {
@@ -139,6 +148,8 @@ public class MemberController {
 				attributes.addAttribute("message", "회원가입이 승인되었습니다.");				
 			}
 		}catch(Exception e) {
+			e.printStackTrace();
+			
 			attributes.addAttribute("code", 302);
 			attributes.addAttribute("message", "회원가입이 승인 처리중 에러가 발생했습니다.");
 			
@@ -167,7 +178,7 @@ public class MemberController {
 	
 	//경기용 채널로 회원목록 가져오기
 	@ResponseBody
-	@RequestMapping(value = "{channelIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/member/{channelIdx}", method = RequestMethod.GET)
 	public List<MemberVO> searchByChannel(@PathVariable Integer channelIdx) throws Exception {
 		List<MemberVO> searchMemberList = memberService.searchByChannel(channelIdx);
 		
