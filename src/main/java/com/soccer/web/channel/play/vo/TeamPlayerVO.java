@@ -14,4 +14,6 @@ public @Data class TeamPlayerVO {
 	private int teamPlayerFormationNumber;
 	
 	private List<TeamPlayerVO> teamPlayerVOList;
+	private String memberImage;
+	
 }

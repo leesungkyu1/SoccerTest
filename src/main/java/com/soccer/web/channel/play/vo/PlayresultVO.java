@@ -6,6 +6,7 @@ public @Data class PlayresultVO {
 	
 	private int playresultIdx;
 	private int channelPlayIdx;
+	private int teamIdx;
 	private int teamPlayerIdx;
 	private int playresultTotaltackle;
 	private int playresultSuccesstackle;
@@ -23,4 +24,14 @@ public @Data class PlayresultVO {
 	private int playresultSuccesspass;
 	private int playresultTotalcontention;
 	private int playresultSuccesscontention;
+	
+	private String searchCode;
+	
+	private String channelName;
+	private String channelImage;
+	private String teamName;
+	private String regionName;
+	
+	private PlayresultVO home;
+	private PlayresultVO away;
 }

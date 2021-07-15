@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -61,6 +62,15 @@ public class ChannelController {
 		}
 		
 		return "";
+	}
+	
+	//경기용 채널 검색 기능
+	@ResponseBody
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public List<ChannelVO> asyncChannelList(ChannelVO channelVO) throws Exception {
+		List<ChannelVO> channelList = channelService.channelList(channelVO);
+		
+		return channelList;
 	}
 	
 	//채널 생성

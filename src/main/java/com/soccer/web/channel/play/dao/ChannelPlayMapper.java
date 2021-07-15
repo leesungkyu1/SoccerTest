@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.soccer.web.channel.board.vo.ChannelBoardVO;
+import com.soccer.web.channel.play.vo.ChannelPlayGoalVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
-import com.soccer.web.channel.play.vo.PlayMatchingVO;
+import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.vo.ChannelVO;
 
@@ -34,27 +34,28 @@ public interface ChannelPlayMapper {
 
 	//채널 Info용 PlayList
 	List<ChannelPlayVO> selectChannelMainPlayList(ChannelVO channelVO) throws Exception;
-	
-	//경기 수락이 신청되지 않은 경기 목록 가져오기
-	List<ChannelPlayVO> opponentList(Integer playIdx) throws Exception;
-	
-	//경기 매칭(경기 게시판 연동) 신청
-	void insertMatching(PlayMatchingVO playMatchingVO) throws Exception;
-	
-	//내가 신청한 매칭 목록
-	List<PlayMatchingVO> applyingMatchingList(Integer channelIdx) throws Exception;
 
-	//상대가 신청한 매칭 목록
-	List<PlayMatchingVO> waitingMatchingList(Integer channelIdx) throws Exception;
-
-	//매칭 수락
-	void applyMatching(Integer matchingIdx) throws Exception;
+	//득점 기록 입력
+	void insertGoal(ChannelPlayGoalVO goalVO) throws Exception;
 	
-	//매칭 거절
-	void denieMatching(Integer matchingIdx) throws Exception;
+	//득점 기록 리스트 가져오기
+	List<ChannelPlayGoalVO> goalList(int channelPlayIdx) throws Exception;
+	
+	//득점 기록 수정
+	void updateGoal(ChannelPlayGoalVO goalVO) throws Exception;
+	
+	//득점 기록 삭제
+	void deleteGoal(int channelPlayGoalIdx) throws Exception;
+	
+	//우리팀,상대팀 기록 총점 가져오기
+	PlayresultVO totalScore(PlayresultVO totalScoreVO) throws Exception;
+
+	//우리팀 생성
+	int insertTeam(TeamVO teamVO) throws Exception;
 
 	// 영상 게시글에 연관된 팀을 가져오는 메서드
 	List<TeamVO> selectTeamList(int channelPlayIdx) throws Exception;
 
+	// 채널의 포메이션을 변경하는 메서드
 	void updateChannelPlayFormation(HashMap<String, String> formationInfoMap) throws Exception;
 }

@@ -38,5 +38,11 @@ public class MemberServiceImpl implements MemberService{
 	public Integer memberCount(Integer channelIdx) throws Exception{
 		return memberDAO.memberCount(channelIdx);
 	}
+	
+	//경기용 - 채널로 멤버 검색
+	@Override
+	public List<MemberVO> searchByChannel(Integer channelIdx) throws Exception{
+		return memberDAO.searchByChannel(channelIdx);
+	}
 
 }

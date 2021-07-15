@@ -1,23 +1,29 @@
 package com.soccer.web.channel.play.service;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.dao.ChannelPlayMapper;
+import com.soccer.web.channel.play.dao.TeamPlayerMapper;
+import com.soccer.web.channel.play.vo.ChannelPlayGoalVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
-import com.soccer.web.channel.play.vo.PlayMatchingVO;
-import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.vo.ChannelVO;
+import com.soccer.web.channel.play.vo.PlayresultVO;
+import com.soccer.web.channel.play.vo.TeamPlayerVO;
+import com.soccer.web.channel.play.vo.TeamVO;
 
 @Service("channelPlayService")
 public class ChannelPlayServiceImpl implements ChannelPlayService {
 	
 	@Autowired
 	private ChannelPlayMapper channelPlayMapper;
+	
+	@Autowired
+	private TeamPlayerMapper teamPlayerMapper;
 
 	@Override
 	public int selectChannelPlayListTotCnt(ChannelPlayVO channelPlayVO) throws Exception {
@@ -50,33 +56,39 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	}
 
 	@Override
-	public List<ChannelPlayVO> opponentList(Integer channelIdx) throws Exception {
-		return channelPlayMapper.opponentList(channelIdx);
+	public void insertGoal(ChannelPlayGoalVO goalVO) throws Exception {
+		channelPlayMapper.insertGoal(goalVO);
 	}
 
 	@Override
-	public void insertMatching(PlayMatchingVO playMatchingVO) throws Exception {
-		channelPlayMapper.insertMatching(playMatchingVO);
+	public List<ChannelPlayGoalVO> goalList(int channelPlayIdx) throws Exception {
+		return channelPlayMapper.goalList(channelPlayIdx);
 	}
 
 	@Override
-	public PlayMatchingVO waitingMatchingList(Integer channelIdx) throws Exception {
-		PlayMatchingVO waitingMatchingList = new PlayMatchingVO();
+	public void updateGoal(ChannelPlayGoalVO goalVO) throws Exception {
+		channelPlayMapper.updateGoal(goalVO);
+	}
+
+	@Override
+	public void deleteGoal(int channelPlayGoalIdx) throws Exception {
+		channelPlayMapper.deleteGoal(channelPlayGoalIdx);
+	}
+
+	@Override
+	public PlayresultVO totalScore(int channelPlayIdx) throws Exception {
+		PlayresultVO totalScoreVO = new PlayresultVO();
 		
-		waitingMatchingList.setApplyingList(channelPlayMapper.applyingMatchingList(channelIdx));
-		waitingMatchingList.setWaitingList(channelPlayMapper.waitingMatchingList(channelIdx));
+		totalScoreVO.setChannelPlayIdx(channelPlayIdx);
+		totalScoreVO.setSearchCode("H");
 		
-		return waitingMatchingList;
-	}
-
-	@Override
-	public void applyMatching(Integer matchingIdx) throws Exception {
-		channelPlayMapper.applyMatching(matchingIdx);
-	}
-
-	@Override
-	public void denieMatching(Integer matchingIdx) throws Exception {
-		channelPlayMapper.denieMatching(matchingIdx);
+		totalScoreVO.setHome(channelPlayMapper.totalScore(totalScoreVO));
+		
+		totalScoreVO.setSearchCode("A");
+		
+		totalScoreVO.setAway(channelPlayMapper.totalScore(totalScoreVO));
+		
+		return totalScoreVO;
 	}
 	
 	@Override
@@ -89,4 +101,30 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 		channelPlayMapper.updateChannelPlayFormation(formationInfoMap);
 	}
 
+	@Override
+	public void createPlayInfo(TeamVO teamVO, List<TeamPlayerVO> playerList) throws Exception {
+		int teamIdx = channelPlayMapper.insertTeam(teamVO);
+		
+		for(int i = 0; i<playerList.size(); i++) {
+			playerList.get(i).setTeamIdx(teamIdx);
+		}
+		
+		teamPlayerMapper.insertPlayerList(playerList);
+		
+		teamVO.setTeamIdx(teamIdx);
+		
+		List<Integer> playerIndexList = teamPlayerMapper.playerIndexList(teamVO);
+		
+		List<PlayresultVO> tempPlayresultList = new ArrayList<PlayresultVO>();
+		
+		for(int i = 0; i<playerIndexList.size(); i++) {
+			PlayresultVO tempPlayresultVO = new PlayresultVO();
+			
+			tempPlayresultVO.setChannelPlayIdx(teamVO.getChannelPlayIdx());
+			tempPlayresultVO.setTeamIdx(teamIdx);
+			tempPlayresultVO.setTeamPlayerIdx(playerIndexList.get(i));
+		}
+		
+		teamPlayerMapper.tempPlayresult(tempPlayresultList);
+	}
 }
