@@ -81,4 +81,10 @@ public class ChannelServiceImpl implements ChannelService{
 	public void viewResultColumnUpdate(ViewResultColumnVO colVO) throws Exception{
 		channelDAO.viewResultColumnUpdate(colVO);
 	}
+	
+	//channelPlayIdx에 연결된 channel을 가져와야 함
+	@Override
+	public List<ChannelVO> selectChannelList(int channelPlayIdx) {
+		return channelDAO.selectChannelList(channelPlayIdx);
+	}
 }

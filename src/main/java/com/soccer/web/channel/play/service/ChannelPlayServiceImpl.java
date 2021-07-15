@@ -1,5 +1,6 @@
 package com.soccer.web.channel.play.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.dao.ChannelPlayMapper;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 import com.soccer.web.channel.play.vo.PlayMatchingVO;
+import com.soccer.web.channel.play.vo.TeamVO;
+import com.soccer.web.channel.vo.ChannelVO;
 
 @Service("channelPlayService")
 public class ChannelPlayServiceImpl implements ChannelPlayService {
@@ -74,6 +77,16 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	@Override
 	public void denieMatching(Integer matchingIdx) throws Exception {
 		channelPlayMapper.denieMatching(matchingIdx);
+	}
+	
+	@Override
+	public List<TeamVO> selectTeamList(int channelPlayIdx) throws Exception {
+		return channelPlayMapper.selectTeamList(channelPlayIdx);
+	}
+	
+	@Override
+	public void updateChannelPlayFormation(HashMap<String, String> formationInfoMap) throws Exception {
+		channelPlayMapper.updateChannelPlayFormation(formationInfoMap);
 	}
 
 }

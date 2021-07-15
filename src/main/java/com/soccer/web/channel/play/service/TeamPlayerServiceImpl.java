@@ -22,6 +22,11 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 	}
 	
 	@Override
+	public List<TeamPlayerVO> selectHomeAwayTeamPlayerList(HashMap<String, String> teamInfoMap) throws Exception {
+		return teamPlayerMapper.selectHomeAwayTeamPlayerList(teamInfoMap);
+	}
+	
+	@Override
 	public List<PlayresultVO> selectPlayerResultVOList(int channelPlayIdx) throws Exception {
 		return teamPlayerMapper.selectPlayerResultList(channelPlayIdx);
 	}
@@ -152,6 +157,12 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 	@Override // 경기를 뛴 선수의 경기 결과를 수정하는 메서드
 	public void updatePlayresult(PlayresultVO playresultVO) throws Exception {
 		teamPlayerMapper.updatePlayerPlayresult(playresultVO);
+	}
+	
+	// 선수의 formation을 변경
+	@Override
+	public void updateTeamPlayerFormation(TeamPlayerVO teamPlayerVO) throws Exception {
+		teamPlayerMapper.updateTeamPlayerFormation(teamPlayerVO);
 	}
 	
 }

@@ -37,5 +37,9 @@ public interface TeamPlayerMapper {
 	
 	// 경기를 뛴 선수의 기록을 변경하는 메서드
 	void updatePlayerPlayresult(PlayresultVO playresultVO) throws Exception;
+
+	List<TeamPlayerVO> selectHomeAwayTeamPlayerList(HashMap<String, String> teamInfoMap) throws Exception;
+
+	void updateTeamPlayerFormation(TeamPlayerVO teamPlayerVO) throws Exception;
 	
 }

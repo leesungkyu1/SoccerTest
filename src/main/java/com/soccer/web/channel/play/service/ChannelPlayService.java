@@ -1,10 +1,13 @@
 package com.soccer.web.channel.play.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 import com.soccer.web.channel.play.vo.PlayMatchingVO;
+import com.soccer.web.channel.play.vo.TeamVO;
+import com.soccer.web.channel.vo.ChannelVO;
 
 public interface ChannelPlayService {
 
@@ -29,5 +32,9 @@ public interface ChannelPlayService {
 	void applyMatching(Integer matchingIdx) throws Exception;
 
 	void denieMatching(Integer matchingIdx) throws Exception;
+
+	List<TeamVO> selectTeamList(int channelPlayIdx) throws Exception;
+
+	void updateChannelPlayFormation(HashMap<String, String> updateFormationInfoMap) throws Exception;
 
 }

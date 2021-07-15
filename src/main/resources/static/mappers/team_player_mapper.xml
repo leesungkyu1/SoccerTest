@@ -6,8 +6,10 @@
 	<resultMap type="com.soccer.web.channel.play.vo.TeamPlayerVO" id="teamPlayerVO">
 		<result property="teamPlayerIdx" column="team_player_idx"/>
 		<result property="userIdx" column="user_idx"/>
+		<result property="teamIdx" column="team_idx"/>
 		<result property="channelPlayIdx" column="channel_play_idx"/>
 		<result property="teamPlayerPosition" column="team_player_position"/>
+		<result property="teamPlayerFormationNumber" column="team_player_formation_number"/>
 	</resultMap>
 	
 	<!-- playresult resultMap -->
@@ -37,6 +39,18 @@
 	<select id="selectTeamPlayerList" resultMap="teamPlayerVO">
 		SELECT * FROM team_player 
 		WHERE channel_play_idx = #{channelPlayIdx}
+	</select>
+	
+	<select id="selectHomeAwayTeamPlayerList" parameterType="java.util.HashMap" resultMap="teamPlayerVO">
+		SELECT * FROM team_player 
+		WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
+			AND team_idx = 
+							(
+									SELECT team_idx 
+									FROM team 
+									WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
+										AND team_type = #{team_type}
+							)
 	</select>
 	
 	<!-- 경기에 선수 리스트에 해당하는 playresult를 가져오는 쿼리문 -->
@@ -151,6 +165,15 @@
 			playresult_successcontention = #{playresultSuccesscontention}
 		WHERE playresult_idx = #{playresultIdx}
 			
+	</update>
+	
+	<!-- 선수의 포지션과 포메이션 위치를 수정하는 쿼리문 -->
+	<update id="updateTeamPlayerFormation" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO">
+		UPDATE team_player
+		SET 
+			team_player_position = #{teamPlayerPosition}
+			team_player_formation_number = #{teamPlayerFormationNumber} 
+		WHERE team_player_idx = #{teamPlayerIdx}
 	</update>
 	
 	<!-- 채널의 member를 눌렀을 때 --> <!-- member쪽에서 쓰는게 더 좋을듯 -->

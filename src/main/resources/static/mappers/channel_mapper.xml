@@ -101,4 +101,14 @@
 				viewresultcolumn_contention = #{viewResultColumnContention}
 		WHERE channel_idx = #{channelIdx}				
 	</update>
+	
+	<select id="selectChannelList" parameterType="int" resultMap="channel">
+		SELECT * FROM channel 
+		WHERE channel_idx 
+			IN (
+					SELECT channel_idx
+					FROM team 
+					WHERE channel_play_idx = #{channelPlayidx}
+				)
+	</select>
 </mapper>

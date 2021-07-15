@@ -1,5 +1,6 @@
 package com.soccer.web.channel.play.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -7,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 import com.soccer.web.channel.play.vo.PlayMatchingVO;
+import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.vo.ChannelVO;
 
 @Mapper
@@ -50,4 +52,9 @@ public interface ChannelPlayMapper {
 	
 	//매칭 거절
 	void denieMatching(Integer matchingIdx) throws Exception;
+
+	// 영상 게시글에 연관된 팀을 가져오는 메서드
+	List<TeamVO> selectTeamList(int channelPlayIdx) throws Exception;
+
+	void updateChannelPlayFormation(HashMap<String, String> formationInfoMap) throws Exception;
 }

@@ -10,6 +10,8 @@ public interface TeamPlayerService {
 	
 	List<TeamPlayerVO> selectTeamPlayerList(int channelPlayIdx) throws Exception;
 	
+	List<TeamPlayerVO> selectHomeAwayTeamPlayerList(HashMap<String, String> teamInfoMap) throws Exception;
+	
 	List<PlayresultVO> selectPlayerResultVOList(int channelPlayIdx) throws Exception;
 
 	int insertTeamPlayer(HashMap<String, String> teamPlayParameterMap) throws Exception;
@@ -27,4 +29,6 @@ public interface TeamPlayerService {
 	PlayresultVO selectPlayerResultVO(int channelPlayIdx) throws Exception;
 	
 	void updatePlayresult(PlayresultVO playresultVO) throws Exception;
+
+	void updateTeamPlayerFormation(TeamPlayerVO teamPlayerVO) throws Exception;
 }

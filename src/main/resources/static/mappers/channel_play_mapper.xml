@@ -12,6 +12,7 @@
 		<result property="channelPlayImage" column="channel_play_image"/>
 		<result property="channelPlayVideo" column="channel_play_video"/>
 		<result property="channelPlayStep" column="channel_play_step"/>
+		<result property="channelPlayFormation" column="channel_play_formation"/>
 		<result property="memberNick" column="member_nick"/>
 	</resultMap>
 	
@@ -20,6 +21,14 @@
 		<result property="channelPlayMatchingPlay1" column="channel_play_matching_play1"/>
 		<result property="channelPlayMatchingPlay2" column="channel_play_matching_play2"/>
 		<result property="channelPlayMatchingStep" column="channel_play_matching_step"/>
+	</resultMap>
+	
+	<resultMap type="com.soccer.web.channel.play.vo.TeamVO" id="teamVO">
+		<result property="teamIdx" column="team_idx"/>
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="channelIdx" column="channel_idx"/>
+		<result property="teamName" column="team_name"/>
+		<result property="teamType" column="team_type"/>
 	</resultMap>
 	
 	<!-- 영상 게시글의 리스트를 출력 -->
@@ -79,6 +88,7 @@
 					default,
 					#{channelPlayImage},
 					#{channelPlayVideo},
+					default,
 					default
 				)
 	</insert>
@@ -164,4 +174,23 @@
 		DELETE FROM channel_play_matching
 		WHERE channel_play_matching_idx = #{matchingIdx}
 	</delete>
+	
+	<!-- channelPlayIdx에 연관된 팀을 불러오는 쿼리문 -->
+	<select id="selectTeamList" parameterType="int" resultMap="teamVO">
+		SELECT * FROM team 
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</select>
+	
+	<update id="updateChannelPlayFormation" parameterType="java.util.HashMap">
+		UPDATE channel_play 
+		SET 
+			<if test='teamType.equals("H")'>
+				channel_play_home_formation = #{formation}
+			</if>
+			<if test='teamType.equals("A")'>
+				channel_play_away_formation = #{formation}
+			</if>
+		WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
+	</update>
+	
 </mapper>
