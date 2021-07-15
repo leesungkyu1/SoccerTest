@@ -12,7 +12,7 @@ public interface NoticeService {
 	
 	NoticeVO selectNoticeDetail(int noticeIdx);
 	
-	int insertNotice(NoticeVO noticeVO);
+	void insertNotice(NoticeVO noticeVO);
 	
 	void updateNotice(NoticeVO noticeVO);
 	
