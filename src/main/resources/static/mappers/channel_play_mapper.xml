@@ -15,13 +15,6 @@
 		<result property="memberNick" column="member_nick"/>
 	</resultMap>
 	
-	<resultMap type="com.soccer.web.channel.play.vo.PlayMatchingVO" id="playMatchingVO">
-		<result property="channelPlayMatchingIdx" column="channel_play_matching_idx"/>
-		<result property="channelPlayMatchingPlay1" column="channel_play_matching_play1"/>
-		<result property="channelPlayMatchingPlay2" column="channel_play_matching_play2"/>
-		<result property="channelPlayMatchingStep" column="channel_play_matching_step"/>
-	</resultMap>
-	
 	<resultMap type="com.soccer.web.channel.play.vo.ChannelPlayGoalVO" id="channelPlayGoalVO">
 		<result property="channelPlayGoalIdx" column="channel_play_goal_idx"/>
 		<result property="channelPlayIdx" column="channel_play_idx"/>

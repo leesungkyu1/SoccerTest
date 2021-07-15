@@ -39,7 +39,9 @@ public class UserController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			
+			attributes.addAttribute("code", 101);
 			attributes.addAttribute("message", "회원가입이 실패했습니다.");
+			
 			
 			return "redirect:";
 		}		
@@ -64,6 +66,7 @@ public class UserController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			
+			attributes.addAttribute("code", 102);
 			attributes.addAttribute("message", "에러가 발생했습니다.");
 			
 			return "redirect:";
@@ -80,6 +83,7 @@ public class UserController {
 		UserVO loginUser = (UserVO)session.getAttribute("loginUser");
 		
 		if(userIdx == null || userIdx != loginUser.getUserIdx()) {
+			model.addAttribute("code", 103);
 			model.addAttribute("message", "잘못된 접근입니다.");
 		}else {
 			UserVO userInfo = userService.userInfo(userIdx);
@@ -99,6 +103,7 @@ public class UserController {
 		UserVO loginUser = (UserVO)session.getAttribute("loginUser");
 		
 		if(userIdx == null || userIdx != loginUser.getUserIdx()) {
+			attributes.addAttribute("code", 104);
 			attributes.addAttribute("message", "잘못된 접근입니다.");
 		}else {
 			userVO.setUserIdx(userIdx);

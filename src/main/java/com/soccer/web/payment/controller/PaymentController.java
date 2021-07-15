@@ -37,6 +37,7 @@ public class PaymentController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			
+			attributes.addAttribute("code", 201);
 			attributes.addAttribute("message", "결제 중 에러가 발생했습니다.");
 			
 			return "redirect:";
