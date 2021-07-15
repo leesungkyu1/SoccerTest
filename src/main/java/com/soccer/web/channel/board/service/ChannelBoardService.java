@@ -6,15 +6,15 @@ import com.soccer.web.channel.board.vo.ChannelBoardVO;
 
 public interface ChannelBoardService {
 
-	List<ChannelBoardVO> selectChannelBoardList(ChannelBoardVO channelBoardVO);
+	List<ChannelBoardVO> selectChannelBoardList(ChannelBoardVO channelBoardVO) throws Exception;
 	
-	int selectChannelBoardListTotCnt(ChannelBoardVO channelBoardVO);
+	int selectChannelBoardListTotCnt(ChannelBoardVO channelBoardVO) throws Exception;
 	
-	ChannelBoardVO selectChannelBoardDetail(int channelBoardIdx);
+	ChannelBoardVO selectChannelBoardDetail(int channelBoardIdx) throws Exception;
 	
-	int insertChannelBoard(ChannelBoardVO channelBoardVO);
+	void insertChannelBoard(ChannelBoardVO channelBoardVO) throws Exception;
 	
-	void updateChannelBoard(ChannelBoardVO channelBoardVO);
+	void updateChannelBoard(ChannelBoardVO channelBoardVO) throws Exception;
 	
-	void deleteChannelBoard(int channelBoardIdx);
+	void deleteChannelBoard(int channelBoardIdx) throws Exception;
 }

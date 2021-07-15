@@ -10,16 +10,16 @@ import com.soccer.web.notice.vo.NoticeVO;
 public interface NoticeMapper {
 	
 	
-	List<NoticeVO> selectNoticeList(NoticeVO noticeVO);
+	List<NoticeVO> selectNoticeList(NoticeVO noticeVO) throws Exception;
 	
-	int selectNoticeListTotCnt(NoticeVO noticeVO);
+	int selectNoticeListTotCnt(NoticeVO noticeVO) throws Exception;
 	
-	NoticeVO selectNoticeDetail(int noticeIdx);
+	NoticeVO selectNoticeDetail(int noticeIdx) throws Exception;
 	
-	void insertNotice(NoticeVO noticeVO);
+	void insertNotice(NoticeVO noticeVO) throws Exception;
 	
-	void updateNotice(NoticeVO noticeVO);
+	void updateNotice(NoticeVO noticeVO) throws Exception;
 	
-	void deleteNotice(int noticeIdx);
+	void deleteNotice(int noticeIdx) throws Exception;
 	
 }

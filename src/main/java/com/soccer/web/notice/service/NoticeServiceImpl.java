@@ -15,33 +15,33 @@ public class NoticeServiceImpl implements NoticeService{
 	private NoticeMapper noticeMapper;
 
 	@Override
-	public List<NoticeVO> selectNoticeList(NoticeVO noticeVO) {
+	public List<NoticeVO> selectNoticeList(NoticeVO noticeVO) throws Exception {
 		return noticeMapper.selectNoticeList(noticeVO);
 	}
 
 	@Override
-	public int selectNoticeListTotCnt(NoticeVO noticeVO) {
+	public int selectNoticeListTotCnt(NoticeVO noticeVO) throws Exception {
 		return noticeMapper.selectNoticeListTotCnt(noticeVO);
 	}
 
 	@Override
-	public NoticeVO selectNoticeDetail(int noticeIdx) {
+	public NoticeVO selectNoticeDetail(int noticeIdx) throws Exception {
 		return noticeMapper.selectNoticeDetail(noticeIdx);
 	}
 
 	@Override
-	public void insertNotice(NoticeVO noticeVO) {
+	public void insertNotice(NoticeVO noticeVO) throws Exception {
 		noticeMapper.insertNotice(noticeVO);
 	}
 
 	@Override
-	public void updateNotice(NoticeVO noticeVO) {
+	public void updateNotice(NoticeVO noticeVO) throws Exception {
 		noticeMapper.updateNotice(noticeVO);
 		
 	}
 
 	@Override
-	public void deleteNotice(int noticeIdx) {
+	public void deleteNotice(int noticeIdx) throws Exception {
 		noticeMapper.deleteNotice(noticeIdx);
 	}
 	

@@ -21,32 +21,44 @@ public class NoticeController { // main 공지사항은 무조건 관리자만 �
 	private NoticeService noticeService;
 	
 	@RequestMapping(value = "/main/notice", method = RequestMethod.GET)
-	public String selectNoticeList(NoticeVO noticeVO, Model model, @RequestParam(required = false) String message) {
-		int totcnt = noticeService.selectNoticeListTotCnt(noticeVO);
-		
-		List<NoticeVO> noticeList = noticeService.selectNoticeList(noticeVO);
-		model.addAttribute("noticeList", noticeList);
-		if (message != null) {
-			model.addAttribute("message", message);
+	public String selectNoticeList(NoticeVO noticeVO, Model model, @RequestParam(required = false) String message) throws Exception {
+		try {
+			int totcnt = noticeService.selectNoticeListTotCnt(noticeVO);
+			
+			List<NoticeVO> noticeList = noticeService.selectNoticeList(noticeVO);
+			model.addAttribute("noticeList", noticeList);
+			if (message != null) {
+				model.addAttribute("message", message);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 		return "";
 //		return "test";
 	}
 	
 	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.GET)
-	public String selectNoticeDetail(@PathVariable("noticeIdx") int noticeIdx, Model model) {
-		
-		NoticeVO noticeVO = noticeService.selectNoticeDetail(noticeIdx);
-		
-		model.addAttribute("noticeVO", noticeVO);
-		
+	public String selectNoticeDetail(@PathVariable("noticeIdx") int noticeIdx, Model model, RedirectAttributes attributes) throws Exception {
+		try {
+			NoticeVO noticeVO = noticeService.selectNoticeDetail(noticeIdx);
+			if (noticeVO.getNoticeTitle() == null) {
+				attributes.addAttribute("message", "존재하지 않는 글입니다.");
+				return "redirect:/main/notice";
+//				return "index";
+			}
+			model.addAttribute("noticeVO", noticeVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			attributes.addAttribute("message", "에러가 발생했습니다");
+			return "redirect:/main/notice";
+//			return "index";
+		}
 		return "";
 //		return "test";
 	}
 	
 	@RequestMapping(value = "/main/notice", method = RequestMethod.POST)
-	public String insertNotice(NoticeVO noticeVO, RedirectAttributes attributes) {
+	public String insertNotice(NoticeVO noticeVO, RedirectAttributes attributes) throws Exception {
 		try {
 			noticeService.insertNotice(noticeVO);
 		}catch (Exception e) {
@@ -60,7 +72,7 @@ public class NoticeController { // main 공지사항은 무조건 관리자만 �
 	}
 	
 	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.PUT)
-	public String updateNotice(@PathVariable int noticeIdx, NoticeVO noticeVO, RedirectAttributes attributes) {
+	public String updateNotice(@PathVariable int noticeIdx, NoticeVO noticeVO, RedirectAttributes attributes) throws Exception {
 		try {
 			noticeService.updateNotice(noticeVO);
 		} catch (Exception e) {
@@ -74,7 +86,7 @@ public class NoticeController { // main 공지사항은 무조건 관리자만 �
 	}
 	
 	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.DELETE)
-	public String deleteNotice(@PathVariable int noticeIdx, RedirectAttributes attributes) {
+	public String deleteNotice(@PathVariable int noticeIdx, RedirectAttributes attributes) throws Exception {
 		try {
 			noticeService.deleteNotice(noticeIdx);			
 		} catch (Exception e) {
