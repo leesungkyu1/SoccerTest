@@ -46,9 +46,9 @@ public class PaymentTest {
 		MockHttpSession session = new MockHttpSession();
 		session.setAttribute("userInfo", session);
 		
-		mvc.perform(post("/user/" + loginUser.getUserIdx())
+		mvc.perform(post("/payment")
 				.session(session))
-				.andExpect(model().)
+				.andExpect(model().attributeDoesNotExist("code"))
 				.andDo(print());
 	}
 }

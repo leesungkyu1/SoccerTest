@@ -65,6 +65,7 @@ public class UserTest {
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.content(EntityUtils.toString(userInfo)))
 				.andExpect(model().attribute("message", "가입하셨습니다."))
+				.andExpect(model().attributeDoesNotExist("code"))
 				.andDo(print());
 	}
 	
@@ -86,6 +87,7 @@ public class UserTest {
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.content(EntityUtils.toString(userInfo)))
 				.andExpect(model().attribute("message", "로그인 하셨습니다."))
+				.andExpect(model().attributeDoesNotExist("code"))
 				.andDo(print());
 	}
 	
@@ -112,6 +114,8 @@ public class UserTest {
 				)
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("userInfo"))
+				.andExpect(model().attributeExists("joinChannelList"))
+				.andExpect(model().attributeDoesNotExist("code"))
 				.andDo(print())
 				.andReturn();
 		
@@ -160,6 +164,7 @@ public class UserTest {
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.content(EntityUtils.toString(userUpdateInfo)))
 				.andExpect(model().attribute("message", "정보를 수정하셨습니다."))
+				.andExpect(model().attributeDoesNotExist("code"))
 				.andDo(print());
 	}
 }
