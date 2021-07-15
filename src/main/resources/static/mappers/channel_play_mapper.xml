@@ -243,7 +243,12 @@
 					null,
 				</if>
 				#{teamName},
-				'H'
+				<if test='teamType == "H"'>
+					'H'
+				</if>
+				<if test='teamType == "A"'>
+					'A'
+				</if>
 				)
 	</insert>
 </mapper>

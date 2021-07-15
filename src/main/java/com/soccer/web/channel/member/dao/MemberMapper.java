@@ -28,4 +28,7 @@ public interface MemberMapper {
 	//경기용 - 채널로 멤버 검색
 	List<MemberVO> searchByChannel(Integer channelIdx) throws Exception;
 
+	// userIdx와 channelIdx로 멤버 검색
+	MemberVO selectMemberDetail(MemberVO memberVO) throws Exception;
+
 }

@@ -44,5 +44,11 @@ public class MemberServiceImpl implements MemberService{
 	public List<MemberVO> searchByChannel(Integer channelIdx) throws Exception{
 		return memberDAO.searchByChannel(channelIdx);
 	}
+	
+	// userIdx와 channelIdx로 멤버 검색
+	@Override
+	public MemberVO selectMemberDetail(MemberVO memberVO) throws Exception {
+		return memberDAO.selectMemberDetail(memberVO);
+	}
 
 }

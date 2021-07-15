@@ -33,4 +33,6 @@ public interface TeamPlayerService {
 	void updateTeamPlayerFormation(TeamPlayerVO teamPlayerVO) throws Exception;
 	
 	void resultUpdate(List<PlayresultVO> resultVO) throws Exception;
+
+	PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception;
 }

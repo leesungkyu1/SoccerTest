@@ -16,5 +16,7 @@ public interface MemberService {
 	Integer memberCount(Integer channelIdx) throws Exception;
 
 	List<MemberVO> searchByChannel(Integer channelIdx) throws Exception;
+
+	MemberVO selectMemberDetail(MemberVO tmpVO) throws Exception;
 	
 }

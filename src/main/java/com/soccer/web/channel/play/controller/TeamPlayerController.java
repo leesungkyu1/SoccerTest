@@ -1,6 +1,5 @@
 package com.soccer.web.channel.play.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,12 +17,13 @@ import com.soccer.web.channel.member.vo.MemberVO;
 import com.soccer.web.channel.play.service.ChannelPlayService;
 import com.soccer.web.channel.play.service.TeamPlayerService;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
-import com.soccer.web.channel.play.vo.PlayMatchingVO;
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelService;
 import com.soccer.web.channel.vo.ChannelVO;
+import com.soccer.web.user.service.UserService;
+import com.soccer.web.user.vo.UserVO;
 
 @RestController
 public class TeamPlayerController {
@@ -40,21 +40,23 @@ public class TeamPlayerController {
 	@Autowired
 	private ChannelService channelService;
 	
-	//이거 수정해서 선수 목록 가져오기로 
+	@Autowired
+	private UserService userService;
+	
 	// 영상 게시글에서 Player를 추가할 때 나오는 채널 멤버의 리스트 출력
-	@RequestMapping(value = "channel/play/member/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
-	public String selectMemberList(@PathVariable int channelIdx, @PathVariable int channelPlayIdx, Model model) throws Exception {
-		try {
-			ChannelVO channelVO = new ChannelVO();
-			channelVO.setChannelIdx(channelIdx);
-			List<MemberVO> memberVOList = memberService.memberList(channelVO);
-			model.addAttribute("memberList", memberVOList);
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("message", "에러가 발생했습니다.");
-		}
-		return "";
-	}
+//	@RequestMapping(value = "channel/play/member/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
+//	public String selectMemberList(@PathVariable int channelIdx, @PathVariable int channelPlayIdx, Model model) throws Exception {
+//		try {
+//			ChannelVO channelVO = new ChannelVO();
+//			channelVO.setChannelIdx(channelIdx);
+//			List<MemberVO> memberVOList = memberService.memberList(channelVO);
+//			model.addAttribute("memberList", memberVOList);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			model.addAttribute("message", "에러가 발생했습니다.");
+//		}
+//		return "";
+//	}
 	
 	//삭제
 	// 영상 게시글에서 Player를 추가하는 메서드
@@ -291,6 +293,40 @@ public class TeamPlayerController {
 			model.addAttribute("message", "오류가 발생했습니다.");
 		}
 		
+		return "";
+	}
+	
+	// 영상 게시글에 저장된 Player의 경기 기록을 보여주는 메서드
+	@RequestMapping(value = "channel/play/player/result/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.GET)
+	public String selectPlayresultBeforeUpdate(	@PathVariable int channelIdx,
+												@PathVariable int channelPlayIdx,
+												@PathVariable int teamPlayerIdx,
+												RedirectAttributes attributes, 
+												Model model) throws Exception {
+		try {
+			HashMap<String, Integer> teamPlayerRequireMap = new HashMap<>();
+			teamPlayerRequireMap.put("channelPlayIdx", channelPlayIdx);
+			teamPlayerRequireMap.put("teamPlayerIdx", teamPlayerIdx);
+			
+			TeamPlayerVO teamPlayerVO = teamPlayerService.selectTeamPlayerDetail(teamPlayerRequireMap); // 선수의 정보를 가져옴
+			UserVO userVO = userService.userInfo(teamPlayerVO.getUserIdx()); // 선수로 연결된 사용자의 정보 (전화번호, 이메일)를 가져옴
+			
+			MemberVO tmpVO = new MemberVO();
+			tmpVO.setChannelIdx(channelIdx);
+			tmpVO.setUserIdx(teamPlayerVO.getUserIdx());
+			
+			MemberVO memberVO = memberService.selectMemberDetail(tmpVO);
+			PlayresultVO playresultVO = teamPlayerService.selectPlayerresultVODetail(teamPlayerIdx);
+			
+			model.addAttribute("teamPlayerVO", teamPlayerVO);
+			model.addAttribute("userVO", userVO);
+			model.addAttribute("memberVO", memberVO);
+			model.addAttribute("playresultVO", playresultVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			attributes.addAttribute("message", "오류가 발생했습니다.");
+			return "redirect:/channel/play/player/" + channelIdx + "/" + channelPlayIdx + "/" + teamPlayerIdx;
+		}
 		return "";
 	}
 	

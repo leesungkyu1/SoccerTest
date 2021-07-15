@@ -170,4 +170,10 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 		teamPlayerMapper.updateTeamPlayerFormation(teamPlayerVO);
 	}
 	
+	// 선수의 경기 결과를 수정하기 전 들고오는 메서드
+	@Override
+	public PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception {
+		return teamPlayerMapper.selectPlayerresultVODetail(teamPlayerIdx);
+	}
+	
 }

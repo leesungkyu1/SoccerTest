@@ -181,6 +181,8 @@
 		LIMIT 5
 	</select>
 	
+	
+	
 	<!-- 한 경기의 선수에 결과기록 수정 -->
 	<update id="updatePlayerPlayresult" parameterType="com.soccer.web.channel.play.vo.PlayresultVO">
 		UPDATE playresult 
@@ -285,4 +287,9 @@
 			WHERE playresult_idx = #{item.playresultIdx}
 		</foreach>
 	</update>
+	
+	<select id="selectPlayerresultVODetail" parameterType="int" resultMap="playresultVO">
+		SELECT * FROM playresult 
+		WHERE team_player_idx = #{teamPlayeridx}
+	</select>
 </mapper>
