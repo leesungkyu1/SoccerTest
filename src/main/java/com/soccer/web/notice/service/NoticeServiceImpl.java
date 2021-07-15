@@ -30,13 +30,8 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	@Override
-	public int insertNotice(NoticeVO noticeVO) {
-//		System.out.println("noticeVO - title : " + noticeVO.getNoticeTitle());
-//		System.out.println("noticeVO - desc : " + noticeVO.getNoticeDesc());
-//		System.out.println("noticeVO - userIdx : " + noticeVO.getUserIdx());
-//		System.out.println("noticeVO - type : " + noticeVO.getNoticeTitle());
-		return noticeMapper.insertNotice(noticeVO);
-		
+	public void insertNotice(NoticeVO noticeVO) {
+		noticeMapper.insertNotice(noticeVO);
 	}
 
 	@Override

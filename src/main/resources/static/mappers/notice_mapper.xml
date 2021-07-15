@@ -19,7 +19,7 @@
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
 		ORDER BY
-				notice_type ASC,
+				notice_type DESC,
 				notice_idx DESC 
 		limit #{recordCountPerPage} offset #{firstIndex}
 	</select>

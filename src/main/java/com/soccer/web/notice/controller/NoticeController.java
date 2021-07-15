@@ -15,7 +15,7 @@ import com.soccer.web.notice.service.NoticeService;
 import com.soccer.web.notice.vo.NoticeVO;
 
 @Controller
-public class NoticeController {
+public class NoticeController { // main 공지사항은 무조건 관리자만 쓸 수 있으므로 글쓴이는 무조건 관리자로
 
 	@Autowired
 	private NoticeService noticeService;
@@ -31,6 +31,7 @@ public class NoticeController {
 		}
 		
 		return "";
+//		return "test";
 	}
 	
 	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.GET)
@@ -41,20 +42,20 @@ public class NoticeController {
 		model.addAttribute("noticeVO", noticeVO);
 		
 		return "";
+//		return "test";
 	}
 	
 	@RequestMapping(value = "/main/notice", method = RequestMethod.POST)
 	public String insertNotice(NoticeVO noticeVO, RedirectAttributes attributes) {
-		int noticeIdx = 0;
 		try {
-			noticeIdx = noticeService.insertNotice(noticeVO);
+			noticeService.insertNotice(noticeVO);
 		}catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
 		}
 		attributes.addAttribute("message","공지를 추가했습니다.");
-		
-		return "redirect:/main/notice/" + noticeIdx;
+//		System.out.println("noticeVO - noticeIdx : " + noticeVO.getNoticeIdx());
+		return "redirect:/main/notice/" + noticeVO.getNoticeIdx();
 //		return "test";
 	}
 	
@@ -65,9 +66,11 @@ public class NoticeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
+//			return "index";
 		}
 		attributes.addAttribute("message","공지를 수정했습니다.");
 		return "redirect:/main/notice/" + noticeIdx;
+//		return "test";
 	}
 	
 	@RequestMapping(value = "/main/notice/{noticeIdx}", method = RequestMethod.DELETE)
@@ -77,8 +80,10 @@ public class NoticeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
+//			return "index";
 		}
 		attributes.addAttribute("message","공지를 삭제했습니다.");
 		return "redirect:/main/notice";
+//		return "test";
 	}
 }
