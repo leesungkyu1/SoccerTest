@@ -1,9 +1,11 @@
 package com.soccer.web.channel.play.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.soccer.web.channel.play.vo.ChannelPlayGoalVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
+import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
@@ -31,6 +33,10 @@ public interface ChannelPlayService {
 	void deleteGoal(int channelPlayGoalIdx) throws Exception;
 
 	PlayresultVO totalScore(int channelPlayIdx) throws Exception;
+
+	List<TeamVO> selectTeamList(int channelPlayIdx) throws Exception;
+
+	void updateChannelPlayFormation(HashMap<String, String> updateFormationInfoMap) throws Exception;
 
 	void createPlayInfo(TeamVO teamVO, List<TeamPlayerVO> playerList) throws Exception;
 }

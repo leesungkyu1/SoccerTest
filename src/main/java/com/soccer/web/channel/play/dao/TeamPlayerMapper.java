@@ -38,6 +38,10 @@ public interface TeamPlayerMapper {
 	
 	// 경기를 뛴 선수의 기록을 변경하는 메서드
 	void updatePlayerPlayresult(PlayresultVO playresultVO) throws Exception;
+
+	List<TeamPlayerVO> selectHomeAwayTeamPlayerList(HashMap<String, String> teamInfoMap) throws Exception;
+
+	void updateTeamPlayerFormation(TeamPlayerVO teamPlayerVO) throws Exception;
 	
 	//선수를 리스트로 입력
 	void insertPlayerList(List<TeamPlayerVO> playerList) throws Exception;
@@ -50,5 +54,8 @@ public interface TeamPlayerMapper {
 
 	//선수 기록 한번에 넣기
 	void resultUpdate(List<PlayresultVO> resultVO) throws Exception;
+
+	// 선수의 경기 결과를 수정하기 전 들고오는 메서드
+	PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception;
 	
 }

@@ -53,6 +53,18 @@
 		WHERE team_player.channel_play_idx = #{channelPlayIdx}
 	</select>
 	
+	<select id="selectHomeAwayTeamPlayerList" parameterType="java.util.HashMap" resultMap="teamPlayerVO">
+		SELECT * FROM team_player 
+		WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
+			AND team_idx = 
+							(
+									SELECT team_idx 
+									FROM team 
+									WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
+										AND team_type = #{team_type}
+							)
+	</select>
+	
 	<!-- 경기에 선수 리스트에 해당하는 playresult를 가져오는 쿼리문 -->
 	<select id="selectPlayerResultList" parameterType="int" resultMap="playresultVO"> 
 	    SELECT 
@@ -169,6 +181,8 @@
 		LIMIT 5
 	</select>
 	
+	
+	
 	<!-- 한 경기의 선수에 결과기록 수정 -->
 	<update id="updatePlayerPlayresult" parameterType="com.soccer.web.channel.play.vo.PlayresultVO">
 		UPDATE playresult 
@@ -191,6 +205,16 @@
 			playresult_successcontention = #{playresultSuccesscontention}
 		WHERE playresult_idx = #{playresultIdx}
 	</update>
+	
+	<!-- 선수의 포지션과 포메이션 위치를 수정하는 쿼리문 -->
+	<update id="updateTeamPlayerFormation" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO">
+		UPDATE team_player
+		SET 
+			team_player_position = #{teamPlayerPosition}
+			team_player_formation_number = #{teamPlayerFormationNumber} 
+		WHERE team_player_idx = #{teamPlayerIdx}
+	</update>
+	
 	<!-- 채널의 member를 눌렀을 때 --> <!-- member쪽에서 쓰는게 더 좋을듯 -->
 	
 	<insert id="insertPlayerList" parameterType="List">
@@ -263,4 +287,9 @@
 			WHERE playresult_idx = #{item.playresultIdx}
 		</foreach>
 	</update>
+	
+	<select id="selectPlayerresultVODetail" parameterType="int" resultMap="playresultVO">
+		SELECT * FROM playresult 
+		WHERE team_player_idx = #{teamPlayeridx}
+	</select>
 </mapper>

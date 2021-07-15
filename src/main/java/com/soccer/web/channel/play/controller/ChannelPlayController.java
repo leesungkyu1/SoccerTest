@@ -129,7 +129,7 @@ public class ChannelPlayController {
 	}
 	
 	//득점 정보 입력
-	@RequestMapping(value = "{channelPlayIdx}", method = RequestMethod.POST)
+	@RequestMapping(value = "/channel/play/goal/{channelPlayIdx}", method = RequestMethod.POST)
 	public String insertGoal(@PathVariable int channelPlayIdx, ChannelPlayGoalVO goalVO,
 			RedirectAttributes attributes) throws Exception {
 		goalVO.setChannelPlayIdx(channelPlayIdx);
@@ -142,7 +142,7 @@ public class ChannelPlayController {
 	}
 	
 	//우리팀, 상대팀 득점 정보 얻어오기
-	@RequestMapping(value = "{channelPlayIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/goal/{channelPlayIdx}", method = RequestMethod.GET)
 	public String goalList(@PathVariable int channelPlayIdx, Model model) throws Exception {
 		//프론트에서 뿌릴때 나눌필요 없이 순서대로 뿌리되 타입에 따라 위치 조절
 		List<ChannelPlayGoalVO> sortedByTimeGoalList = channelPlayService.goalList(channelPlayIdx);
@@ -153,7 +153,7 @@ public class ChannelPlayController {
 	}
 	
 	//득점 기록 수정
-	@RequestMapping(value = "{channelPlayIdx}/{channelPlayGoalIdx}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/channel/play/goal/{channelPlayIdx}/{channelPlayGoalIdx}", method = RequestMethod.PUT)
 	public String updateGoal(@PathVariable int channelPlayGoalIdx, ChannelPlayGoalVO goalVO,
 			RedirectAttributes attributes) throws Exception {
 		goalVO.setChannelPlayGoalIdx(channelPlayGoalIdx);
@@ -165,7 +165,7 @@ public class ChannelPlayController {
 	}
 	
 	//득점 기록 삭제
-	@RequestMapping(value = "{channelPlayIdx}/{channelPlayGoalIdx}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/channel/play/goal/{channelPlayIdx}/{channelPlayGoalIdx}", method = RequestMethod.DELETE)
 	public String deleteGoal(@PathVariable int channelPlayGoalIdx, RedirectAttributes attributes) throws Exception {
 		channelPlayService.deleteGoal(channelPlayGoalIdx);
 		
@@ -174,8 +174,8 @@ public class ChannelPlayController {
 		return "";
 	}
 	
-	//우리팀 총점 상대팀 총점 기능
-	@RequestMapping(value = "{channelPlayIdx}", method = RequestMethod.GET)
+	//우리팀 총점 상대팀 성적 기능
+	@RequestMapping(value = "/channel/play/team/result/{channelPlayIdx}", method = RequestMethod.GET)
 	public String totalScore(@PathVariable int channelPlayIdx, Model model) throws Exception {
 		PlayresultVO totalScoreAndTeamInfo = channelPlayService.totalScore(channelPlayIdx);
 		
@@ -190,7 +190,7 @@ public class ChannelPlayController {
 	//상대팀 생성 로직도 똑같음
 	
 	//팀 생성(상대팀도 같음 테스트 필요!!!)
-	@RequestMapping(value = "{channelIdx}/{playIdx}", method = RequestMethod.POST)
+	@RequestMapping(value = "/channel/play/team/{channelIdx}/{playIdx}", method = RequestMethod.POST)
 	public String createPlayInfo(
 			@PathVariable int channelIdx, @PathVariable int playIdx,
 			TeamVO teamVO, List<TeamPlayerVO> playerList, RedirectAttributes attributes) throws Exception {
@@ -209,7 +209,7 @@ public class ChannelPlayController {
 	}
 	
 	//선수 개별 기록 한번에 수정
-	@RequestMapping(value = "", method = RequestMethod.PUT)
+	@RequestMapping(value = "/channel/play/result", method = RequestMethod.PUT)
 	public String resultUpdate(List<PlayresultVO> resultVO, RedirectAttributes attributes) throws Exception {
 		teamPlayerService.resultUpdate(resultVO);
 		

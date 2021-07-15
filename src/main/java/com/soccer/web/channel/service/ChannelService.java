@@ -24,4 +24,6 @@ public interface ChannelService {
 	ViewResultColumnVO selectViewResultColumn(Integer channelIdx) throws Exception;
 
 	void viewResultColumnUpdate(ViewResultColumnVO colVO) throws Exception;
+
+	List<ChannelVO> selectChannelList(int channelPlayIdx);
 }

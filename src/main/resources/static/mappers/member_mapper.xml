@@ -71,4 +71,13 @@
 		WHERE member.channel_idx = #{channelIdx}
 			AND apply.apply_step = "ok"
 	</select>
+	
+	<!-- userIdx와 channelIdx로 member의 정보를 불러오는 쿼리문 -->
+	<select id="selectMemberDetail" parameterType="com.soccer.web.channel.member.vo.MemberVO" resultMap="member">
+		SELECT * FROM member
+		WHERE 
+				user_idx = #{userIdx}
+				AND channel_idx = #{channelIdx}
+	</select>
+	
 </mapper>

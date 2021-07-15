@@ -33,4 +33,7 @@ public interface ChannelMapper {
 	
 	//채널 컬럼 정보 수정
 	void viewResultColumnUpdate(ViewResultColumnVO colVO) throws Exception;
+
+	// channelPlayIdx로 채널 리스트를 가져옴
+	List<ChannelVO> selectChannelList(int channelPlayIdx);
 }

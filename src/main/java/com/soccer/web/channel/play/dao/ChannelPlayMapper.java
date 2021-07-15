@@ -1,5 +1,6 @@
 package com.soccer.web.channel.play.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -51,5 +52,10 @@ public interface ChannelPlayMapper {
 
 	//우리팀 생성
 	int insertTeam(TeamVO teamVO) throws Exception;
-	
+
+	// 영상 게시글에 연관된 팀을 가져오는 메서드
+	List<TeamVO> selectTeamList(int channelPlayIdx) throws Exception;
+
+	// 채널의 포메이션을 변경하는 메서드
+	void updateChannelPlayFormation(HashMap<String, String> formationInfoMap) throws Exception;
 }

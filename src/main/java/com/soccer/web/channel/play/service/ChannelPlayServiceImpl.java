@@ -1,5 +1,6 @@
 package com.soccer.web.channel.play.service;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.soccer.web.channel.play.dao.ChannelPlayMapper;
 import com.soccer.web.channel.play.dao.TeamPlayerMapper;
 import com.soccer.web.channel.play.vo.ChannelPlayGoalVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
+import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
@@ -87,6 +89,16 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 		totalScoreVO.setAway(channelPlayMapper.totalScore(totalScoreVO));
 		
 		return totalScoreVO;
+	}
+	
+	@Override
+	public List<TeamVO> selectTeamList(int channelPlayIdx) throws Exception {
+		return channelPlayMapper.selectTeamList(channelPlayIdx);
+	}
+	
+	@Override
+	public void updateChannelPlayFormation(HashMap<String, String> formationInfoMap) throws Exception {
+		channelPlayMapper.updateChannelPlayFormation(formationInfoMap);
 	}
 
 	@Override
