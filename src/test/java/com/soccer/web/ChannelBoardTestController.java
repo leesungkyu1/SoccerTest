@@ -225,42 +225,56 @@ public class ChannelBoardTestController {
 		}
 	}
 	
-	// 공지사항 세부사항 출력 실패 테스트 ( 미완 - 삭제메서드 후 구현)
+	// 채널 게시글 세부사항 출력 실패 테스트 ( 완료 - 삭제메서드 후 구현)
 	@Test
 	@Transactional
-	void selectNoticeDetailTestFail() throws Exception {
+	void selectChannelBoardDetailTestFail() throws Exception {
 		try {
-			NoticeVO noticeVO = new NoticeVO();
-			noticeVO.setUserIdx(6);
-			noticeVO.setNoticeTitle("디테일 확인 공지글");
-			noticeVO.setNoticeType("N");
-			noticeVO.setNoticeDesc("디테일 확인 공지글 내용입니다.");
+			ChannelBoardVO channelBoardVO = new ChannelBoardVO();
+			channelBoardVO.setMemberIdx(2);
+			channelBoardVO.setChannelIdx(1);
+			channelBoardVO.setChannelBoardTitle("디테일 확인용 채널 게시글");
+			channelBoardVO.setChannelBoardType("N");
+			channelBoardVO.setChannelBoardDesc("디테일 확인용 채널 게시글 내용입니다.");
 			
-			noticeService.insertNotice(noticeVO);
+			channelBoardService.insertChannelBoard(channelBoardVO);
 			
-			int noticeIdx = noticeVO.getNoticeIdx();
-			System.out.println("noticeVO-noticeIdx : " + noticeVO.getNoticeIdx());
+			int channelBoardIdx = channelBoardVO.getChannelBoardIdx();
+			int channelIdx = channelBoardVO.getChannelIdx();
 			
-			// TODO 방금 만들었던 공지사항 글을 삭제하는 메서드 필요
+			ChannelBoardVO beforeDeleteVO = channelBoardService.selectChannelBoardDetail(channelBoardIdx);
+			
+			System.out.println("beforeDeleteVO - channelBoardIdx : " + beforeDeleteVO.getChannelBoardIdx());
+			System.out.println("beforeDeleteVO - memberIdx : " + beforeDeleteVO.getMemberIdx());
+			System.out.println("beforeDeleteVO - channelIdx : " + beforeDeleteVO.getChannelIdx());
+			System.out.println("beforeDeleteVO - channelBoardTitle : " + beforeDeleteVO.getChannelBoardTitle());
+			System.out.println("beforeDeleteVO - channelBoardType : " + beforeDeleteVO.getChannelBoardType());
+			System.out.println("beforeDeleteVO - channelBoardDesc : " + beforeDeleteVO.getChannelBoardDesc());
+			System.out.println("beforeDeleteVO - channelBoardDate : " + beforeDeleteVO.getChannelBoardDate());
+			System.out.println("beforeDeleteVO - memberNick : " + beforeDeleteVO.getMemberNick());
+			
+			// TODO 방금 만들었던 채널 게시글을 삭제하는 메서드 필요
+			channelBoardService.deleteChannelBoard(channelBoardIdx);
 			
 			// TODO 삭제된 글을 들어가려고 하면 예외가 발생해야 함
 			System.out.println("진입전 =");
-			MvcResult result = mockMvc.perform(get("/main/notice/" + noticeIdx)
+			MvcResult result = mockMvc.perform(get("/channel/board/" + channelIdx + "/" + channelBoardIdx)
 							.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-							.content("" + noticeIdx))
+							.content("" + channelIdx)
+							.content("" + channelBoardIdx))
 							.andExpect(status().isOk())
 							.andDo(print())
 							.andReturn();
 			
-			System.out.println("==============================");
-			System.out.println("result : " + result.getResponse().getContentAsString());
-			System.out.println("==============================");
+//			System.out.println("==============================");
+//			System.out.println("result : " + result.getResponse().getContentAsString());
+//			System.out.println("==============================");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	// 채널 게시글 수정 성공 테스트
+	// 채널 게시글 수정 성공 테스트 (완료)
 	@Test
 	@Transactional
 	void updateChannelBoardTestOk() throws Exception {
@@ -325,7 +339,7 @@ public class ChannelBoardTestController {
 		}
 	}
 	
-	// 채널 게시글 수정 실패 테스트
+	// 채널 게시글 수정 실패 테스트 (완료)
 	@Test
 	@Transactional
 	void updateChannelBoardTestFail() throws Exception {
@@ -390,53 +404,55 @@ public class ChannelBoardTestController {
 		}
 	}
 	
-	// 공지사항 삭제 성공 테스트 ------ 여기부터 할 차례
+	// 공지사항 삭제 성공 테스트 (완료)
 	@Test
 	@Transactional
-	void deleteNoticeTestOk() throws Exception {
+	void deleteChannelBoardTestOk() throws Exception {
 		try {
-			NoticeVO noticeVO = new NoticeVO();
-			noticeVO.setUserIdx(6);
-			noticeVO.setNoticeTitle("삭제 전 확인 공지글");
-			noticeVO.setNoticeType("N");
-			noticeVO.setNoticeDesc("삭제 전 확인 공지글 내용입니다.");
+			ChannelBoardVO channelBoardVO = new ChannelBoardVO();
+			channelBoardVO.setMemberIdx(2);
+			channelBoardVO.setChannelIdx(1);
+			channelBoardVO.setChannelBoardTitle("삭제 전 확인용 채널 게시글");
+			channelBoardVO.setChannelBoardType("N");
+			channelBoardVO.setChannelBoardDesc("삭제 전 확인용 채널 게시글 내용입니다.");
 			
-			noticeService.insertNotice(noticeVO);
+			channelBoardService.insertChannelBoard(channelBoardVO);
 			
-			int noticeIdx = noticeVO.getNoticeIdx();
-//			System.out.println("noticeVO-noticeIdx : " + noticeVO.getNoticeIdx());
+			int channelBoardIdx = channelBoardVO.getChannelBoardIdx();
+			int channelIdx = channelBoardVO.getChannelIdx();
 			
-			NoticeVO beforeupdateVO = noticeService.selectNoticeDetail(noticeIdx);
+			ChannelBoardVO beforeUpdateVO = channelBoardService.selectChannelBoardDetail(channelBoardIdx);
 			
-			System.out.println("beforeupdateVO - noticeIdx : " + beforeupdateVO.getNoticeIdx());
-			System.out.println("beforeupdateVO - userIdx : " + beforeupdateVO.getUserIdx());
-			System.out.println("beforeupdateVO - noticeTitle : " + beforeupdateVO.getNoticeTitle());
-			System.out.println("beforeupdateVO - noticeType : " + beforeupdateVO.getNoticeType());
-			System.out.println("beforeupdateVO - noticeDesc : " + beforeupdateVO.getNoticeDesc());
-			
-//			UrlEncodedFormEntity notice = new UrlEncodedFormEntity(Arrays.asList(
-//					new BasicNameValuePair("noticeIdx", String.valueOf(noticeIdx)),
-//					new BasicNameValuePair("userIdx", String.valueOf(noticeVO.getUserIdx())),
-//					new BasicNameValuePair("noticeTitle", "수정 후 확인 공지글"),
-//					new BasicNameValuePair("noticeType", noticeVO.getNoticeType()),
-//					new BasicNameValuePair("noticeDesc", "수정 후 확인 공지글 내용입니다.")
-//			), "UTF-8");
+			System.out.println("beforeUpdateVO - channelBoardIdx : " + beforeUpdateVO.getChannelBoardIdx());
+			System.out.println("beforeUpdateVO - memberIdx : " + beforeUpdateVO.getMemberIdx());
+			System.out.println("beforeUpdateVO - channelIdx : " + beforeUpdateVO.getChannelIdx());
+			System.out.println("beforeUpdateVO - channelBoardTitle : " + beforeUpdateVO.getChannelBoardTitle());
+			System.out.println("beforeUpdateVO - channelBoardType : " + beforeUpdateVO.getChannelBoardType());
+			System.out.println("beforeUpdateVO - channelBoardDesc : " + beforeUpdateVO.getChannelBoardDesc());
+			System.out.println("beforeUpdateVO - channelBoardDate : " + beforeUpdateVO.getChannelBoardDate());
+			System.out.println("beforeUpdateVO - memberNick : " + beforeUpdateVO.getMemberNick());
 			
 			System.out.println("==========컨트롤러 진입 이전=========");
-			MvcResult result = mockMvc.perform(delete("/main/notice/" + noticeIdx)
+			MvcResult result = mockMvc.perform(delete("/channel/board/" + channelIdx + "/" + channelBoardIdx)
 							.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-							.content("" + noticeIdx))
+							.content("" + channelIdx)
+							.content("" + channelBoardIdx))
 							.andExpect(status().isOk())
 							.andDo(print())
 							.andReturn();
 			System.out.println("==========컨트롤러 진입 이후=========");
 			
-			NoticeVO resultVO = noticeService.selectNoticeDetail(noticeIdx);
-			System.out.println("resultVO - noticeIdx : " + resultVO.getNoticeIdx());
-			System.out.println("resultVO - userIdx : " + resultVO.getUserIdx());
-			System.out.println("resultVO - noticeTitle : " + resultVO.getNoticeTitle());
-			System.out.println("resultVO - noticeType : " + resultVO.getNoticeType());
-			System.out.println("resultVO - noticeDesc : " + resultVO.getNoticeDesc());
+			ChannelBoardVO resultVO = channelBoardService.selectChannelBoardDetail(channelBoardIdx);
+			
+			System.out.println("ㅇㅇㅇㅇㅇㅇ 결과 확인 ㅇㅇㅇㅇㅇㅇㅇ");
+			System.out.println("resultVO - channelBoardIdx : " + resultVO.getChannelBoardIdx());
+			System.out.println("resultVO - memberIdx : " + resultVO.getMemberIdx());
+			System.out.println("resultVO - channelIdx : " + resultVO.getChannelIdx());
+			System.out.println("resultVO - channelBoardTitle : " + resultVO.getChannelBoardTitle());
+			System.out.println("resultVO - channelBoardType : " + resultVO.getChannelBoardType());
+			System.out.println("resultVO - channelBoardDesc : " + resultVO.getChannelBoardDesc());
+			System.out.println("resultVO - channelBoardDate : " + resultVO.getChannelBoardDate());
+			System.out.println("resultVO - memberNick : " + resultVO.getMemberNick());
 			
 //			System.out.println("==============================");
 //			System.out.println("result : " + result.getResponse().getContentAsString());

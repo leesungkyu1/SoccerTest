@@ -41,13 +41,15 @@ public class ChannelBoardController {
 	}
 	
 	@RequestMapping(value = "/channel/board/{channelIdx}/{channelBoardIdx}", method = RequestMethod.GET)
-	public String selectChannelBoardDetail(@PathVariable int channelIdx, @PathVariable("channelBoardIdx") int channelBoardIdx, Model model) throws Exception {
+	public String selectChannelBoardDetail(@PathVariable int channelIdx, @PathVariable("channelBoardIdx") int channelBoardIdx, Model model, RedirectAttributes attributes) throws Exception {
 		try {
 			ChannelBoardVO channelBoardVO = channelBoardService.selectChannelBoardDetail(channelBoardIdx);
 			
 			model.addAttribute("channelBoardVO", channelBoardVO);
 		} catch (Exception e) {
 			e.printStackTrace();
+			attributes.addAttribute("message", "등록된 글이 없습니다");
+			return "redirect:/channel/board/" + channelIdx;
 //			return "index";
 		}
 		return "";
@@ -86,15 +88,17 @@ public class ChannelBoardController {
 	}
 	
 	@RequestMapping(value = "/channel/board/{channelIdx}/{channelBoardIdx}", method = RequestMethod.DELETE)
-	public String deleteChannelBoard(@PathVariable int channelIdx,@PathVariable int channelBoardIdx, RedirectAttributes attributes) throws Exception {
+	public String deleteChannelBoard(@PathVariable int channelIdx, @PathVariable int channelBoardIdx, RedirectAttributes attributes) throws Exception {
 		try {
 			channelBoardService.deleteChannelBoard(channelBoardIdx);			
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
+//			return "index";
 		}
 		attributes.addAttribute("message","게시글을 삭제했습니다.");
 		return "redirect:/channel/" + channelIdx + "/board";
 		// return "redirect:/channel/board/" + channelIdx;
+//		return "test";
 	}
 }
