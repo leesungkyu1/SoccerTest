@@ -137,7 +137,7 @@ public class MemberTest {
 		channelVO.setChannelIdx(1);
 		
 		mvc.perform(get("/channel/play/member/" + channelVO.getChannelIdx()))
-			.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andDo(print());
 	}
