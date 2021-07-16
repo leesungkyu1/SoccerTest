@@ -19,13 +19,13 @@
 		FROM channel_board 
 		INNER JOIN member 
 			ON channel_board.member_idx = member.member_idx 
-		WHERE channel_idx = #{channelIdx} 
+		WHERE channel_board.channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
 		ORDER BY 
-				channel_board_type ASC, 
-				channel_board_idx DESC
+				channel_board.channel_board_type DESC, 
+				channel_board.channel_board_idx DESC
 		<if test="recordCountPerPage != null">
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}		
 		</if>

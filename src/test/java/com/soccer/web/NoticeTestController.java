@@ -44,7 +44,7 @@ public class NoticeTestController {
 	@Autowired
 	MockMvc mockMvc;
 	
-	// 공지사항 추가 테스트 성공 메서드
+	// 공지사항 추가 테스트 성공 메서드 (완료)
 	@Test
 	@Transactional
 	@DisplayName("공지사항 추가")
@@ -73,7 +73,7 @@ public class NoticeTestController {
 		}
 	}
 	
-	// 공지사항 추가 테스트 실패 메서드
+	// 공지사항 추가 테스트 실패 메서드 (완료)
 	@Test
 	@Transactional
 	void insertNoticeTestFail() throws Exception {
@@ -101,7 +101,7 @@ public class NoticeTestController {
 		}
 	}
 	
-	// 공지사항 리스트 출력 테스트 성공 메서드
+	// 공지사항 리스트 출력 테스트 성공 메서드 (완료)
 	@Test
 	@Transactional
 	void selectNoticeListTestOK() throws Exception {
@@ -135,7 +135,7 @@ public class NoticeTestController {
 		}
 	}
 	
-	// 공지사항 세부사항 출력 테스트 성공 메서드
+	// 공지사항 세부사항 출력 테스트 성공 메서드 (완료)
 	@Test
 	@Transactional
 	void selectNoticeDetailTestOk() throws Exception {
@@ -184,7 +184,7 @@ public class NoticeTestController {
 			System.out.println("noticeVO-noticeIdx : " + noticeVO.getNoticeIdx());
 			
 			// TODO 방금 만들었던 공지사항 글을 삭제하는 메서드 필요
-			
+			noticeService.deleteNotice(noticeIdx);
 			// TODO 삭제된 글을 들어가려고 하면 예외가 발생해야 함
 			System.out.println("진입전 =");
 			MvcResult result = mockMvc.perform(get("/main/notice/" + noticeIdx)
@@ -202,7 +202,7 @@ public class NoticeTestController {
 		}
 	}
 	
-	// 공지사항 수정 성공 테스트
+	// 공지사항 수정 성공 테스트 (완료)
 	@Test
 	@Transactional
 	void updateNoticeTestOk() throws Exception {
@@ -258,7 +258,7 @@ public class NoticeTestController {
 		}
 	}
 	
-	// 공지사항 수정 실패 테스트
+	// 공지사항 수정 실패 테스트 (완료)
 	@Test
 	@Transactional
 	void updateNoticeTestFail() throws Exception {
@@ -314,7 +314,7 @@ public class NoticeTestController {
 		}
 	}
 	
-	// 공지사항 삭제 성공 테스트
+	// 공지사항 삭제 성공 테스트 (완료)
 	@Test
 	@Transactional
 	void deleteNoticeTestOk() throws Exception {

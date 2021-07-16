@@ -15,34 +15,33 @@ public class ChannelBoardServiceImpl implements ChannelBoardService{
 	private ChannelBoardMapper channelBoardMapper;
 
 	@Override
-	public List<ChannelBoardVO> selectChannelBoardList(ChannelBoardVO channelBoardVO) {
+	public List<ChannelBoardVO> selectChannelBoardList(ChannelBoardVO channelBoardVO) throws Exception {
 		return channelBoardMapper.selectChannelBoardList(channelBoardVO);
 	}
 
 	@Override
-	public int selectChannelBoardListTotCnt(ChannelBoardVO channelBoardVO) {
+	public int selectChannelBoardListTotCnt(ChannelBoardVO channelBoardVO) throws Exception {
 		return channelBoardMapper.selectChannelBoardListTotCnt(channelBoardVO);
 	}
 
 	@Override
-	public ChannelBoardVO selectChannelBoardDetail(int channelBoardIdx) {
+	public ChannelBoardVO selectChannelBoardDetail(int channelBoardIdx) throws Exception {
 		return channelBoardMapper.selectChannelBoardDetail(channelBoardIdx);
 	}
 
 	@Override
-	public int insertChannelBoard(ChannelBoardVO channelBoardVO) {
-		return channelBoardMapper.insertChannelBoard(channelBoardVO);
-		
+	public void insertChannelBoard(ChannelBoardVO channelBoardVO) throws Exception {
+		channelBoardMapper.insertChannelBoard(channelBoardVO);
 	}
 
 	@Override
-	public void updateChannelBoard(ChannelBoardVO channelBoardVO) {
+	public void updateChannelBoard(ChannelBoardVO channelBoardVO) throws Exception {
 		channelBoardMapper.updateChannelBoard(channelBoardVO);
 		
 	}
 
 	@Override
-	public void deleteChannelBoard(int channelBoardIdx) {
+	public void deleteChannelBoard(int channelBoardIdx) throws Exception {
 		channelBoardMapper.deleteChannelBoard(channelBoardIdx);
 	}
 	
