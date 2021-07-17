@@ -41,8 +41,8 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 	}
 	
 	@Override
-	public int insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception {
-		return channelPlayMapper.insertChannelPlay(channelPlayVO);
+	public void insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception {
+		channelPlayMapper.insertChannelPlay(channelPlayVO);
 	}
 	
 	@Override
@@ -108,12 +108,6 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 		for(int i = 0; i<playerList.size(); i++) {
 			playerList.get(i).setTeamIdx(teamIdx);
 		}
-		
-		teamPlayerMapper.insertPlayerList(playerList);
-		
-		teamVO.setTeamIdx(teamIdx);
-		
-		List<Integer> playerIndexList = teamPlayerMapper.playerIndexList(teamVO);
 		
 		List<PlayresultVO> tempPlayresultList = new ArrayList<PlayresultVO>();
 		

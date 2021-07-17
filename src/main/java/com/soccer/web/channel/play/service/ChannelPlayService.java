@@ -18,7 +18,7 @@ public interface ChannelPlayService {
 	
 	ChannelPlayVO selectChannelPlayDetail(int channelPlayIdx) throws Exception;
 	
-	int insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
+	void insertChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
 	
 	void updateChannelPlay(ChannelPlayVO channelPlayVO) throws Exception;
 	

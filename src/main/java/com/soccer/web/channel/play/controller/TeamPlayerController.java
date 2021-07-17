@@ -69,13 +69,15 @@ public class TeamPlayerController {
 		try {
 			HashMap<String, String> teamPlayParameterMap = new HashMap<>();
 			teamPlayParameterMap.put("userIdx", Integer.toString(userIdx));
-			teamPlayParameterMap.put("userIdx", Integer.toString(channelPlayIdx));
+			teamPlayParameterMap.put("teamIdx", Integer.toString(teamIdx));
+			teamPlayParameterMap.put("channelPlayIdx", Integer.toString(channelPlayIdx));
 			teamPlayParameterMap.put("teamPlayerPosition", teamPlayerVO.getTeamPlayerPosition());
 			
 			int teamPlayerIdx = teamPlayerService.insertTeamPlayer(teamPlayParameterMap); // 선수 추가
 			
 			HashMap<String, Integer> playresultMap = new HashMap<>();
 			playresultMap.put("channelPlayIdx", channelPlayIdx);
+			playresultMap.put("teamIdx", teamIdx);
 			playresultMap.put("teamPlayerIdx", teamPlayerIdx);
 			
 			teamPlayerService.insertPlayresult(playresultMap); // 선수의 경기 결과 추가

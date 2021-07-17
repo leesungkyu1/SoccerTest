@@ -105,8 +105,12 @@
 				(
 					default, 
 					CONVERT(#{userIdx}, UNSIGNED INTEGER), 
+					CONVERT(#{teamIdx}, UNSIGNED INTEGER), 
 					CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER), 
-					#{teamPlayerPosition}
+					<!-- #{teamPlayerPosition} -->
+					null, 
+					null, 
+					null
 				)
 	</insert> 
 	
@@ -117,6 +121,7 @@
 				(
 					default,
 					#{channelPlayIdx},
+					#{teamIdx}, 
 					#{teamPlayerIdx},
 					default,
 					default,

@@ -14,10 +14,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		//로그인 권한 인터셉터
 		registry.addInterceptor(new LoginAuthorityInterceptor())
-			.excludePathPatterns("적용할 주소");
+			.addPathPatterns("적용할 주소");
 		
 		//관리자 체크 인터셉터
 		registry.addInterceptor(new AdminAuthorityInterceprot())
-			.excludePathPatterns("적용할 주소");
+			.addPathPatterns("적용할 주소");
 	}
 }

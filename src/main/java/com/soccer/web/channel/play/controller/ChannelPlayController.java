@@ -3,12 +3,12 @@ package com.soccer.web.channel.play.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.play.service.ChannelPlayService;
@@ -20,7 +20,7 @@ import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
 
-@RestController
+@Controller
 public class ChannelPlayController {
 
 	@Autowired
@@ -33,7 +33,7 @@ public class ChannelPlayController {
 	ChannelServiceImpl channelService;
 	
 	// 채널 게시글의 리스트를 보여주는 메서드 (페이징처리는 나중에)
-	@RequestMapping(value = "channel/play/{channelIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayList(@PathVariable int channelIdx,
 										ChannelPlayVO channelPlayVO,
 										Model model,
@@ -43,18 +43,22 @@ public class ChannelPlayController {
 			
 			List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
 			model.addAttribute("channelPlayList", channelPlayList);
+			model.addAttribute("test","test");
+			
+			System.out.println("진입");
+			if (message != null) {
+				model.addAttribute("message", message);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "index";
 		}
-		if (message != null) {
-			model.addAttribute("message", message);
-		}
-		
-		return "";
+//		return "";
+		return "test";
 	}
 	
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
-	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayDetail(	@PathVariable int channelIdx,
 											@PathVariable int channelPlayIdx,
 											RedirectAttributes attributes,
@@ -73,12 +77,14 @@ public class ChannelPlayController {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
 			return "redirect:/channel/play/" + channelIdx;
+//			return "index";
 		}
 		return "";
+//		return "test";
 	}
 	
 	// 영상 게시글을 추가하는 메서드
-	@RequestMapping(value = "channel/play/{channelIdx}", method = RequestMethod.POST)
+	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
 	public String insertChannelPlay(@PathVariable int channelIdx,
 									ChannelPlayVO channelPlayVO,
 									RedirectAttributes attributes) throws Exception {
@@ -86,17 +92,20 @@ public class ChannelPlayController {
 		try {
 			//TODO 영상을 실제 DB에 추가하는 메서드를 구현해야 함
 //			channelPlayVO.setChannelIdx(channelIdx); // 혹시나 필요할 때 사용하기
-			channelPlayIdx = channelPlayService.insertChannelPlay(channelPlayVO);
+			channelPlayService.insertChannelPlay(channelPlayVO);
+			channelPlayIdx = channelPlayVO.getChannelPlayIdx();
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
+//			return "index";
 		}
 		attributes.addAttribute("message", "영상이 성공적으로 등록되었습니다.");
 		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
+//		return "test";
 	}
 	
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)
-	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.PUT)
 	public String updateChannelPlay(@PathVariable int channelIdx,
 									@PathVariable int channelPlayIdx,
 									ChannelPlayVO channelPlayVO,
@@ -107,13 +116,15 @@ public class ChannelPlayController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
+//			return "index";
 		}
 		attributes.addAttribute("message", "영상이 성공적으로 수정되었습니다.");
 		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
+//		return "test";
 	}
 	
 	// 영상 게시글을 삭제하는 메서드
-	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.DELETE)
 	public String deleteChannelPlay(@PathVariable int channelIdx,
 									@PathVariable int channelPlayIdx,
 									RedirectAttributes attributes) throws Exception {
@@ -123,9 +134,11 @@ public class ChannelPlayController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
+			return "index";
 		}
 		attributes.addAttribute("message", "영상이 삭제되었습니다.");
-		return "redirect:/channel/play/" + channelIdx;
+//		return "redirect:/channel/play/" + channelIdx;
+		return "test";
 	}
 	
 	//득점 정보 입력
