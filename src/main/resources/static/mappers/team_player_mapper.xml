@@ -115,7 +115,7 @@
 	</insert> 
 	
 	<!-- 경기에 선수를 추가할 때 playresult를 추가하는 쿼리문 -->
-	<insert id="insertPlayresult" parameterType="java.util.HashMap">
+	<insert id="insertPlayresult" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="playresultIdx">
 		INSERT INTO playresult 
 		VALUES 
 				(

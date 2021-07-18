@@ -134,11 +134,11 @@ public class ChannelPlayController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
-			return "index";
+//			return "index";
 		}
 		attributes.addAttribute("message", "영상이 삭제되었습니다.");
-//		return "redirect:/channel/play/" + channelIdx;
-		return "test";
+		return "redirect:/channel/play/" + channelIdx;
+//		return "test";
 	}
 	
 	//득점 정보 입력
@@ -152,6 +152,7 @@ public class ChannelPlayController {
 		attributes.addAttribute("message", "득점 정보를 입력했습니다.");
 				
 		return "redirect:";
+//		return "test";
 	}
 	
 	//우리팀, 상대팀 득점 정보 얻어오기
@@ -163,6 +164,7 @@ public class ChannelPlayController {
 		model.addAttribute("goalList", sortedByTimeGoalList);
 		
 		return "";
+//		return "test";
 	}
 	
 	//득점 기록 수정
@@ -175,6 +177,7 @@ public class ChannelPlayController {
 		
 		attributes.addAttribute("message", "득점 기록을 수정했습니다.");
 		return "";
+//		return "test";
 	}
 	
 	//득점 기록 삭제
@@ -185,6 +188,7 @@ public class ChannelPlayController {
 		attributes.addAttribute("message", "득점 기록을 삭제했습니다.");
 		
 		return "";
+//		return "test";
 	}
 	
 	//우리팀 총점 상대팀 성적 기능
@@ -194,6 +198,7 @@ public class ChannelPlayController {
 		
 		model.addAttribute("totalScoreAndTeamInfo", totalScoreAndTeamInfo);
 		return "";
+//		return "test";
 	}
 	
 	//채널 검색 기능 channelController에 존재

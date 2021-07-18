@@ -162,13 +162,13 @@
 	</delete>
 	
 	<insert id="insertGoal" parameterType="com.soccer.web.channel.play.vo.ChannelPlayGoalVO">
-		INSER INTO channel_play_goal
+		INSERT INTO channel_play_goal
 		VALUES(
 				default,
 				#{channelPlayIdx},
 				#{channelPlayGoalName},
 				#{channelPlayGoalType},
-				#{channelPlayGoalTiem}
+				#{channelPlayGoalTime}
 			   )
 	</insert>
 	
@@ -223,16 +223,33 @@
 			channel_image,
 			team_name,
 			region_name
-		FROM (SELECT * FROM playresult
-			  INNER JOIN team
-			  	ON playresult.team_idx = team.team_idx
-			  RIGHT JOIN channel
-			  	ON team.channel_idx = channel.channel_idx
-			  RIGHT JOIN region
-			  	ON channel.region_idx = region.region_idx)  
-		WHERE channel_play_idx = #{channel_play_idx}
+		FROM (	SELECT 
+					playresult.playresult_totaltackle,
+					playresult.playresult_totalcross,
+					playresult.playresult_totalcornerkick,
+					playresult.playresult_totalfreekick,
+					playresult.playresult_totalshooting,
+					playresult.playresult_totalassist,
+					playresult.playresult_totalpass,
+					playresult.playresult_totalcontention,
+					playresult.channel_play_idx,
+					team.team_idx,
+					team.team_name,
+					channel.channel_idx,
+					channel.channel_name,
+					channel.channel_image,
+					region.region_idx,
+					region.region_name
+				FROM playresult
+				INNER JOIN team
+			  		ON playresult.team_idx = team.team_idx
+			  	RIGHT JOIN channel
+			  		ON team.channel_idx = channel.channel_idx
+			  	RIGHT JOIN region
+			  		ON channel.region_idx = region.region_idx) a
+		WHERE channel_play_idx = #{channelPlayIdx}
 			AND team_idx = (SELECT team_idx FROM team
-							WHERE channel_play_idx = #{channel_play_idx}
+							WHERE channel_play_idx = #{channelPlayIdx}
 							<if test='searchCode == "H"'>
 								AND team_type = 'H')
 							</if>
