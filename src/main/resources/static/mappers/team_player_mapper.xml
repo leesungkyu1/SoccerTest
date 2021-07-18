@@ -10,6 +10,7 @@
 		<result property="channelPlayIdx" column="channel_play_idx"/>
 		<result property="teamPlayerPosition" column="team_player_position"/>
 		<result property="teamPlayerFormationNumber" column="team_player_formation_number"/>
+		<result property="teamPlayerName" column="team_player_name"/>
 		<result property="memberImage" column="member_image"/>
 	</resultMap>
 	
@@ -61,7 +62,7 @@
 									SELECT team_idx 
 									FROM team 
 									WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
-										AND team_type = #{team_type}
+										AND team_type = #{teamType}
 							)
 	</select>
 	
@@ -110,7 +111,7 @@
 					<!-- #{teamPlayerPosition} -->
 					null, 
 					null, 
-					null
+					#{teamPlayerName}
 				)
 	</insert> 
 	
@@ -152,13 +153,15 @@
 	
 	<!-- 경기에 선수를 삭제할 때 사용되는 쿼리문 -->
 	<delete id="deleteTeamPlayer" parameterType="int">
-		DELETE * FROM team_player 
+		DELETE FROM team_player 
 		WHERE team_player_idx=#{teamPlayerIdx}
 	</delete>
 	
 	<!-- 선수 목록에서 선수를 눌렀을 때 선수의 정보를 받아오는 쿼리문 -->
 	<select id="selectTeamPlayerDetail" parameterType="java.util.HashMap" resultMap="teamPlayerVO">
 		SELECT * FROM team_player 
+		INNER JOIN member
+			ON team_player.user_idx = member.user_idx
 		WHERE
 			channel_play_idx = #{channelPlayIdx}
 			AND team_player_idx = #{teamPlayerIdx}

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.user.service.UserService;
 import com.soccer.web.user.vo.UserVO;
 
-@RestController
+@Controller
 public class TeamPlayerController {
 
 	@Autowired
@@ -60,7 +61,7 @@ public class TeamPlayerController {
 	
 	//삭제
 	// 영상 게시글에서 Player를 추가하는 메서드
-	@RequestMapping(value = "channel/play/player/{channelIdx}/{channelPlayIdx}", method = RequestMethod.POST)
+	@RequestMapping(value = "/channel/play/player/{channelIdx}/{channelPlayIdx}", method = RequestMethod.POST)
 	public String insertTeamPlayer(RedirectAttributes attributes,
 								@PathVariable int channelIdx,
 								@PathVariable int channelPlayIdx, 
@@ -109,7 +110,7 @@ public class TeamPlayerController {
 //	}
 	
 	// 영상 게시글에서 포메이션을 불러오는 메서드 (player의 formationIdx가 있는 경우 매칭 포함)
-	@RequestMapping(value = "channel/play/formation/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/formation/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayFormation(	@PathVariable int channelIdx,
 												@PathVariable int channelPlayIdx,
 												Model model
@@ -136,23 +137,25 @@ public class TeamPlayerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", "에러가 발생했습니다.");
+//			return "index";
 		}
 		return "";
+//		return "test";
 	}
 	
 	// 영상 게시글에서 포메이션을 변경하기 전 정보를 받아오는 메서드
-	@RequestMapping(value = "channel/play/formation/{channelIdx}/{channelPlayIdx}/{teamType}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/formation/{channelIdx}/{channelPlayIdx}/{teamType}", method = RequestMethod.GET)
 	public String selectChannelPlayFormationDetail(	@PathVariable int channelIdx,
-													@PathVariable int chnnelPlayIdx,
+													@PathVariable int channelPlayIdx,
 													@PathVariable String teamType,
 													Model model) throws Exception {
 		try {
-			ChannelPlayVO channelPlayVO = channelPlayService.selectChannelPlayDetail(chnnelPlayIdx);
+			ChannelPlayVO channelPlayVO = channelPlayService.selectChannelPlayDetail(channelPlayIdx);
 			String formation = "";
 			HashMap<String, String> teamInfo = new HashMap<>();
-			teamInfo.put("channelPlayIdx", Integer.toString(chnnelPlayIdx));
+			teamInfo.put("channelPlayIdx", Integer.toString(channelPlayIdx));
 			teamInfo.put("teamType", teamType);
-			if (teamType == "H") {
+			if (teamType.equals("H")) {
 				formation = channelPlayVO.getChannelPlayHomeFormation();
 			} else {
 				formation = channelPlayVO.getChannelPlayAwayFormation();
@@ -165,12 +168,14 @@ public class TeamPlayerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", "에러가 발생했습니다.");
+//			return "index";
 		}
 		return "";
+//		return "test";
 	}
 	
 	// 영상 게시글에서 포메이션을 변경하는 메서드 (player의 formationIdx 변경 포함)
-	@RequestMapping(value = "channel/play/formation/{channelIdx}/{channelPlayIdx}/{teamType}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/channel/play/formation/{channelIdx}/{channelPlayIdx}/{teamType}", method = RequestMethod.PUT)
 	public String updateChannelPlayFormation(	@PathVariable int channelIdx,
 												@PathVariable int channelPlayIdx,
 												@PathVariable String teamType,
@@ -243,7 +248,7 @@ public class TeamPlayerController {
 	}
 	
 	// 영상 게시글에서 Player를 삭제하는 메서드
-	@RequestMapping(value = "channel/play/player/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/channel/play/player/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.DELETE)
 	public String deleteTeamPlayer(	RedirectAttributes attributes,
 									@PathVariable int channelIdx,
 									@PathVariable int channelPlayIdx,
@@ -254,9 +259,11 @@ public class TeamPlayerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
+//			return "index";
 		}
 		attributes.addAttribute("message", "선수가 삭제되었습니다.");
 		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
+//		return "test";
 	}
 	
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력(다른 부분에 들어갈 수 있으므로 축소화)
@@ -275,7 +282,7 @@ public class TeamPlayerController {
 //	}
 	
 	// 영상 게시글에 저장된 Player 리스트에서 Player를 클릭했을 때 나타나는 Player의 세부사항
-	@RequestMapping(value = "channel/play/player/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/player/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.GET)
 	public String selectTeamPlayerDetail(	Model model,
 											@PathVariable int channelIdx,
 											@PathVariable int channelPlayIdx,
@@ -289,17 +296,20 @@ public class TeamPlayerController {
 			
 			PlayresultVO currentPlayresultVO = teamPlayerService.selectTeamPlayerCurrentResult(teamPlayerVO);
 			
+			model.addAttribute("teamPlayerVO", teamPlayerVO);
 			model.addAttribute("currentPlayresultVO", currentPlayresultVO);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", "오류가 발생했습니다.");
+//			return "index";
 		}
 		
 		return "";
+//		return "test";
 	}
 	
 	// 영상 게시글에 저장된 Player의 경기 기록을 보여주는 메서드
-	@RequestMapping(value = "channel/play/player/result/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "/channel/play/player/result/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.GET)
 	public String selectPlayresultBeforeUpdate(	@PathVariable int channelIdx,
 												@PathVariable int channelPlayIdx,
 												@PathVariable int teamPlayerIdx,
@@ -333,7 +343,7 @@ public class TeamPlayerController {
 	}
 	
 	// 영상 게시글에 저장된 Player의 경기 기록을 수정하는 메서드
-	@RequestMapping(value = "channel/play/player/result/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/channel/play/player/result/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.PUT)
 	public String updatePlayresult(	RedirectAttributes attributes,
 									@PathVariable int channelIdx,
 									@PathVariable int channelPlayIdx,
