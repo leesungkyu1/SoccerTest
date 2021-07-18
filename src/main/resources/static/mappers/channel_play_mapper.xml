@@ -128,13 +128,13 @@
 					<!-- 테스트를 위해 ok로 처리 -->
 					<!-- default, -->
 					<if test="channelPlayHomeFormation == null">
-						"",
+						null,
 					</if>
 					<if test="channelPlayHomeFormation != null">
 						#{channelPlayHomeFormation},
 					</if>
 					<if test="channelPlayAwayFormation == null">
-						""
+						null
 					</if>
 					<if test="channelPlayAwayFormation != null">
 						#{channelPlayAwayFormation}

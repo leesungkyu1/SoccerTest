@@ -31,8 +31,8 @@ public class ChannelServiceImpl implements ChannelService{
 	
 	//채널 가입가능 회원 수
 	@Override
-	public Integer channelMemeberMax(Integer channelIdx) throws Exception{
-		return channelDAO.channelMemeberMax(channelIdx);
+	public Integer channelMemberMax(Integer channelIdx) throws Exception{
+		return channelDAO.channelMemberMax(channelIdx);
 	}
 
 	//채널 생성

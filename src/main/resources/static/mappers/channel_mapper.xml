@@ -24,7 +24,7 @@
 		<result property="viewResultColumnContention" column="viewresultcolumn_contention" />
 	</resultMap>
 	
-	<select id="channelList" resultMap="channel">
+	<select id="channelList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channel">
 		SELECT * FROM channel
 		<if test='searchWord != null or searchWord != ""'>
 			<where>
@@ -34,7 +34,7 @@
 		ORDER BY channel_idx DESC
 	</select>
 	
-	<select id="channelMemeberMax" resultType="integer">
+	<select id="channelMemberMax" parameterType="integer" resultType="integer">
 		SELECT channel_max FROM channel
 		WHERE channel_idx = #{channelIdx}
 	</select>
@@ -50,7 +50,7 @@
 				#{channelName},
 				#{channelImage},
 				#{regionIdx},
-				#{channelMax},
+				#{channelMax}
 				)
 	</insert>
 	
@@ -90,7 +90,7 @@
 	</select>
 	
 	<update id="viewResultColumnUpdate" parameterType="com.soccer.web.channel.play.vo.ViewResultColumnVO">
-		UPDATE viewResultColumnUpdate
+		UPDATE viewresultcolumn
 			SET viewresultcolumn_tackle = #{viewResultColumnTackle},
 				viewresultcolumn_cross = #{viewResultColumnCross},		
 				viewresultcolumn_cornerKick = #{viewResultColumnCornerKick},

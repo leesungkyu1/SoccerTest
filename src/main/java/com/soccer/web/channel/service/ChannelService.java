@@ -9,7 +9,7 @@ public interface ChannelService {
 
 	List<ChannelVO> channelList(ChannelVO channelVO) throws Exception;
 
-	Integer channelMemeberMax(Integer channelIdx) throws Exception;
+	Integer channelMemberMax(Integer channelIdx) throws Exception;
 
 	int channelInsert(ChannelVO channelVO) throws Exception;
 

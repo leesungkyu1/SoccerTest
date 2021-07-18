@@ -54,7 +54,7 @@
 	<update id="memberDenie" parameterType="integer">
 		UPDATE apply
 			SET apply_step = "denie"
-		WHERE apply_idx = #{apply_idx}
+		WHERE apply_idx = #{applyIdx}
 	</update>
 	
 	<delete id="applyDelete" parameterType="integer">
