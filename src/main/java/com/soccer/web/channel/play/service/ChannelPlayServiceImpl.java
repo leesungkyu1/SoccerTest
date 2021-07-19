@@ -109,6 +109,12 @@ public class ChannelPlayServiceImpl implements ChannelPlayService {
 			playerList.get(i).setTeamIdx(teamIdx);
 		}
 		
+		teamPlayerMapper.insertPlayerList(playerList);
+		
+		teamVO.setTeamIdx(teamIdx);
+		
+		List<Integer> playerIndexList = teamPlayerMapper.playerIndexList(teamVO);
+		
 		List<PlayresultVO> tempPlayresultList = new ArrayList<PlayresultVO>();
 		
 		for(int i = 0; i<playerIndexList.size(); i++) {
