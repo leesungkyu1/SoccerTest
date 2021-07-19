@@ -43,7 +43,6 @@ public class ChannelPlayController {
 			
 			List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
 			model.addAttribute("channelPlayList", channelPlayList);
-			model.addAttribute("test","test");
 			
 			System.out.println("진입");
 			if (message != null) {
@@ -51,10 +50,10 @@ public class ChannelPlayController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "index";
+//			return "index";
 		}
-//		return "";
-		return "test";
+		return "";
+//		return "test";
 	}
 	
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
