@@ -23,6 +23,12 @@ public class UserController {
 	@Autowired
 	UserServiceImpl userService;
 	
+	//회원가입 뷰
+	@RequestMapping(value = "/user/view", method = RequestMethod.GET)
+	public String userJoinView() throws Exception {
+		return "main/sign_up";
+	}
+	
 	//회원가입
 	@RequestMapping(value = "/user" , method = RequestMethod.POST)
 	public String userJoin(UserVO userVO, RedirectAttributes attributes) throws Exception{
@@ -43,10 +49,16 @@ public class UserController {
 			attributes.addAttribute("message", "회원가입이 실패했습니다.");
 			
 			
-			return "redirect:";
+			return "redirect:/";
 		}		
 		
-		return "redirect:";
+		return "redirect:/";
+	}
+	
+	//로그인 페이지 뷰
+	@RequestMapping(value = "/user/login/view", method = RequestMethod.GET)
+	public String userLoginView() throws Exception {
+		return "main/sign_up";
 	}
 	
 	//로그인

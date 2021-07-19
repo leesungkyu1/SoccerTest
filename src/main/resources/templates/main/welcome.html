@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{css/reset.css}">
+    <link rel="stylesheet" th:href="@{css/common.css}">
+    <link rel="stylesheet" th:href="@{css/welcome.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+            <div class="row">
+                <div class="text">
+                    <div class="text_main">
+                        <h1 class="text_bold">내 손안의<br>축구클럽!</h1>
+                        <h2>간편회원가입으로<br>바로 즐겨보세요!</h2>
+                    </div>
+                    <div class="in">
+                        <h2>바로체험해보기>></h2>
+                    </div>
+                    <div class="btn">
+                        <button class="sign_up"><span>회원가입</span></button>
+                        <button class="login"><span>로그인</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="bg"></div>
+        </div>
+    </section>
+    <script>
+    	const main = {
+            // 이벤트 핸들러 등록
+            mainView: {
+                init: () => {
+                    //회원가입 버튼 이벤트 등록
+                    const singUpBtn = document.getElementsByClassName("sign_up")[0];
+                    singUpBtn.addEventListener("click", () => main.mainEvent.movePage("/user/view"));
+
+                    //로그인 버튼 이벤트 등록
+                    const loginBtn = document.getElementsByClassName("login")[0];
+                    loginBtn.addEventListener("click", () => main.mainEvent.movePage("/user/login/view"));
+                },
+            },
+
+            // 이벤트 정의
+    		mainEvent: {
+                movePage : (loc) => {
+                    location.href=loc;
+                },
+    		},
+    	};
+		
+        main.mainView.init();
+    </script>
+</body>
+</html>

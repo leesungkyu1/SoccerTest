@@ -1,0 +1,145 @@
+#team_performance {
+    padding-top: 50px;
+}
+.team_performance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 80px;
+}
+.game_record2_logo {
+    width: 68px;
+    background-color: #fff;
+    border-radius: 24px;
+    margin: 0 20px;
+    position: relative;
+    background-size: cover;
+    margin: 0 35px;
+}
+.game_record2_logo::after {
+    content: '';
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+}
+.game_record2_logo .game_record2_name{
+    position: absolute;
+    top: 70px;
+    width: 120px;
+    transform: translateX(-26px);
+    text-align: center;
+}
+.game_record2_logo h1 {
+    font-size: 16px;
+}
+.game_record2_logo h2 {
+    font-size: 12px;
+    color: #8c8c8c;
+}
+
+/* 팀성적 표 */
+.team_performance_attack, .team_performance_defense {
+    margin-top: 35px;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: -0.4px;
+}
+.team_performance_name {
+    width: 100%;
+    height: 30px;
+}
+.team_performance_table {
+    width: 100%;
+    height: 45px;
+}
+.team_performance_name {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #303030;
+}
+.line1 { margin-top: 10px; }
+.line2 { margin-top: 5px; }
+.team_performance_table > div{
+    display: flex;
+    justify-content: space-between;
+}
+.team_performance_table_bg {
+    display: flex;
+    width: 100%;
+    height: 8px;
+    background-color: #303030;
+    border-radius: 10px;
+}
+.team_performance_table_bg > div {
+    width: 50%;
+    height: 100%;
+}
+.team_performance_table_bg > div:nth-child(1) {
+    display: flex;
+    justify-content: flex-end;
+}
+.team_performance_table_bg > div:nth-child(1) div{
+    background-color: #FFE400;
+    border-radius: 10px 0px 0px 10px;
+    width: 80%;
+    height: 100%;
+}
+.team_performance_table_bg > div:nth-child(2) div{
+    background-color: #fff;
+    border-radius: 0px 10px 10px 0px;
+    width: 20%;
+    height: 100%;
+}
+
+
+/* 선수별기록 */
+.team_performance_record_table {
+    display: flex;
+
+}
+.team_performance_record_table .table{
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+.team_performance_record_table ul {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+.team_performance_record_table ul li {
+    color: #fff;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.3);
+    width: 50%;
+    min-width: 100px;
+
+}
+.team_performance_record_table ul li input {
+    width: 100%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    background-color: #191919;
+}
+.team_performance_record_table ul:last-child {
+    border-bottom: none;
+}
+.team_performance_record_table ul li:last-child {
+    border-right: none;
+}
+.team_performance_record_table ul li:nth-child(1) {
+    width: 30%;
+    min-width: 80px;
+    border-right: 1px solid #fff;
+    background-color: #303030;
+}
+.team_performance_record_table ul:nth-child(1){
+    border-bottom: 1px solid #fff;
+    background-color: #303030;
+}

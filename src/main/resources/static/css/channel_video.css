@@ -1,0 +1,132 @@
+#video_index {
+    padding-top: 50px;
+}
+.videos {
+    padding-bottom: 20px;
+}
+.videos:last-child {
+    padding-bottom: 0;
+}
+.video {
+    width: 100%;
+    background: url(../img/video.PNG);
+    background-size: cover;
+}
+.video::after{
+    display: block;
+    content: '';
+    padding-bottom: 56%;
+}
+
+.video_name h1{
+    padding-top: 10px;
+    font-size: 16px;
+    letter-spacing: -0.4px;
+}
+.video_name span {
+    font-size: 12px;
+    letter-spacing: -0.3px;
+    color: #8C8C8C;
+}
+
+/* 선수목록 */
+#player_index {
+    padding-bottom: 10px;
+}
+.player_index_logo {
+    display: flex;
+    overflow: hidden;
+
+}
+.player_index_logo > div{
+    width: 18.13%;
+}
+.player_index_logo > div {
+    margin-right: 3%;
+}
+.player_index_logo > div:first-child{
+    margin-left: 16px;
+}
+.player_index_logo > div:last-child{
+    margin-right: 16px;
+}
+.player_index_logo > div .player {
+    width: 100%;
+}
+.player_index_logo > div .player::after{
+    content: '';
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+}
+.player_index_logo > div h1 {
+    width: 20vw;
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 200;
+}
+.player {
+    background-size: cover;
+    border-radius: 50px;
+}
+
+/* 선수별기록 */
+.player_record_table {
+    display: flex;
+
+}
+.player_record_table .table{
+    padding-left: 16px;
+    position: relative;
+    width: calc(100% - 32px);
+    overflow: hidden;
+}
+.player_record_table ul {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+.player_record_table ul li {
+    color: #fff;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.3);
+    width: 16%;
+    min-width: 50px;
+
+}
+
+.player_record_table ul:last-child {
+    border-bottom: none;
+}
+.player_record_table ul li:last-child {
+    border-right: none;
+}
+.player_record_table ul li:nth-child(1) {
+    width: 20%;
+    min-width: 60px;
+    border-right: 1px solid #fff;
+    background-color: #303030;
+}
+.player_record_table ul:nth-child(1){
+    border-bottom: 1px solid #fff;
+    background-color: #303030;
+}
+
+.player_add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    background-color: #303030;
+    color: #fff;
+    right: 0;
+    border-radius: 0 12px 12px 0;
+    z-index: 2;
+}
