@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/channel_formation_modify.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_formation_modify.css">
     <title>축구 플랫폼</title>
 </head>
 <body>
@@ -27,23 +27,30 @@
                         <a href="#">변경<div class="right_arrow"></div></a>
                     </div> 
                     
-                    <select class="formation_modify select" name="formation_modify" form="myForm">
+                    <!-- 위의 변경을 눌렀을 때 포메이션에 맞게 아래 뷰가 생성되야 함 - 공간의 선수들은 초기화 -->
+                    <input class="formation_modify" id="formation_modify" th:value=${formation}>
+                    
+                    <!-- <select class="formation_modify select" name="formation_modify" form="myForm">
                         <option value="443">4 : 4 : 3</option>
                         <option value="434">4 : 3 : 4</option>
                         <option value="344">3 : 4 : 4</option>
-                    </select>
+                    </select> -->
                     
                     <div class="ground">
                         <div class="bg">
                             <div class="player">
-                                <div class="lin1">
+                                <div class="lin1" th:object="${goalkeeperVO}">
                                     <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
+                                        <div class="player0"></div> <!-- 이미지 -->
+                                        <h1 th:text="*{teamPlayerName}"></h1>
                                     </div>
                                 </div>
                                 <div class="lin2">
-                                    <div>
+                                    <div th:each="defender : ${defenderVOList}">
+                                        <div class="player0"></div> <!-- 이미지 -->
+                                        <h1 th:text="${defender.teamPlayerName}"></h1>
+                                    </div>
+                                    <!-- <div>
                                         <div class="player0"></div>
                                         <h1></h1>
                                     </div>
@@ -54,14 +61,14 @@
                                     <div>
                                         <div class="player0"></div>
                                         <h1></h1>
-                                    </div>
-                                    <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="lin3">
-                                    <div>
+                                    <div th:each="midfilder : ${midfilderVOList}">
+                                        <div class="player0"></div> <!-- 이미지 -->
+                                        <h1 th:text="${midfilder.teamPlayerName}"></h1>
+                                    </div>
+                                    <!-- <div>
                                         <div class="player0"></div>
                                         <h1></h1>
                                     </div>
@@ -72,21 +79,17 @@
                                     <div>
                                         <div class="player0"></div>
                                         <h1></h1>
-                                    </div>
-                                    <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="lin4">
-                                    <div>
+                                    <div th:each="forward : ${forwardVOList}">
+                                        <div class="player0"></div> <!-- 이미지 -->
+                                        <h1 th:text="${forward.teamPlayerName}"></h1>
+                                    </div>
+                                    <!-- <div>
                                         <div class="player0"></div>
                                         <h1></h1>
-                                    </div>
-                                    <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -100,14 +103,14 @@
             <div class="popup">
                 <div class="down-btn"></div>
                 <div class="popup_players">
-                    <div>
-                        <div class="popup_player player1"></div>
+                    <div th:each="teamPlayer : ${teamPlayerVOList}">
+                        <div class="popup_player player1"></div> <!-- 이미지 -->
                         <div>
-                            <h1>홍길동</h1>
+                            <h1 th:text="${teamPlayer.teamPlayerName}">홍길동</h1>
                             <h2>미드필더(MF)</h2>
                         </div>
                     </div>
-                    <div>
+                    <!-- <div>
                         <div class="popup_player player2"></div>
                         <div>
                             <h1>홍길동</h1>
@@ -267,7 +270,7 @@
                             <h1>홍길동</h1>
                             <h2>미드필더(MF)</h2>
                         </div>
-                    </div>
+                    </div> -->
                     
                 </div>
                 
@@ -283,6 +286,6 @@
            </div>
         </div>
     </section>
-    <script src="js/popup.js"></script>
+    <script src="/js/popup.js"></script>
 </body>
 </html>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -31,7 +32,7 @@ import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
 
-@RestController
+@Controller
 public class ChannelPlayController {
 
 	@Autowired
@@ -68,6 +69,7 @@ public class ChannelPlayController {
 	}
 	
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
+	@ResponseBody
 	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayDetail(	@PathVariable int channelIdx,
 											@PathVariable int channelPlayIdx,
@@ -151,6 +153,7 @@ public class ChannelPlayController {
 	}
 	
 	// 영상 게시글을 추가하는 메서드channel/play/{channelIdx}
+	@ResponseBody
 	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
 	public String insertChannelPlay(@PathVariable int channelIdx,
 									@RequestParam("multipartFile")
@@ -274,7 +277,7 @@ public class ChannelPlayController {
 		PlayresultVO totalScoreAndTeamInfo = channelPlayService.totalScore(channelPlayIdx);
 		
 		model.addAttribute("totalScoreAndTeamInfo", totalScoreAndTeamInfo);
-		return "";
+		return "/channel/channel_team_performance";
 //		return "test";
 	}
 	

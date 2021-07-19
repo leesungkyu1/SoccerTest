@@ -18,10 +18,20 @@
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY
-				notice_type DESC,
-				notice_idx DESC 
+		WHERE notice_type = "N"
+		ORDER BY notice_idx DESC 
 		limit #{recordCountPerPage} offset #{firstIndex}
+	</select>
+		
+	<select id="selectImportantNoticeList" parameterType="com.soccer.web.notice.vo.NoticeVO" resultMap="noticeVO">
+		SELECT * 
+		FROM notice 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		WHERE notice_type = "Y"
+		ORDER BY notice_idx DESC 
+		limit 3
 	</select>
 	
 	<select id="selectNoticeListTotCnt" parameterType="com.soccer.web.notice.vo.NoticeVO" resultType="int">

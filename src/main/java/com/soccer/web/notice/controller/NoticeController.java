@@ -25,7 +25,9 @@ public class NoticeController { // main 공지사항은 무조건 관리자만 �
 		try {
 			int totcnt = noticeService.selectNoticeListTotCnt(noticeVO);
 			
+			List<NoticeVO> importantNoticeList = noticeService.selectImportantNoticeList(noticeVO);
 			List<NoticeVO> noticeList = noticeService.selectNoticeList(noticeVO);
+			model.addAttribute("importantNoticeList", importantNoticeList);
 			model.addAttribute("noticeList", noticeList);
 			if (message != null) {
 				model.addAttribute("message", message);

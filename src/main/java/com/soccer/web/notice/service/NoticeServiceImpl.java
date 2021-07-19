@@ -18,6 +18,11 @@ public class NoticeServiceImpl implements NoticeService{
 	public List<NoticeVO> selectNoticeList(NoticeVO noticeVO) throws Exception {
 		return noticeMapper.selectNoticeList(noticeVO);
 	}
+	
+	@Override
+	public List<NoticeVO> selectImportantNoticeList(NoticeVO noticeVO) throws Exception {
+		return noticeMapper.selectImportantNoticeList(noticeVO);
+	}
 
 	@Override
 	public int selectNoticeListTotCnt(NoticeVO noticeVO) throws Exception {

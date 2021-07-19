@@ -64,6 +64,7 @@
 									WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
 										AND team_type = #{teamType}
 							)
+		ORDER BY team_player_formation_number
 	</select>
 	
 	<!-- 경기에 선수 리스트에 해당하는 playresult를 가져오는 쿼리문 -->
