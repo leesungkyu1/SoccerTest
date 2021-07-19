@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.soccer.web.channel.play.dao.ChannelPlayMapper">
+	<!-- channelPlayVO resultMap -->
+	<resultMap type="com.soccer.web.channel.play.vo.ChannelPlayVO" id="channelPlayVO">
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="memberIdx" column="member_idx"/>
+		<result property="channelIdx" column="channel_idx"/>
+		<result property="channelPlayTitle" column="channel_play_title"/>
+		<result property="channelPlayDate" column="channel_play_date"/>
+		<result property="channelPlayImage" column="channel_play_image"/>
+		<result property="channelPlayVideo" column="channel_play_video"/>
+		<result property="channelPlayStep" column="channel_play_step"/>
+		<result property="channelPlayFormation" column="channel_play_formation"/>
+		<result property="memberNick" column="member_nick"/>
+	</resultMap>
+	
+	<resultMap type="com.soccer.web.channel.play.vo.TeamVO" id="teamVO">
+		<result property="teamIdx" column="team_idx"/>
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="channelIdx" column="channel_idx"/>
+		<result property="teamName" column="team_name"/>
+		<result property="teamType" column="team_type"/>
+	</resultMap>
+
+	<resultMap type="com.soccer.web.channel.play.vo.ChannelPlayGoalVO" id="channelPlayGoalVO">
+		<result property="channelPlayGoalIdx" column="channel_play_goal_idx"/>
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="channelPlayGoalName" column="channel_play_goal_name"/>
+		<result property="channelPlayGoalType" column="channel_play_goal_type"/>
+		<result property="channelPlayGoalTime" column="channel_play_goal_time"/>
+	</resultMap>
+	
+	<resultMap type="com.soccer.web.channel.play.vo.PlayresultVO" id="playresultVO">
+		<result property="playresultIdx" column="playresult_idx"/>
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="teamIdx" column="team_idx"/>
+		<result property="teamPlayerIdx" column="team_player_idx"/>
+		<result property="playresultTotaltackle" column="playresult_totaltackle"/>
+		<result property="playresultSuccesstackle" column="playresult_successtackle"/>
+		<result property="playresultTotalcross" column="playresult_totalcross"/>
+		<result property="playresultSuccesscross" column="playresult_successcross"/>
+		<result property="playresultTotalcornerkick" column="playresult_totalcornerkick"/>
+		<result property="playresultSuccesscornerkick" column="playresult_successcornerkick"/>
+		<result property="playresultTotalfreekick" column="playresult_totalfreekick"/>
+		<result property="playresultSuccessfreekick" column="playresult_successfreekick"/>
+		<result property="playresultTotalshooting" column="playresult_totalshooting"/>
+		<result property="playresultSuccessshooting" column="playresult_successshooting"/>
+		<result property="playresultTotalassist" column="playresult_totalassist"/>
+		<result property="playresultSuccessassist" column="playresult_successassist"/>
+		<result property="playresultTotalpass" column="playresult_totalpass"/>
+		<result property="playresultSuccesspass" column="playresult_successpass"/>
+		<result property="playresultTotalcontention" column="playresult_totalcontention"/>
+		<result property="playresultSuccesscontention" column="playresult_successcontention"/>
+		
+		<result property="channelName" column="channel_name"/>
+		<result property="channelImage" column="channel_image"/>
+		<result property="teamName" column="team_name"/>
+		<result property="regionName" column="region_name"/>
+	</resultMap>
+	
+	<!-- 영상 게시글의 리스트를 출력 -->
+	<select id="selectChannelPlayList" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" resultMap="channelPlayVO">
+		SELECT channel_play_idx, channel_play.channel_idx, channel_play_title, channel_play_video 
+		FROM channel_play 
+		INNER JOIN member 
+			ON channel_play.member_idx = member.member_idx 
+		WHERE channel_play.channel_idx = #{channelIdx}
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY channel_play_idx DESC 
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectChannelMainPlayList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelPlayVO">
+		SELECT * 
+		FROM channel_play 
+		INNER JOIN member 
+			ON channel_play.member_idx = member.member_idx 
+		WHERE channel_idx = #{channelIdx} 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY channel_play_idx DESC
+		LIMIT 10			
+	</select>
+	
+	<!-- 영상 게시글 리스트의 size 확인 -->
+	<select id="selectChannelPlayListTotCnt" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" resultType="int">
+		SELECT COUNT(*) totcnt 
+		FROM channel_play
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+	</select>
+	
+	<!-- 영상 게시글의 세부사항을 출력하는 쿼리문 -->
+	<select id="selectChannelPlayDetail" parameterType="int" resultType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+		SELECT * 
+		FROM channel_play 
+		INNER JOIN member 
+			ON channel_play.member_idx = member.member_idx 
+		WHERE channel_play_idx = #{channelPlayIdx};
+	</select>
+	
+	<!-- 영상 게시글을 추가하는 메서드(승인 전) -->
+	<insert id="insertChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO" useGeneratedKeys="true" keyProperty="channelPlayIdx">
+		INSERT INTO channel_play
+		VALUES 
+				(
+					default,
+					#{memberIdx},
+					#{channelIdx},
+					#{channelPlayTitle},
+					default,
+					#{channelPlayImage},
+					#{channelPlayVideo},
+					default,
+					default
+				)
+	</insert>
+	
+	<!-- 영상 게시글을 수정하는 메서드(승인 전으로 다시 바꾸어야 함) -->
+	<update id="updateChannelPlay" parameterType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+		UPDATE channel_play 
+		SET 
+			channel_play_title = #{channelPlayTitle},
+			channel_play_date = default,
+			channel_play_image = #{channelPlayImage},
+			channel_play_video = #{channelPlayVideo},
+			channel_play_step = default
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</update>
+	
+	<!-- 영상 게시글을 삭제하는 메서드 -->
+	<delete id="deleteChannelPlay" parameterType="int">
+		DELETE * FROM channel_play 
+		WHERE 
+			channel_play_idx = #{channelPlayIdx}
+	</delete>
+	
+	<insert id="insertGoal" parameterType="com.soccer.web.channel.play.vo.ChannelPlayGoalVO">
+		INSER INTO channel_play_goal
+		VALUES(
+				default,
+				#{channelPlayIdx},
+				#{channelPlayGoalName},
+				#{channelPlayGoalType},
+				#{channelPlayGoalTiem}
+			   )
+	</insert>
+	
+	<select id="goalList" parameterType="int" resultMap="channelPlayGoalVO">
+		SELECT * FROM channel_play_goal
+		WHERE channel_play_idx = #{channelPlayIdx}
+		ORDER BY channel_play_goal_time
+	</select>
+	
+	<update id="updateGoal" parameterType="com.soccer.web.channel.play.vo.ChannelPlayGoalVO">
+		UPDATE channel_play_goal
+			SET channel_play_goal_name = #{channelPlayGoalName},
+				channel_play_goal_type = #{channelPlayGoalType},
+				channel_play_goal_time = #{channelPlayGoalTime}
+		WHERE channel_play_goal_idx = #{channelPlayGoalIdx} 
+	</update>
+	
+	<delete id="deleteGoal" parameterType="int">
+		DELETE FROM channel_play_goal
+		WHERE channel_play_goal_idx = #{channelPlayGoalIdx}
+	</delete>
+	
+	<!-- channelPlayIdx에 연관된 팀을 불러오는 쿼리문 -->
+	<select id="selectTeamList" parameterType="int" resultMap="teamVO">
+		SELECT * FROM team 
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</select>
+	
+	<update id="updateChannelPlayFormation" parameterType="java.util.HashMap">
+		UPDATE channel_play 
+		SET 
+			<if test='teamType.equals("H")'>
+				channel_play_home_formation = #{formation}
+			</if>
+			<if test='teamType.equals("A")'>
+				channel_play_away_formation = #{formation}
+			</if>
+		WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
+	</update>
+	
+	<select id="totalScore" parameterType="com.soccer.web.channel.play.vo.PlayresultVO" resultMap="playresultVO">
+		SELECT 
+			SUM(playresult_totaltackle) as playresult_totaltackle,
+			SUM(playresult_totalcross) as playresult_totalcross,
+			SUM(playresult_totalcornerkick) as playresult_totalcornerkick,
+			SUM(playresult_totalfreekick) as playresult_totalfreekick,
+			SUM(playresult_totalshooting) as playresult_totalshooting,
+			SUM(playresult_totalassist) as playresult_totalassist,
+			SUM(playresult_totalpass) as playresult_totalpass,
+			SUM(playresult_totalcontention) as playresult_totalcontention,
+			channel_name,
+			channel_image,
+			team_name,
+			region_name
+		FROM (SELECT * FROM playresult
+			  INNER JOIN team
+			  	ON playresult.team_idx = team.team_idx
+			  RIGHT JOIN channel
+			  	ON team.channel_idx = channel.channel_idx
+			  RIGHT JOIN region
+			  	ON channel.region_idx = region.region_idx)  
+		WHERE channel_play_idx = #{channel_play_idx}
+			AND team_idx = (SELECT team_idx FROM team
+							WHERE channel_play_idx = #{channel_play_idx}
+							<if test='searchCode == "H"'>
+								AND team_type = 'H')
+							</if>
+							<if test='searchCode == "A"'>
+								AND team_type = 'A')
+							</if>
+		GROUP BY channel_play_idx, team_idx
+	</select>
+	
+	<insert id="insertTeam" parameterType="com.soccer.web.channel.play.vo.TeamVO">
+		<selectKey resultType="int" keyProperty="teamIdx" order="AFTER">
+			SELECT MAX(team_idx) FROM team;
+		</selectKey>
+		INSERT INTO team
+		VALUES (default,
+				#{channelPlayIdx},
+				<if test='channelIdx != -1'>
+					#{channelIdx},
+				</if>
+				<if test='channelIdx == -1'>
+					null,
+				</if>
+				#{teamName},
+				<if test='teamType == "H"'>
+					'H'
+				</if>
+				<if test='teamType == "A"'>
+					'A'
+				</if>
+				)
+	</insert>
+</mapper>

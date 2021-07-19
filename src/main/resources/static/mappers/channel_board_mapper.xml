@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soccer.web.channel.board.dao.ChannelBoardMapper">
+	
+	<resultMap type="com.soccer.web.channel.board.vo.ChannelBoardVO" id="channelBoardVO">
+		<result property="channelBoardIdx" column="channel_board_idx" />
+		<result property="memberIdx" column="member_idx" />
+		<result property="channelIdx" column="channel_idx" />
+		<result property="channelBoardTitle" column="channel_board_title" />
+		<result property="channelBoardType" column="channel_board_type" />
+		<result property="channelBoardDesc" column="channel_board_desc" />
+		<result property="channelBoardDate" column="channel_board_date" />
+		<result property="memberNick" column="member_nick" />
+	</resultMap>
+	
+	<!-- 채널 일반 게시글의 리스트 -->
+	<select id="selectChannelBoardList" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultMap="channelBoardVO">
+		SELECT * 
+		FROM channel_board 
+		INNER JOIN member 
+			ON channel_board.member_idx = member.member_idx 
+		WHERE channel_board.channel_idx = #{channelIdx} 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY 
+				channel_board.channel_board_type DESC, 
+				channel_board.channel_board_idx DESC
+		<if test="recordCountPerPage != null">
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}		
+		</if>
+		<if test="recordCountPerPage == null">
+			LIMIT 10
+		</if>
+	</select>
+	
+	<select id="selectChannelMainBoardList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelBoardVO">
+		SELECT * 
+		FROM channel_board 
+		INNER JOIN member 
+			ON channel_board.member_idx = member.member_idx 
+		WHERE channel_idx = #{channelIdx} 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY channel_board_idx DESC
+		LIMIT 10		
+	</select>
+	
+	<select id="selectChannelBoardListTotCnt" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultType="int">
+		SELECT COUNT(*) totcnt 
+		FROM channel_board 
+		WHERE channel_idx = #{channelIdx} 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+	</select>
+	
+	<!-- 채널 일반 게시글의 상세 페이지 -->
+	<select id="selectChannelBoardDetail" parameterType="int" resultMap="channelBoardVO">
+		SELECT * 
+		FROM channel_board 
+		INNER JOIN member 
+			ON channel_board.member_idx = member.member_idx 
+		WHERE channel_board_idx=#{channelBoardIdx}
+	</select>
+	
+	<!-- 채널 일반 게시글 추가 -->
+	<insert id="insertChannelBoard" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" useGeneratedKeys="true" keyProperty="channelBoardIdx">
+		<![CDATA[
+			INSERT INTO channel_board 
+			VALUES (
+					default,
+					#{memberIdx},
+					#{channelIdx},
+					#{channelBoardTitle},
+					#{channelBoardType},
+					#{channelBoardDesc},
+					default
+			)
+		]]>
+	</insert>
+	
+	<!-- 채널 일반 게시글 수정 -->
+	<update id="updateChannelBoard" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" >
+		<![CDATA[
+			UPDATE channel_board
+			SET 
+				channel_board_title = #{channelBoardTitle},
+				channel_board_type = #{channelBoardType},
+				channel_board_desc = #{channelBoardDesc},
+				channel_board_date = default 
+				WHERE channel_board_idx=#{channelBoardIdx}
+		]]>
+	</update>
+	
+	<!-- 채널 일반 게시글 삭제 -->
+	<delete id="deleteChannelBoard" parameterType="int">
+		DELETE FROM channel_board 
+		WHERE channel_board_idx=#{channelBoardIdx}
+	</delete>
+	
+</mapper>
