@@ -1,7 +1,16 @@
 package com.soccer.web.channel.play.controller;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.file.Paths;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.play.service.ChannelPlayService;
@@ -20,7 +31,7 @@ import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
 
-@Controller
+@RestController
 public class ChannelPlayController {
 
 	@Autowired
@@ -41,34 +52,94 @@ public class ChannelPlayController {
 		try {
 			int totcnt = channelPlayService.selectChannelPlayListTotCnt(channelPlayVO);
 			
-			List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
-			model.addAttribute("channelPlayList", channelPlayList);
-			model.addAttribute("test","test");
 			
-			System.out.println("진입");
-			if (message != null) {
-				model.addAttribute("message", message);
-			}
+			
+			List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
+			channelPlayVO.getChannelPlayIdx();
+			
+			System.out.println(channelPlayList.get(channelPlayVO.getChannelPlayIdx()));
+			model.addAttribute("channelPlayList", channelPlayList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "index";
 		}
-//		return "";
-		return "test";
+		if (message != null) {
+			model.addAttribute("message", message);
+		}
+		
+		return "";
 	}
 	
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
-	@RequestMapping(value = "/channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
+	@RequestMapping(value = "channel/play/{channelIdx}/{channelPlayIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayDetail(	@PathVariable int channelIdx,
 											@PathVariable int channelPlayIdx,
 											RedirectAttributes attributes,
-											Model model) throws Exception{
+											Model model, HttpServletRequest request,
+											HttpServletResponse response) throws Exception{
 		try {
+			
 			ChannelPlayVO channelPlayVO = channelPlayService.selectChannelPlayDetail(channelPlayIdx);
+			
 			List<TeamPlayerVO> teamPlayerVOList = teamPlayerService.selectTeamPlayerList(channelPlayIdx); // player 리스트
 			List<PlayresultVO> playerResultVOList = teamPlayerService.selectPlayerResultVOList(channelPlayIdx); // player들의 playresult 리스트
 			
-			//TODO 영상 게시글의 영상 작업 필요
+			
+			System.out.println(channelPlayVO.getChannelPlayVideo());
+			//채널 index
+			
+			
+			//파일 이름 및 경로
+			String filePath = channelPlayVO.getChannelPlayVideo();
+			String fileName = channelPlayVO.getChannelPlayTitle();
+			
+			//파일의 시작위치 임의
+			RandomAccessFile randomFile = new RandomAccessFile(filePath, fileName);
+			
+			//파일 스트리밍 부분
+			long rangeStart =0;
+			long rangeEnd = 0;
+			boolean isPart=false; //부분 요청일 경우 true
+			long movieSize=randomFile.length();
+			String range = request.getHeader("range");
+			
+			if(range != null) {
+				if(range.endsWith("-")) {
+					range=range + (movieSize -1 );
+				}
+				int idxm = range.trim().indexOf("-");
+				rangeStart = Long.parseLong(range.substring(6, idxm));
+				rangeEnd = Long.parseLong(range.substring(idxm+1));
+				if(rangeStart>0) {
+					isPart=true;
+				}
+			}else {
+				rangeStart=0;
+				rangeEnd = movieSize-1;
+			}
+			
+			long partSize = rangeEnd - rangeStart+1;
+			
+			response.reset();
+			response.setStatus(isPart? 206: 200);	 //전체 요청 200, 부분 요청 206
+			response.setContentType("video/mp4");
+			
+			response.setHeader("Content-Range", "bytes" + rangeStart+ "-" + rangeEnd+ "/" + movieSize);
+			response.setHeader("Accept-Range","bytes");
+			response.setHeader("Content-Length",""+partSize);
+			
+			OutputStream out = response.getOutputStream();
+			//동영상 파일의 전송 시작 위치 지정
+			randomFile.seek(rangeStart);
+			
+			int bufferSize=8*1024;
+			byte[] buf = new byte[bufferSize];
+			
+			do {
+				int block=partSize>bufferSize ? bufferSize : (int)partSize;
+				int len= randomFile.read(buf,0,block);
+				out.write(buf, 0, len);
+				partSize -= block;
+			} while(partSize>0);
 			
 			model.addAttribute("channelPlayVO", channelPlayVO);
 			model.addAttribute("teamPlayerVOList", teamPlayerVOList);
@@ -77,31 +148,39 @@ public class ChannelPlayController {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
 			return "redirect:/channel/play/" + channelIdx;
-//			return "index";
 		}
 		return "";
-//		return "test";
 	}
 	
-	// 영상 게시글을 추가하는 메서드
+	// 영상 게시글을 추가하는 메서드channel/play/{channelIdx}
 	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
 	public String insertChannelPlay(@PathVariable int channelIdx,
+									@RequestParam("multipartFile")
 									ChannelPlayVO channelPlayVO,
-									RedirectAttributes attributes) throws Exception {
+									RedirectAttributes attributes, MultipartFile multipartFile) throws Exception {
 		int channelPlayIdx = 0;
 		try {
-			//TODO 영상을 실제 DB에 추가하는 메서드를 구현해야 함
-//			channelPlayVO.setChannelIdx(channelIdx); // 혹시나 필요할 때 사용하기
+			String root_path = Paths.get("C:", "downloads","upload").toString(); 
+			
+			File targetFile = new File(root_path + multipartFile.getOriginalFilename());
+		
+			System.out.println("경로는 "+root_path);
+			InputStream fileStream;
+			
+			channelPlayVO.setChannelPlayTitle(multipartFile.getOriginalFilename());
+			channelPlayVO.setChannelPlayVideo(root_path);
 			channelPlayService.insertChannelPlay(channelPlayVO);
-			channelPlayIdx = channelPlayVO.getChannelPlayIdx();
+//			channelPlayVO.setChannelIdx(channelIdx); // 혹시나 필요할 때 사용하기
+//			channelPlayIdx = channelPlayService.insertChannelPlay(channelPlayVO);
+			
+			fileStream = multipartFile.getInputStream();
+			FileUtils.copyInputStreamToFile(fileStream, targetFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
-//			return "index";
 		}
 		attributes.addAttribute("message", "영상이 성공적으로 등록되었습니다.");
 		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
-//		return "test";
 	}
 	
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)

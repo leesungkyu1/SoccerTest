@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.soccer.web.channel.member.dao.MemberMapper">
+	
+	<resultMap id="member" type="com.soccer.web.channel.member.vo.MemberVO">
+		<result property="memberIdx" column="member_idx" />
+		<result property="userIdx" column="user_idx" />
+		<result property="channelIdx" column="channel_idx" />
+		<result property="memberDate" column="member_date" />
+		<result property="memberNick" column="member_nick" />
+		<result property="memberPosition" column="member_position" />
+		<result property="memberImage" column="member_image" />
+	</resultMap>
+	
+	<select id="memberList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="member">
+		SELECT * FROM 
+			member 
+		INNER JOIN
+			apply
+			ON member.user_idx = apply.user_idx
+		WHERE apply.channel_idx = #{channelIdx}
+			AND apply.apply_step = 'ok'
+	</select>
+	
+	<delete id="memberDelete" parameterType="integer">
+		DELETE FROM member
+		WHERE member_idx = #{memberIdx}
+			AND channel_idx = #{channelIdx}
+	</delete>
+	
+	<select id="memberCheck" parameterType="com.soccer.web.channel.member.vo.MemberVO" resultType="boolean">
+		SELECT COUNT(*) FROM member
+		WHERE member_idx = #{memberIdx}
+			AND channel_idx = #{channelIdx}
+	</select>
+	
+	<insert id="memberInsert" parameterType="com.soccer.web.channel.member.vo.MemberVO">
+		INSERT INTO member
+		VALUES(
+			   default,
+			   #{user_idx},
+			   #{channel_idx},
+			   default,
+			   #{member_nick},
+			   #{member_position},
+			   #{member_image}
+		)
+	</insert>
+	
+	<select id="memberCount" parameterType="integer" resultType="integer">
+		SELECT COUNT(*) FROM member
+		INNER JOIN apply
+			ON member.channel_idx = apply.channel_idx
+		WHERE member.channel_idx = #{channelIdx}
+			AND apply.apply_step = "ok"
+	</select>
+	
+	<select id="searchByChannel" parameterType="integer" resultMap="member">
+		SELECT
+			   member.member_idx,
+			   member.user_idx,
+			   member.channel_idx,
+			   member.member_date,
+			   member.member_nick,
+			   member.member_position,
+			   member.member_image,
+		FROM member
+		INNER JOIN apply
+			ON member.user_idx = apply.user_idx
+		WHERE member.channel_idx = #{channelIdx}
+			AND apply.apply_step = "ok"
+	</select>
+	
+	<!-- userIdx와 channelIdx로 member의 정보를 불러오는 쿼리문 -->
+	<select id="selectMemberDetail" parameterType="com.soccer.web.channel.member.vo.MemberVO" resultMap="member">
+		SELECT * FROM member
+		WHERE 
+				user_idx = #{userIdx}
+				AND channel_idx = #{channelIdx}
+	</select>
+	
+</mapper>
