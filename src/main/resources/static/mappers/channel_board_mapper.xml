@@ -90,7 +90,7 @@
 				channel_board_type = #{channelBoardType},
 				channel_board_desc = #{channelBoardDesc},
 				channel_board_date = default 
-				WHERE channel_board_idx=#{channelBoardIdx}
+			WHERE channel_board_idx=#{channelBoardIdx}
 		]]>
 	</update>
 	

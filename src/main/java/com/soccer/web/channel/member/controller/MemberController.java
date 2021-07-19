@@ -134,7 +134,7 @@ public class MemberController {
 	public String memberAccept(@PathVariable("applyIdx") Integer applyIdx, @PathVariable("channelIdx") Integer channelIdx,
 			RedirectAttributes attributes) throws Exception{
 		try {
-			Integer memberMax = channelService.channelMemeberMax(channelIdx);
+			Integer memberMax = channelService.channelMemberMax(channelIdx);
 			Integer memberCount = memberService.memberCount(channelIdx);
 			
 			System.out.println("memberMax = " + memberMax);

@@ -14,7 +14,7 @@ public interface ChannelMapper {
 	List<ChannelVO> channelList(ChannelVO channelVO) throws Exception;
 	
 	//채널 회원가입 가능 수
-	Integer channelMemeberMax(Integer channelIdx) throws Exception;
+	Integer channelMemberMax(Integer channelIdx) throws Exception;
 	
 	//채널 생성
 	int channelInsert(ChannelVO channelVO) throws Exception;

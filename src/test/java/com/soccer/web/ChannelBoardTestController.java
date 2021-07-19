@@ -8,14 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.json.simple.JSONObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.xdevapi.JsonString;
 import com.soccer.web.channel.board.controller.ChannelBoardController;
 import com.soccer.web.channel.board.service.ChannelBoardService;
 import com.soccer.web.channel.board.vo.ChannelBoardVO;
-import com.soccer.web.notice.controller.NoticeController;
-import com.soccer.web.notice.service.NoticeService;
-import com.soccer.web.notice.vo.NoticeVO;
 
 @SpringBootTest
 @AutoConfigureMockMvc
