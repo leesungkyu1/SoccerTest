@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/sign.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <div class="lefrarrow"></div>
+                </div>
+            </header>
+            <!-- 회원가입 -->
+            <div id="sign">
+                <div class="row">
+                    <h1 class="header_center">회원가입</h1>
+                    <div class="sign_up_num">
+                        <div class="sign_compl">1</div>
+                        <span class="sign_up_dot"></span>
+                        <div>2</div>
+                    </div>
+                    <form action="/user" method="post">
+                        <input class="main_input sing_page_1" id="userId" title="영어 + 숫자 조합" name="userId" type="text" placeholder="아이디 입력해주세요." required pattern="^[a-zA-Z0-9]*$">
+                        <span class="sing_page_1">영어와 숫자 조합으로 입력하세요.</span>
+                        <input class="main_input sing_page_1" id="userPassword" title="최소 6자리의 영어,숫자 조합" name="userPassword" type="password" placeholder="비밀번호를 입력해주세요." minlength="6" required pattern="^[a-zA-Z0-9]*$">
+                        <span class="sing_page_1">6자리의 숫자,영어로 입력하세요.</span>
+                        <input class="main_input sing_page_1" id="userPasswordCheck" title="최소 6자리의 영어,숫자 조합" name="userPasswordCheck" type="password" placeholder="비밀번호를 다시 입력해주세요." required minlength="6" pattern="^[a-zA-Z0-9]*$">
+                        
+                        <input class="main_input sing_page_2" id="userName" title="한글로 입력하세요" name="userName" type="text" placeholder="이름을 입력해주세요." minlength="2" required pattern="^[가-힣]*$">
+                        <span class="sing_page_2">한글로 입력하세요.</span>
+                        <input class="main_input sing_page_2" id="userNick" name="userNick" type="text" placeholder="닉네임을 입력해주세요." required>
+                        <select class="select main_select sing_page_2" name="regionIdx" aria-placeholder="활동지역을 선택해주세요.">
+                            <option value="" disabled selected hidden>활동지역을 선택해주세요.</option>
+                            <option value="서울">서울</option>
+                            <option value="대전">대전</option>
+                            <option value="대구">대구</option>
+                            <option value="부산">부산</option>
+                        </select>
+                        <input class="main_input sing_page_2" id="userMobile" name="userMobile" type="text" placeholder="휴대전화번호를 입력해주세요." required pattern="^(?:(010-\d{4})|(01[1|6|7|8|9]-\d{3,4}))-(\d{4})$">
+                        <span class="sing_page_2">- 를 뺴고 입력하세요.</span>
+                        <button type="button" class="main_btn sing_page_1" id="nextBtn">다음</button>
+                        <button type="button" class="main_btn sing_page_2" id="preBtn">이전</button>
+                        <button class="main_btn btn_yellow sing_page_2">회원가입완료</button>
+                    </form>
+                </div>
+            </div>
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:src="@{/js/select.js}"></script>
+    <script>
+    	const singUp = {
+    		singUpView: {
+    			init: () => {
+    				//다음 버튼 이벤트
+    				const nextBtn = document.getElementById('nextBtn');
+    				nextBtn.addEventListener('click', () => singUp.singUpEvent.movePage('next'));
+    				
+    				//이전 버튼 이벤트
+    				const preBtn = document.getElementById('preBtn');
+    				preBtn.addEventListener('click', () => singUp.singUpEvent.movePage('pre'));
+    			},
+    		},
+    		singUpEvent: {
+    			//페이지 이동시 보여줄 Element
+    			movePage: (switch) => {
+    				console.log('test');
+   					const nextElement = document.getElementsByClassName('sing_page_1');
+   					const previousElement = document.getElementsByClassName('sing_page_2');
+    				if(switch === 'next'){
+    					nextElement.forEach(el => {
+    						el.style.display = block;
+    					});
+    					
+    					previousElement.forEach(el => {
+    						el.style.display = none;
+    					});
+    				}else{
+    					nextElement.forEach(el => {
+    						el.style.display = none;
+    					});
+    					
+    					previousElement.forEach(el => {
+    						el.style.display = block;
+    					});
+    				}
+    			}
+    		}
+    	}
+    	
+    	singUp.singUpView.init();
+    </script>
+</body>
+</html>

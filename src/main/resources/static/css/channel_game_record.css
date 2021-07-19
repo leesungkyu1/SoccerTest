@@ -1,0 +1,67 @@
+#video_index {
+    padding-top: 50px;
+}
+.videos {
+    padding-bottom: 20px;
+}
+.videos:last-child {
+    padding-bottom: 0;
+}
+.video {
+    width: 100%;
+    background: url(../img/video.PNG);
+    background-size: cover;
+}
+.video::after{
+    display: block;
+    content: '';
+    padding-bottom: 56%;
+}
+
+.video_name h1{
+    padding-top: 10px;
+    font-size: 16px;
+    letter-spacing: -0.4px;
+}
+.video_name span {
+    font-size: 12px;
+    letter-spacing: -0.3px;
+    color: #8C8C8C;
+}
+
+/* 게임기록 */
+#game_record {
+
+}
+#game_record .subtitle_line {
+    border-bottom: 1px solid #8c8c8c;
+}
+#game_record .subtitle_line .subtitle {
+    padding-bottom: 10px;
+}
+.game_record {
+    display: flex;
+    justify-content: space-between;
+}
+.game_record .team1, .team2 {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+.game_record .team1 {
+    text-align: right;
+    border-right: 1px solid #8c8c8c;
+    padding-right: 20px;
+}
+.game_record .team2 {
+    text-align: left;
+    padding-left: 20px;
+}
+.game_record h1 {
+    font-size: 14px;
+    letter-spacing: -0.35px;
+}
+.game_record h1:last-child {
+    padding-bottom: 30px;
+}

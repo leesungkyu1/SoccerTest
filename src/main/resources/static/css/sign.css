@@ -1,0 +1,67 @@
+#sign {
+    padding-top: 50px;
+}
+.header_center {
+    padding-bottom: 17px;
+}
+.sign_up_num {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.sign_up_num > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: #191919;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #303030;
+    border-radius: 30px; 
+}
+.sign_up_num .sign_compl {
+    background-color: #FFE400;
+}
+.sign_up_dot {
+    background-color: #303030;
+    width: 4px;
+    height: 4px;
+    border-radius: 30px; 
+    margin: 6px;
+}
+.select {
+    margin-bottom: 6px;
+}
+
+#sign .main_btn {
+margin-top: 6px;
+}
+
+/* 회원가입완료 */
+.sign_up_comple {
+    margin-top: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 140px;
+}
+.comple_mark {
+    height: 54px;
+    width: 54px;
+    background: url(../img/checkicon.png);
+    margin-bottom: 10px;
+}
+.sign_up_comple h1 {
+    font-size: 24px;
+    letter-spacing: -0.6px;
+    font-weight: 200;
+    line-height: 30px;
+}
+.sing_page_2 {
+	display: none;
+}
