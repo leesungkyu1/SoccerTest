@@ -1,33 +1,35 @@
-#video_index {
-    padding-top: 50px;
-}
-.videos {
-    padding-bottom: 20px;
-}
-.videos:last-child {
-    padding-bottom: 0;
-}
+/* #video_index { */
+/*     padding-top: 50px; */
+/* } */
+/* .videos { */
+/*     padding-bottom: 20px; */
+/* } */
+/* .videos:last-child { */
+/*     padding-bottom: 0; */
+/* } */
 .video {
     width: 100%;
-    background: url(../img/video.PNG);
-    background-size: cover;
+    max-width: 640px;
+    height: auto;
+/*     background: url(../img/video.PNG); */
+/*     background-size: cover; */
 }
-.video::after{
-    display: block;
-    content: '';
-    padding-bottom: 56%;
-}
+/* .video::after{ */
+/*     display: block; */
+/*     content: ''; */
+/*     padding-bottom: 56%; */
+/* } */
 
-.video_name h1{
-    padding-top: 10px;
-    font-size: 16px;
-    letter-spacing: -0.4px;
-}
-.video_name span {
-    font-size: 12px;
-    letter-spacing: -0.3px;
-    color: #8C8C8C;
-}
+/* .video_name h1{ */
+/*     padding-top: 10px; */
+/*     font-size: 16px; */
+/*     letter-spacing: -0.4px; */
+/* } */
+/* .video_name span { */
+/*     font-size: 12px; */
+/*     letter-spacing: -0.3px; */
+/*     color: #8C8C8C; */
+/* } */
 
 /* 선수목록 */
 #player_index {

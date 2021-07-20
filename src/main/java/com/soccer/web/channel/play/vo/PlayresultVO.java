@@ -32,6 +32,8 @@ public @Data class PlayresultVO {
 	private String teamName;
 	private String regionName;
 	
+	private String teamPlayerName;
+	
 	private PlayresultVO home;
 	private PlayresultVO away;
 }
