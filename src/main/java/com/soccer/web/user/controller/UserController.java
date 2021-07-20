@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.vo.ChannelVO;
+import com.soccer.web.region.service.RegionServiceImpl;
+import com.soccer.web.region.vo.RegionVO;
 import com.soccer.web.user.service.UserServiceImpl;
 import com.soccer.web.user.vo.UserVO;
 
@@ -23,70 +25,79 @@ public class UserController {
 	@Autowired
 	UserServiceImpl userService;
 	
+	@Autowired
+	RegionServiceImpl regionService;
+	
 	//회원가입 뷰
 	@RequestMapping(value = "/user/view", method = RequestMethod.GET)
-	public String userJoinView() throws Exception {
+	public String userJoinView(Model model) throws Exception {
+		List<RegionVO> regionList = regionService.regionList();
+		
+		model.addAttribute("regionList", regionList);
+		
 		return "main/sign_up";
 	}
 	
 	//회원가입
 	@RequestMapping(value = "/user" , method = RequestMethod.POST)
-	public String userJoin(UserVO userVO, RedirectAttributes attributes) throws Exception{
+	public String userJoin(UserVO userVO, Model model) throws Exception{
 		try {
 			Integer idCheck = userService.checkId(userVO);
 			
 			if(idCheck == 0) {
 				userService.userJoin(userVO);
 				
-				attributes.addAttribute("message", "가입하셨습니다.");
+				model.addAttribute("message", "가입하셨습니다.");
+				
+				return "main/sign_up_comple";
 			}else {
-				attributes.addAttribute("message", "아이디가 중복되었습니다.");
+				model.addAttribute("message", "아이디가 중복되었습니다.");
+				
+				return "main/sign_up";
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			
-			attributes.addAttribute("code", 101);
-			attributes.addAttribute("message", "회원가입이 실패했습니다.");
+			model.addAttribute("code", 101);
+			model.addAttribute("message", "회원가입이 실패했습니다.");
 			
-			
-			return "redirect:/";
+			return "main/sign_up";
 		}		
-		
-		return "redirect:/";
 	}
 	
 	//로그인 페이지 뷰
 	@RequestMapping(value = "/user/login/view", method = RequestMethod.GET)
 	public String userLoginView() throws Exception {
-		return "main/sign_up";
+		return "main/log_in";
 	}
 	
 	//로그인
 	@RequestMapping(value = "/user/login" , method = RequestMethod.POST)
-	public String userLogin(UserVO userVO, RedirectAttributes attributes, HttpSession session) throws Exception{
+	public String userLogin(UserVO userVO, Model model, RedirectAttributes attributes, HttpSession session) throws Exception{
 		UserVO authUser = null;
 		try {
 			authUser = userService.userLogin(userVO);
 			
 			if(authUser == null) {
-				attributes.addAttribute("message", "아이디나 비밀번호를 확인하세요.");
-			}else {
-				attributes.addAttribute("message", "로그인 하셨습니다.");
+				model.addAttribute("message", "아이디나 비밀번호를 확인하세요.");
 				
-				session.setAttribute("loginUser", authUser);	
+				return "main/log_in";
+			}else {
+				//attributes.addAttribute("message", "로그인 하셨습니다.");
+				
+				session.setAttribute("loginUser", authUser);
+				
+				return "redirect:/main";
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			attributes.addAttribute("code", 102);
-			attributes.addAttribute("message", "에러가 발생했습니다.");
+			model.addAttribute("code", 102);
+			model.addAttribute("message", "에러가 발생했습니다.");
 			
-			return "redirect:";
+			return "main/log_in";
 		}		
-		
-		return "redirect:";
 	}
-	
 	
 	//정보 조회
 	@RequestMapping(value = "/user/{userIdx}", method = RequestMethod.GET)
@@ -104,7 +115,19 @@ public class UserController {
 			model.addAttribute("joinChannelList",joinChannelList);
 			model.addAttribute("userInfo", userInfo);
 		}
-		return "test";
+		return "user/mypage.html";
+	}
+	
+	//정보 수정 뷰
+	@RequestMapping(value = "/user/userView/{userIdx}", method = RequestMethod.GET)
+	public String userInfoUpdateView(@PathVariable("userIdx") Integer userIdx, Model model) throws Exception {
+		UserVO userInfo = userService.userInfo(userIdx);
+		List<RegionVO> regionList = regionService.regionList();
+		
+		model.addAttribute("userInfo", userInfo);
+		model.addAttribute("regionList", regionList);
+		
+		return "user/information_modify";
 	}
 	
 	//마이페이지 정보 수정
@@ -125,6 +148,6 @@ public class UserController {
 			attributes.addAttribute("message", "정보를 수정하셨습니다.");
 		}
 		
-		return "redirect:";
+		return "redirect:/user/" + loginUser.getUserIdx();
 	}
 }

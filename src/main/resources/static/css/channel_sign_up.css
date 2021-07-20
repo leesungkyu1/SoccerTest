@@ -57,3 +57,20 @@
 .container > .row {
     height: auto;
 }
+.main_input {
+    background-color: #191919;
+    border-top: 1px solid #303030;
+    border-bottom: 1px solid #303030;
+    border-radius: 0;
+    text-align: center;
+}
+.main_select {
+    background-color: #191919;
+    text-align-last: center;
+    text-align: center;
+    -ms-text-align-last: center;
+    -moz-text-align-last: center;
+}
+form {
+    width: 100%;
+}

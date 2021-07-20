@@ -1,0 +1,46 @@
+#video_upload_index {
+    padding-top: 50px;
+}
+.videos {
+    padding-bottom: 30px;
+}
+.videos:last-child {
+    padding-bottom: 0;
+}
+.video {
+    width: 100%;
+    background: url(../img/video.PNG);
+    background-size: cover;
+}
+.video::after{
+    display: block;
+    content: '';
+    padding-bottom: 56%;
+}
+
+.video_info h1{
+    padding-top: 10px;
+    font-size: 16px;
+    letter-spacing: -0.4px;
+}
+.video_info span {
+    font-size: 12px;
+    letter-spacing: -0.3px;
+    color: #8C8C8C;
+}
+.video_info span:nth-child(3){
+    padding: 0 6px;
+}
+.btns {
+    display: flex;
+    justify-content: space-between;
+}
+.main_btn {
+    margin-top: 10px;
+    width: 49%;
+}
+.btns > :nth-child(2){
+    color: #fff;
+    background-color: #191919;
+    border: 1px solid #fff;
+}

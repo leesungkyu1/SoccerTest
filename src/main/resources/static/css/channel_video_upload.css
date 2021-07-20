@@ -1,0 +1,43 @@
+#video_upload {
+    padding-top: 50px;
+    height: calc(100vh - 110px);
+}
+
+.line1, .line2 {
+    display: flex;   
+    align-items: center;
+    margin-bottom: 10px;
+}
+.line1 h1 {
+    width: 30px;
+}
+.line1 input {
+    background-color: #191919;
+    margin-bottom: 0;
+}
+input[type="file"] {
+     /* 파일 필드 숨기기 */ 
+     position: absolute; 
+     width: 1px; 
+     height: 1px; 
+     padding: 0; 
+     left: 100px;
+     margin: -1px; 
+     overflow: hidden; 
+     clip:rect(0,0,0,0); 
+     border: 0; 
+    }
+.line2 label {
+    font-size: 14px;
+    background-color: #fff;
+    min-width: 55px;
+    padding: 13.5px 18px;
+    border-radius: 4px;
+    margin-left: 6px;
+}
+.line2 input {
+    margin-bottom: 0;
+}
+.main_btn {
+    margin-top: 12px;
+}

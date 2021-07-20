@@ -87,4 +87,9 @@ public class ChannelServiceImpl implements ChannelService{
 	public List<ChannelVO> selectChannelList(int channelPlayIdx) {
 		return channelDAO.selectChannelList(channelPlayIdx);
 	}
+
+	@Override
+	public int selectChannelListTotCnt(ChannelVO channelVO) throws Exception{
+		return channelDAO.selectChannelListTotCnt(channelVO);
+	}
 }

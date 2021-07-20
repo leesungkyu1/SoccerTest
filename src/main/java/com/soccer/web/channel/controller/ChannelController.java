@@ -53,15 +53,35 @@ public class ChannelController {
 	//채널 목록, 검색 목록 (페이징 처리 안했음) 쿼리 전달
 	@RequestMapping(value = "/main/channel", method = RequestMethod.GET)
 	public String channelList(ChannelVO channelVO, Model model) throws Exception {
+		int totcnt = channelService.selectChannelListTotCnt(channelVO);
+		
+		//총 게시물
+		channelVO.setTotalListCnt(totcnt);
+		//총 페이지
+		channelVO.setTotalPageCnt((int) Math.ceil(channelVO.getTotalListCnt() * 1.0 / channelVO.getPageSize()));
+		//게시글 번호
+		channelVO.setStartIndex((channelVO.getPage() - 1) * channelVO.getBlockSize()); 
+		//시작 페이지 번호
+		channelVO.setStartPage(channelVO.getPage() - (channelVO.getPage() - 1) % channelVO.getBlockSize());
+		//끌 페이지 번호
+		channelVO.setEndPage(channelVO.getStartPage() + channelVO.getBlockSize() - 1);
+		//가져오는 게시물 인덱스 시작번호
+		channelVO.setStartIndex((channelVO.getPage() - 1) * channelVO.getPageSize());
+		
+		if(channelVO.getEndPage() > channelVO.getTotalPageCnt()) {
+			channelVO.setEndPage(channelVO.getTotalPageCnt());
+		}
+		
 		List<ChannelVO> channelList = channelService.channelList(channelVO);
 		
 		if(channelList == null) {
 			model.addAttribute("message", "검색 결과가 없습니다.");
 		}else {
+			model.addAttribute("page", channelVO);
 			model.addAttribute("channelList", channelList);			
 		}
 		
-		return "";
+		return "channel/channel_list";
 	}
 	
 	//경기용 채널 검색 기능

@@ -171,7 +171,7 @@ header .row {
     background: #FFE400 0% 0% no-repeat padding-box;
     border-radius: 6px;
 }
-.page > .show {
+.page > div > .show {
     background-color: #3E3E3E;
 }
 .page_left {
@@ -338,6 +338,7 @@ select option, select optgroup {
     width: 100%;
     text-align: center;
     padding-top: 20px;
+    color: #fff;
 }
 
 #sign .header_center {

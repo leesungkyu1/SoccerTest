@@ -10,4 +10,6 @@ public @Data class UserVO {
 	private String userMobile;
 	private String userName;
 	private String userNick;
+	
+	private String regionName;
 }

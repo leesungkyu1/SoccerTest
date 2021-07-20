@@ -1,0 +1,65 @@
+.logo_header{
+    height: 108px;
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+}
+.channel_sign_up_logo {
+    position: absolute;
+    top: 57px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.logo {
+    width: 98px;
+    height: 101px;
+    background-size: cover;
+}
+.channel_sign_up_logo h1 {
+    font-size: 16px;
+    text-align: center;
+}
+.channel_sign_up_logo h2 span{
+    font-size: 12px;
+}
+.channel_sign_up_logo h2 span:nth-child(1){
+    color: #8C8C8C;
+    margin-right: 5px;
+}
+.channel_sign_up_content {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 회원가입완료 */
+.sign_up_comple {
+    margin-top: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 140px;
+}
+.comple_mark {
+    height: 54px;
+    width: 54px;
+    background: url(../img/checkicon.png);
+    margin-bottom: 10px;
+}
+.sign_up_comple h1 {
+    font-size: 24px;
+    letter-spacing: -0.6px;
+    font-weight: 200;
+    line-height: 30px;
+}
+
+.main_btn {
+    margin-top: 0;
+}
+.container > .row {
+    height: auto;
+}
