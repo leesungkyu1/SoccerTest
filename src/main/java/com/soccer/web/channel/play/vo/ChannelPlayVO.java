@@ -1,8 +1,11 @@
 package com.soccer.web.channel.play.vo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public @Data class ChannelPlayVO extends ChannelPlayDefaultVO{
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class ChannelPlayVO extends ChannelPlayDefaultVO{
 
 	private int channelPlayIdx;
 	private int memberIdx;

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.soccer.web.user.dao.UserMapper">
+	
+	<resultMap id="user" type="com.soccer.web.user.vo.UserVO">
+		<result property="userIdx" column="user_idx" />
+		<result property="userId" column="user_id" />
+		<result property="userPassword" column="user_password" />
+		<result property="regionIdx" column="region_idx" />
+		<result property="userMobile" column="user_mobile" />
+		<result property="userName" column="user_name" />
+		<result property="userNick" column="user_nick" />
+	</resultMap>
+	
+	<resultMap id="channel" type="com.soccer.web.channel.vo.ChannelVO">
+		<result property="channelIdx" column="channel_idx" />
+		<result property="userIdx" column="user_idx" />
+		<result property="channelName" column="channel_name" />
+		<result property="channelImage" column="channel_image" />
+		<result property="regionIdx" column="region_idx" />
+		<result property="channelMax" column="channel_max" />
+	</resultMap>
+	
+	<insert id="userJoin" parameterType="com.soccer.web.user.vo.UserVO">
+		INSERT INTO user 
+			VALUES (
+				default, 
+				#{userId}, 
+				#{userPassword},
+				#{regionIdx},
+				#{userMobile},
+				#{userName},
+				#{userNick}
+			)
+	</insert>
+	
+	<select id="userLogin" parameterType="com.soccer.web.user.vo.UserVO" resultMap="user">
+		SELECT * FROM user 
+		WHERE user_id = #{userId} 
+			AND user_password = #{userPassword} 
+	</select>
+	
+	<select id="userInfo" parameterType="Integer" resultMap="user">
+		SELECT * FROM user 
+		WHERE user_idx = #{userIdx} 
+	</select>
+	
+	<update id="userInfoUpdate" parameterType="com.soccer.web.user.vo.UserVO">
+		UPDATE user
+		SET user_password = #{userPassword},
+			region_idx = #{regionIdx},
+			user_mobile = #{userMobile},
+			user_name = #{userName},
+			user_nick = #{userNick}
+		WHERE user_idx = #{userIdx}
+	</update>
+	
+	<select id="checkId" parameterType="com.soccer.web.user.vo.UserVO" resultType="integer">
+		SELECT COUNT(*) FROM user
+		WHERE user_id = #{userId}
+	</select>
+	
+	<select id="joinChannelList" parameterType="integer" resultMap="channel">
+		SELECT * FROM channel
+		WHERE channel_idx IN (SELECT channel_idx FROM member
+							  WHERE user_idx = #{userIdx})
+	</select>
+</mapper>
