@@ -1,0 +1,70 @@
+#mypage {
+    padding-top: 50px;
+    height: calc(100vh - 50px);
+}
+#mypage .row {
+    height: auto;
+}
+.subtitle {
+    padding-bottom: 15px;
+}
+.line {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+}
+.line :first-child{
+    width: 80px;
+    font-size: 14px;
+    letter-spacing: -0.35px;
+}
+
+/* 채널목록 */
+.channel_join h2 {
+    font-size: 16px;
+    letter-spacing: -0.4px;
+    padding: 30px 0 20px 16px;
+}
+.channel_index_logo {
+    display: flex;
+    overflow: hidden;
+
+}
+.channel_index_logo > div{
+    width: 18.13%;
+}
+.channel_index_logo > div {
+    margin-right: 4.26%;
+}
+.channel_index_logo > div:first-child{
+    margin-left: 16px;
+}
+.channel_index_logo > div:last-child{
+    margin-right: 16px;
+}
+.channel_index_logo > div .logo {
+    width: 100%;
+}
+.channel_index_logo > div .logo::after{
+    content: '';
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+}
+.channel_index_logo > div h1 {
+    width: 18.5vw;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 200;
+}
+.logo {
+    background-size: cover;
+    background-color: #fff;
+    border-radius: 16px;
+}
+
+#footer {
+    margin-top: 0;
+}

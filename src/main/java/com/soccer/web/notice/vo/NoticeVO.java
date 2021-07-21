@@ -10,4 +10,6 @@ public @Data class NoticeVO extends NoticeDefaultVO{
 	private String noticeType;
 	private String noticeDesc;
 	private String noticeDate;
+	
+	private String newNotice;
 }

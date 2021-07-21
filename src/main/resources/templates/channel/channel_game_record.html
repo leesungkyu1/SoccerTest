@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/channel_game_record.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_game_record.css">
     <title>축구 플랫폼</title>
 </head>
 <body>
@@ -42,15 +42,13 @@
                         <h1 class="subtitle">경기기록</h1>
                         <a href="#">기록추가<div class="right_arrow"></div></a>
                     </div>
-                    <div class="game_record">
-                        <div class="team1">
-                            <h1>　</h1>
-                            <h1>29:13 홍길동 골</h1>
-                        </div>
+                    <div class="game_record" id="game_record" th:each="record :${goalList}">
+	                        <div class="team1">
+	                        	<div th:if="${record.channelPlayGoalType}=='H'" th:text="|${record.channelPlayGoalName} ${record.channelPlayGoalTime}|"></div>
+              				</div>
                         <div class="team2">
-                            <h1>29:13 홍길동 골</h1>
-                            <h1>　</h1>
-                            <h1>29:13 홍길동 골</h1>
+                        	<div th:if="${record.channelPlayGoalType}=='A'" th:text="|${record.channelPlayGoalName} ${record.channelPlayGoalTime}|"></div>
+                        	
                         </div>
                     </div>
                 </div>
@@ -66,5 +64,7 @@
            </div>
         </div>
     </section>
+
+    <script src="/js/channel/channelList.js"></script>
 </body>
 </html>

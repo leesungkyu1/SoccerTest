@@ -1,0 +1,66 @@
+#log_in {
+    padding-top: 50px;
+}
+.header_center {
+    padding-top: 40px;
+}
+.log_in_input {
+    margin-top: 20px;
+}
+.main_btn {
+    margin: 6px 0;
+}
+.main_btn button {
+    position: relative;
+}
+.log_in_input h4, .log_in_btn h4 {
+    font-size: 12px;
+    color: #AAB0BB;
+    text-align: center;
+    padding-top: 6px;
+}
+.or {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 0;
+}
+.or div {
+    width: 40%;
+    height: 1px;
+    background-color: #8C8C8C;
+}
+.or h3 {
+    color: #8C8C8C;
+}
+.log_in_btn h4 {
+    padding-top: 90px;
+}
+.log_in_btn h4 a {
+    color: #2699FB;
+}
+#footer {
+    margin-top: 25px;
+}
+.log_in_btn button {
+    position: relative;
+}
+.naver::before {
+    position: absolute;
+    left: 16px;
+    content: '';
+    display: block;
+    width: 18.71px;
+    height: 17.14px;
+    background: url(../img/naver.png);
+}
+.goggle::before {
+    position: absolute;
+    left: 15px;
+    content: '';
+    display: block;
+    width: 21.44px;
+    height: 21.79px;
+    background: url(../img/google.png
+    );
+}

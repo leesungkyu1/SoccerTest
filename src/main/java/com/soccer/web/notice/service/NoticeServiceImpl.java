@@ -1,6 +1,10 @@
 package com.soccer.web.notice.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +20,16 @@ public class NoticeServiceImpl implements NoticeService{
 
 	@Override
 	public List<NoticeVO> selectNoticeList(NoticeVO noticeVO) throws Exception {
-		return noticeMapper.selectNoticeList(noticeVO);
+		List<NoticeVO> selectNoticeList = noticeMapper.selectNoticeList(noticeVO); 
+		
+		return diffDay(selectNoticeList);
+	}
+	
+	@Override
+	public List<NoticeVO> selectImportantNoticeList(NoticeVO noticeVO) throws Exception {
+		List<NoticeVO> selectImportantNoticeList = noticeMapper.selectImportantNoticeList(noticeVO);
+		
+		return diffDay(selectImportantNoticeList);
 	}
 	
 	@Override
@@ -50,4 +63,25 @@ public class NoticeServiceImpl implements NoticeService{
 		noticeMapper.deleteNotice(noticeIdx);
 	}
 	
+	private List<NoticeVO> diffDay(List<NoticeVO> noticeList) throws Exception {
+		for(int i=0; i<noticeList.size(); i++) {
+			//System.out.println(selectImportantNoticeList.get(i).getNoticeDate());
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			
+			Date noticeDate = sdf.parse(noticeList.get(i).getNoticeDate());
+			Date nowDate = new Date();
+					
+			long diff = nowDate.getTime() - noticeDate.getTime();
+			
+			TimeUnit time = TimeUnit.DAYS;
+			long diffDay = time.convert(diff, TimeUnit.MILLISECONDS);
+			
+			if(diffDay > 7) {
+				noticeList.get(i).setNewNotice("N");
+			}
+		}
+		
+		return noticeList;
+	}
 }

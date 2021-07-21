@@ -61,35 +61,35 @@ public class TeamPlayerController {
 	
 	//삭제
 	// 영상 게시글에서 Player를 추가하는 메서드
-	@RequestMapping(value = "/channel/play/player/{channelIdx}/{channelPlayIdx}", method = RequestMethod.POST)
-	public String insertTeamPlayer(RedirectAttributes attributes,
-								@PathVariable int channelIdx,
-								@PathVariable int channelPlayIdx, 
-								@RequestParam("userIdx") int userIdx,
-								TeamPlayerVO teamPlayerVO) throws Exception {
-		try {
-			HashMap<String, String> teamPlayParameterMap = new HashMap<>();
-			teamPlayParameterMap.put("userIdx", Integer.toString(userIdx));
-			teamPlayParameterMap.put("teamIdx", Integer.toString(teamIdx));
-			teamPlayParameterMap.put("channelPlayIdx", Integer.toString(channelPlayIdx));
-			teamPlayParameterMap.put("teamPlayerPosition", teamPlayerVO.getTeamPlayerPosition());
-			
-			int teamPlayerIdx = teamPlayerService.insertTeamPlayer(teamPlayParameterMap); // 선수 추가
-			
-			HashMap<String, Integer> playresultMap = new HashMap<>();
-			playresultMap.put("channelPlayIdx", channelPlayIdx);
-			playresultMap.put("teamIdx", teamIdx);
-			playresultMap.put("teamPlayerIdx", teamPlayerIdx);
-			
-			teamPlayerService.insertPlayresult(playresultMap); // 선수의 경기 결과 추가
-		} catch (Exception e) {
-			e.printStackTrace();
-			attributes.addAttribute("message", "에러가 발생했습니다.");
-		}
-		
-		attributes.addAttribute("message", "선수가 등록되었습니다.");
-		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
-	}
+//	@RequestMapping(value = "/channel/play/player/{channelIdx}/{channelPlayIdx}", method = RequestMethod.POST)
+//	public String insertTeamPlayer(RedirectAttributes attributes,
+//								@PathVariable int channelIdx,
+//								@PathVariable int channelPlayIdx, 
+//								@RequestParam("userIdx") int userIdx,
+//								TeamPlayerVO teamPlayerVO) throws Exception {
+//		try {
+//			HashMap<String, String> teamPlayParameterMap = new HashMap<>();
+//			teamPlayParameterMap.put("userIdx", Integer.toString(userIdx));
+//			teamPlayParameterMap.put("teamIdx", Integer.toString(teamIdx));
+//			teamPlayParameterMap.put("channelPlayIdx", Integer.toString(channelPlayIdx));
+//			teamPlayParameterMap.put("teamPlayerPosition", teamPlayerVO.getTeamPlayerPosition());
+//			
+//			int teamPlayerIdx = teamPlayerService.insertTeamPlayer(teamPlayParameterMap); // 선수 추가
+//			
+//			HashMap<String, Integer> playresultMap = new HashMap<>();
+//			playresultMap.put("channelPlayIdx", channelPlayIdx);
+//			playresultMap.put("teamIdx", teamIdx);
+//			playresultMap.put("teamPlayerIdx", teamPlayerIdx);
+//			
+//			teamPlayerService.insertPlayresult(playresultMap); // 선수의 경기 결과 추가
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			attributes.addAttribute("message", "에러가 발생했습니다.");
+//		}
+//		
+//		attributes.addAttribute("message", "선수가 등록되었습니다.");
+//		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
+//	}
 	
 //	// 영상 게시글에서 Player의 position을 변경하는 메서드
 //	@RequestMapping(value = "channel/play/player/{channelIdx}/{channelPlayIdx}/{teamPlayerIdx}", method = RequestMethod.PUT)

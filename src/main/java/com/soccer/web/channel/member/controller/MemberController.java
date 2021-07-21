@@ -49,7 +49,7 @@ public class MemberController {
 		model.addAttribute("memberList", memberList);
 		model.addAttribute("applyList", applyList);
 				
-		return "test";
+		return "channel/channel_sign_up";
 	}
 	
 	//회원 강퇴
@@ -63,6 +63,8 @@ public class MemberController {
 			applyService.applyDelete(memberIdx, channelVO.getChannelIdx());
 			
 			String imageFileDir = MEMBER_IMAGE_DIR + "/" + channelVO.getChannelIdx() + "/" + memberIdx; 
+			
+			System.out.println(imageFileDir);
 			
 			File imageFile = new File(imageFileDir);
 			
@@ -126,7 +128,7 @@ public class MemberController {
 			
 			return "redirect:";
 		}
-		return "redirect:";
+		return "channel/channel_sign_up";
 	}
 	
 	//회원 가입신청 승인
@@ -156,7 +158,7 @@ public class MemberController {
 			return "redirect:";
 		}
 		
-		return "redirect:";
+		return "channel/channel_sign_up";
 	}
 	
 	//회원 가입신청 거절 
@@ -173,7 +175,7 @@ public class MemberController {
 			attributes.addAttribute("message", "회원가입 거절 중 에러가 발생했습니다.");
 		}
 		
-		return "redirect:";
+		return "channel/channel_sign_up";
 	}
 	
 	//경기용 채널로 회원목록 가져오기

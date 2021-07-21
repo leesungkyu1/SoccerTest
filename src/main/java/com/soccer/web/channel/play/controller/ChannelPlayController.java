@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +34,7 @@ import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
 
+@Component("streamView")
 @Controller
 public class ChannelPlayController {
 
@@ -58,14 +61,17 @@ public class ChannelPlayController {
 			List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
 			model.addAttribute("channelPlayList", channelPlayList);
 			
-			System.out.println(channelPlayList.get(channelPlayVO.getChannelPlayIdx()));
+//			System.out.println(channelPlayList.get(channelPlayVO.getChannelPlayIdx()));
 			model.addAttribute("channelPlayList", channelPlayList);
 		} catch (Exception e) {
 			e.printStackTrace();
 //			return "index";
 		}
-		return "";
-//		return "test";
+		if (message != null) {
+			model.addAttribute("message", message);
+		}
+		
+		return "channel/channel_video_index";
 	}
 	
 	// 영상 게시글에 저장된 Player 리스트를 출력 + player들의 playresult 리스트 출력 + 영상 출력
@@ -80,96 +86,106 @@ public class ChannelPlayController {
 			
 			ChannelPlayVO channelPlayVO = channelPlayService.selectChannelPlayDetail(channelPlayIdx);
 			
+			System.out.println(channelPlayVO);
 			List<TeamPlayerVO> teamPlayerVOList = teamPlayerService.selectTeamPlayerList(channelPlayIdx); // player 리스트
 			List<PlayresultVO> playerResultVOList = teamPlayerService.selectPlayerResultVOList(channelPlayIdx); // player들의 playresult 리스트
-			
-			
-			System.out.println(channelPlayVO.getChannelPlayVideo());
-			//채널 index
-			
-			
+	
 			//파일 이름 및 경로
 			String filePath = channelPlayVO.getChannelPlayVideo();
-			String fileName = channelPlayVO.getChannelPlayTitle();
+			System.out.println(filePath);
 			
-			//파일의 시작위치 임의
-			RandomAccessFile randomFile = new RandomAccessFile(filePath, fileName);
-			
-			//파일 스트리밍 부분
-			long rangeStart =0;
-			long rangeEnd = 0;
-			boolean isPart=false; //부분 요청일 경우 true
-			long movieSize=randomFile.length();
-			String range = request.getHeader("range");
-			
-			if(range != null) {
-				if(range.endsWith("-")) {
-					range=range + (movieSize -1 );
-				}
-				int idxm = range.trim().indexOf("-");
-				rangeStart = Long.parseLong(range.substring(6, idxm));
-				rangeEnd = Long.parseLong(range.substring(idxm+1));
-				if(rangeStart>0) {
-					isPart=true;
-				}
-			}else {
-				rangeStart=0;
-				rangeEnd = movieSize-1;
-			}
-			
-			long partSize = rangeEnd - rangeStart+1;
-			
-			response.reset();
-			response.setStatus(isPart? 206: 200);	 //전체 요청 200, 부분 요청 206
-			response.setContentType("video/mp4");
-			
-			response.setHeader("Content-Range", "bytes" + rangeStart+ "-" + rangeEnd+ "/" + movieSize);
-			response.setHeader("Accept-Range","bytes");
-			response.setHeader("Content-Length",""+partSize);
-			
-			OutputStream out = response.getOutputStream();
-			//동영상 파일의 전송 시작 위치 지정
-			randomFile.seek(rangeStart);
-			
-			int bufferSize=8*1024;
-			byte[] buf = new byte[bufferSize];
-			
-			do {
-				int block=partSize>bufferSize ? bufferSize : (int)partSize;
-				int len= randomFile.read(buf,0,block);
-				out.write(buf, 0, len);
-				partSize -= block;
-			} while(partSize>0);
-			
+//			//파일의 시작위치 임의
+//			RandomAccessFile randomFile = new RandomAccessFile(filePath , "r");
+//			
+//			 System.out.println(randomFile);
+//			 
+//			//파일 스트리밍 부분
+//			long rangeStart =0;
+//			long rangeEnd = 0;
+//			boolean isPart=false; //부분 요청일 경우 true
+//			long movieSize=randomFile.length();
+//			String range = request.getHeader("range");
+//			
+//			if(range != null) {
+//				if(range.endsWith("-")) {
+//					range=range + (movieSize -1 );
+//				}
+//				int idxm = range.trim().indexOf("-");
+//				rangeStart = Long.parseLong(range.substring(6, idxm));
+//				rangeEnd = Long.parseLong(range.substring(idxm+1));
+//				if(rangeStart>0) {
+//					isPart=true;
+//				}
+//			}else {
+//				rangeStart=0;
+//				rangeEnd = movieSize-1;
+//			}
+//			
+//			long partSize = rangeEnd - rangeStart+1;
+//			
+//			response.reset();
+//			response.setStatus(isPart? 206: 200);	 //전체 요청 200, 부분 요청 206
+//			response.setContentType("video/mp4");
+//			
+//			response.setHeader("Content-Range", "bytes" + rangeStart+ "-" + rangeEnd+ "/" + movieSize);
+//			response.setHeader("Accept-Range","bytes");
+//			response.setHeader("Content-Length",""+partSize);
+//			
+//			OutputStream out = response.getOutputStream();
+//			//동영상 파일의 전송 시작 위치 지정
+//			randomFile.seek(rangeStart);
+//			
+//			int bufferSize=8*1024;
+//			byte[] buf = new byte[bufferSize];
+//			
+//			do {
+//				int block=partSize>bufferSize ? bufferSize : (int)partSize;
+//				int len= randomFile.read(buf,0,block);
+//				out.write(buf, 0, len);
+//				partSize -= block;
+//			} while(partSize>0);
+//			
 			model.addAttribute("channelPlayVO", channelPlayVO);
 			model.addAttribute("teamPlayerVOList", teamPlayerVOList);
 			model.addAttribute("playerResultVOList", playerResultVOList);
+			model.addAttribute("channelPlayVideo", filePath);
+			System.out.println(channelPlayVO);
+			System.out.println(teamPlayerVOList);
+			System.out.println(playerResultVOList);
+			System.out.println(filePath);
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다");
 			return "redirect:/channel/play/" + channelIdx;
 		}
-		return "";
+		return "channel/channel_video";
 	}
 	
+	
+	
 	// 영상 게시글을 추가하는 메서드channel/play/{channelIdx}
-	@ResponseBody
 	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
 	public String insertChannelPlay(@PathVariable int channelIdx,
 									@RequestParam("multipartFile")
 									ChannelPlayVO channelPlayVO,
-									RedirectAttributes attributes, MultipartFile multipartFile) throws Exception {
+									RedirectAttributes attributes, MultipartFile multipartFile,
+									HttpServletRequest request) throws Exception {
 		int channelPlayIdx = 0;
+		String root_path = request.getSession().getServletContext().getRealPath("");
+		String root_path2 = request.getSession().getServletContext().getRealPath("resources/static/video");
 		try {
-			String root_path = Paths.get("C:", "downloads","upload").toString(); 
+			
+//			Paths.get("C:","downloads","upload").toString(); 
 			
 			File targetFile = new File(root_path + multipartFile.getOriginalFilename());
 		
+			System.out.println("root_path2 의 경로는 "+ root_path2);
 			System.out.println("경로는 "+root_path);
 			InputStream fileStream;
 			
-			channelPlayVO.setChannelPlayTitle(multipartFile.getOriginalFilename());
-			channelPlayVO.setChannelPlayVideo(root_path);
+//			channelPlayVO.setChannelPlayTitle(multipartFile.getOriginalFilename());
+//			channelPlayVO.setChannelPlayVideo(root_path);
+			channelPlayVO.setChannelPlayVideo(root_path+multipartFile.getOriginalFilename());
 			channelPlayService.insertChannelPlay(channelPlayVO);
 //			channelPlayVO.setChannelIdx(channelIdx); // 혹시나 필요할 때 사용하기
 //			channelPlayIdx = channelPlayService.insertChannelPlay(channelPlayVO);
@@ -181,7 +197,7 @@ public class ChannelPlayController {
 			attributes.addAttribute("message", "에러가 발생했습니다");
 		}
 		attributes.addAttribute("message", "영상이 성공적으로 등록되었습니다.");
-		return "redirect:/channel/play/" + channelIdx + "/" + channelPlayIdx;
+		return "channel/channel_video_index";
 	}
 	
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)
@@ -229,10 +245,11 @@ public class ChannelPlayController {
 		
 		channelPlayService.insertGoal(goalVO);
 		
+		
+		
 		attributes.addAttribute("message", "득점 정보를 입력했습니다.");
 				
-		return "redirect:";
-//		return "test";
+		return "";
 	}
 	
 	//우리팀, 상대팀 득점 정보 얻어오기
@@ -243,8 +260,8 @@ public class ChannelPlayController {
 		
 		model.addAttribute("goalList", sortedByTimeGoalList);
 		
-		return "";
-//		return "test";
+		System.out.println(sortedByTimeGoalList);
+		return "channel/channel_game_record";
 	}
 	
 	//득점 기록 수정
@@ -310,6 +327,7 @@ public class ChannelPlayController {
 	@RequestMapping(value = "/channel/play/result", method = RequestMethod.PUT)
 	public String resultUpdate(List<PlayresultVO> resultVO, RedirectAttributes attributes) throws Exception {
 		teamPlayerService.resultUpdate(resultVO);
+		
 		
 		attributes.addAttribute("message", "선수 기록을 수정했습니다.");
 		return "";
