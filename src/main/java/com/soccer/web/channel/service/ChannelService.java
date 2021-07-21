@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.soccer.web.channel.play.vo.ViewResultColumnVO;
 import com.soccer.web.channel.vo.ChannelVO;
+import com.soccer.web.user.vo.UserVO;
 
 public interface ChannelService {
 
@@ -28,4 +29,8 @@ public interface ChannelService {
 	List<ChannelVO> selectChannelList(int channelPlayIdx);
 
 	int selectChannelListTotCnt(ChannelVO channelVO) throws Exception;
+
+	ChannelVO selectChannel(ChannelVO channelVO) throws Exception;
+
+	List<Integer> joinChannelList(UserVO userVO) throws Exception;
 }

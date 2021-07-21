@@ -1155,7 +1155,7 @@ public class ChannelPlayTestController { // 영상 제외
 				
 				PlayresultVO playresultVO = new PlayresultVO();
 				playresultVO.setChannelPlayIdx(channelPlayIdx);
-				playresultVO.setTeamIdx(homeTeamIdx);
+				//playresultVO.setTeamIdx(homeTeamIdx);
 				playresultVO.setTeamPlayerIdx(teamPlayerIdx);
 				playresultVO.setPlayresultTotaltackle(i);
 				playresultVO.setPlayresultSuccesstackle(i);
@@ -1306,17 +1306,17 @@ public class ChannelPlayTestController { // 영상 제외
 						new BasicNameValuePair("", null)
 					),"UTF-8");
 			
-			UrlEncodedFormEntity resultList = new UrlEncodedFormEntity(result), "UTF-8");
+			//UrlEncodedFormEntity resultList = new UrlEncodedFormEntity(result), "UTF-8");
 			
-			System.out.println("==========컨트롤러 진입 이전=========");
-			mockMvc.perform(post("/channel/play/result/")
-						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-						.content(EntityUtils.toString(resultList)))
-						.andExpect(status().isOk())
-//						.andExpect(model().attributeExists("channelPlayList"))
-//						.andExpect(model().attributeExists("message"))
-						.andDo(print());
-			System.out.println("==========컨트롤러 진입 이후=========");
+//			System.out.println("==========컨트롤러 진입 이전=========");
+//			mockMvc.perform(post("/channel/play/result/")
+//						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+//						.content(EntityUtils.toString(resultList)))
+//						.andExpect(status().isOk())
+////						.andExpect(model().attributeExists("channelPlayList"))
+////						.andExpect(model().attributeExists("message"))
+//						.andDo(print());
+//			System.out.println("==========컨트롤러 진입 이후=========");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

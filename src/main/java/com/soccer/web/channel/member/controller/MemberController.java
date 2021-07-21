@@ -49,7 +49,7 @@ public class MemberController {
 		model.addAttribute("memberList", memberList);
 		model.addAttribute("applyList", applyList);
 				
-		return "channel/channel_sign_up";
+		return "test";
 	}
 	
 	//회원 강퇴
@@ -85,6 +85,21 @@ public class MemberController {
 		return "redirect:";
 	}
 	
+	//회원가입 신청 뷰
+	@RequestMapping(value = "/channel/apply/{channelIdx}", method = RequestMethod.GET)
+	public String memberApplyView(@PathVariable Integer channelIdx,ChannelVO page, Model model) throws Exception {
+		ChannelVO channelVO = new ChannelVO();
+		
+		channelVO.setChannelIdx(channelIdx);
+		
+		channelVO = channelService.selectChannel(channelVO);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("channelVO", channelVO);
+		
+		return "channel/channel_sign_up";
+	}
+	
 	//회원가입 신청
 	@SuppressWarnings("static-access")
 	@RequestMapping(value ="/channel/member/{channelIdx}" , method = RequestMethod.POST)
@@ -109,7 +124,13 @@ public class MemberController {
 			if(checkMember == 0) {
 				applyService.memberApply(memberVO);
 				
-				attributes.addAttribute("message", "채널가입이 신청되었습니다.");
+				ChannelVO channelVO = new ChannelVO();
+				channelVO.setChannelIdx(memberVO.getChannelIdx());
+				
+				channelVO = channelService.selectChannel(channelVO);
+				
+				attributes.addFlashAttribute("channelVO", channelVO);
+				//attributes.addAttribute("message", "채널가입이 신청되었습니다.");
 			}else {
 				attributes.addAttribute("message", "가입 거부되신 채널입니다.");
 			}
@@ -128,7 +149,20 @@ public class MemberController {
 			
 			return "redirect:";
 		}
-		return "channel/channel_sign_up";
+		return "redirect:/channel/singUpCompleView";
+	}
+	
+	@RequestMapping(value = "/channel/singUpCompleView", method = RequestMethod.GET)
+	public String channelSingUpCompleteView (ChannelVO channelVO, @RequestParam(required = false) String message, Model model) throws Exception {
+		System.out.println(channelVO);
+		
+		model.addAttribute("channelVO", channelVO);
+		
+		if(message != null) {
+			model.addAttribute("message", message);
+		}
+		
+		return "channel/channel_sign_up_comple";
 	}
 	
 	//회원 가입신청 승인
@@ -158,7 +192,7 @@ public class MemberController {
 			return "redirect:";
 		}
 		
-		return "channel/channel_sign_up";
+		return "test";
 	}
 	
 	//회원 가입신청 거절 

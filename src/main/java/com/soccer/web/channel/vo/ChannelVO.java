@@ -19,6 +19,8 @@ public @Data class ChannelVO extends ChannelDefaultVO{
 	private String regionName;
 	private int channelMemberCount;
 	
+	private String joinCheck = "F";
+	
 	private List<ChannelBoardVO> channelBoardList;
 	private List<ChannelPlayVO> channelPlayList;
 	

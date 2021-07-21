@@ -32,7 +32,7 @@ public class MvcConfig implements WebMvcConfigurer {
 		
 		//로그인 했는지 체크
 		registry.addInterceptor(new UserAutoInterceptor())
-			.excludePathPatterns("/", "/css/*", "/js/*", "/img/*", "/user/login/view");
+			.excludePathPatterns("/", "/css/*", "/js/*", "/img/*", "/user/login/view", "/user/login");
 		
 		//관리자 체크 인터셉터
 		registry.addInterceptor(new AdminAuthorityInterceprot())

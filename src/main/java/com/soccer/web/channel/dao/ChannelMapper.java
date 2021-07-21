@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.soccer.web.channel.play.vo.ViewResultColumnVO;
 import com.soccer.web.channel.vo.ChannelVO;
+import com.soccer.web.user.vo.UserVO;
 
 @Mapper
 public interface ChannelMapper {
@@ -38,4 +39,8 @@ public interface ChannelMapper {
 	List<ChannelVO> selectChannelList(int channelPlayIdx);
 
 	int selectChannelListTotCnt(ChannelVO channelVO) throws Exception;
+
+	ChannelVO selectChannel(ChannelVO channelVO) throws Exception;
+
+	List<Integer> joinChannelList(UserVO userVO) throws Exception;
 }

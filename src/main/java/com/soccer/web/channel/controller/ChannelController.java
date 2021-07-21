@@ -52,9 +52,8 @@ public class ChannelController {
 	
 	//채널 목록, 검색 목록 (페이징 처리 안했음) 쿼리 전달
 	@RequestMapping(value = "/main/channel", method = RequestMethod.GET)
-	public String channelList(ChannelVO channelVO, Model model) throws Exception {
+	public String channelList(ChannelVO channelVO, Model model, HttpSession session) throws Exception {
 		int totcnt = channelService.selectChannelListTotCnt(channelVO);
-		
 		//총 게시물
 		channelVO.setTotalListCnt(totcnt);
 		//총 페이지
@@ -74,11 +73,23 @@ public class ChannelController {
 		
 		List<ChannelVO> channelList = channelService.channelList(channelVO);
 		
+		UserVO userVO = (UserVO)session.getAttribute("loginUser");
+		
+		List<Integer> joinChannelList = channelService.joinChannelList(userVO);
+		
 		if(channelList == null) {
 			model.addAttribute("message", "검색 결과가 없습니다.");
 		}else {
+			for(int i=0; i<channelList.size(); i++) {
+				boolean joinSw = joinChannelList.contains(channelList.get(i).getChannelIdx());
+				
+				if(joinSw) {
+					channelList.get(i).setJoinCheck("T");
+				}
+			}
+			
 			model.addAttribute("page", channelVO);
-			model.addAttribute("channelList", channelList);			
+			model.addAttribute("channelList", channelList);
 		}
 		
 		return "channel/channel_list";

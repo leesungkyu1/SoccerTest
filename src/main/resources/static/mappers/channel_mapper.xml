@@ -145,4 +145,38 @@
 					WHERE channel_play_idx = #{channelPlayidx}
 				)
 	</select>
+	
+	<select id="selectChannel" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channel">
+		SELECT
+			channel.channel_idx,
+			channel.user_idx,
+			channel.channel_name,
+			channel.channel_image,
+			channel.region_idx,
+			channel.channel_max,
+			region.region_name,
+			IFNULL(memberCount.channel_memberCount, 0) AS channel_memberCount
+		FROM channel
+		INNER JOIN region
+			ON channel.region_idx = region.region_idx
+		LEFT OUTER JOIN (SELECT 
+							 member.channel_idx, 
+							 COUNT(*) AS channel_memberCount 
+						 FROM member
+						 INNER JOIN apply
+						 	ON member.user_idx = apply.user_idx
+								AND member.channel_idx = apply.channel_idx
+						 WHERE apply.apply_step = 'ok'
+					     GROUP BY member.channel_idx
+						 ) AS memberCount
+			ON memberCount.channel_idx = channel.channel_idx
+		WHERE channel.channel_idx = #{channelIdx}
+		ORDER BY channel_idx DESC
+		limit #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="joinChannelList" parameterType="com.soccer.web.user.vo.UserVO" resultType="integer">
+		SELECT channel_idx FROM member
+		WHERE user_idx = #{userIdx}
+	</select>
 </mapper>

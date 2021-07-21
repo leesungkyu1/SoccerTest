@@ -10,6 +10,7 @@ import com.soccer.web.channel.dao.ChannelMapper;
 import com.soccer.web.channel.play.dao.ChannelPlayMapper;
 import com.soccer.web.channel.play.vo.ViewResultColumnVO;
 import com.soccer.web.channel.vo.ChannelVO;
+import com.soccer.web.user.vo.UserVO;
 
 @Service("channelService")
 public class ChannelServiceImpl implements ChannelService{
@@ -91,5 +92,15 @@ public class ChannelServiceImpl implements ChannelService{
 	@Override
 	public int selectChannelListTotCnt(ChannelVO channelVO) throws Exception{
 		return channelDAO.selectChannelListTotCnt(channelVO);
+	}
+
+	@Override
+	public ChannelVO selectChannel(ChannelVO channelVO) throws Exception{
+		return channelDAO.selectChannel(channelVO);
+	}
+	
+	@Override
+	public List<Integer> joinChannelList(UserVO userVO) throws Exception {
+		return channelDAO.joinChannelList(userVO);
 	}
 }

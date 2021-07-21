@@ -44,15 +44,15 @@
     			init: () => {
     				//뒤로가기 버튼 이벤트
     				const leftArrow = document.getElementsByClassName('lefrarrow')[0];
-    				leftArrow.addEventListener('click', () => singUpComple.singUpCompleEvnet.movePage('/'));
+    				leftArrow.addEventListener('click', () => singUpComple.singUpCompleEvent.movePage('/'));
     				
     				//홈 버튼 이벤트
     				const mainBtn = document.getElementsByClassName('main_btn')[0];
-    				mainBtn.addEventListener('click', () => singUpComple.singUpCompleEvnet.movePage('/'));
+    				mainBtn.addEventListener('click', () => singUpComple.singUpCompleEvent.movePage('/'));
     			},	
     		},
     		
-    		singUpCompleEvnet: {
+    		singUpCompleEvent: {
     			//페이지 이동
     			movePage : (loc) => {
                     location.href=loc;
