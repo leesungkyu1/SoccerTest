@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
     <link rel="stylesheet" th:href="@{/css/reset.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/channel_list.css}">
+
     <title>축구 플랫폼</title>
 </head>
 <body>
@@ -27,6 +30,118 @@
                          <div class="search" id="serach_btn"></div>
                      </div>
                  </div>
+
+
+                 	<div class = "channel_index">
+                 		
+                 	</div>
+<!--                  <div class="channel_index"> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo1"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>FC바로셀로나</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo2"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>토트넘 홋스퍼 FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo3"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>맨체스터 유나이티드 FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo4"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>리버풀FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo5"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>아스널FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo1"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>FC바로셀로나</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo2"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>토트넘 홋스퍼 FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo3"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>맨체스터 유나이티드 FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo4"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>리버풀FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+<!--                     <div class="channel_index_logo"> -->
+<!--                         <div class="channel_contents"> -->
+<!--                             <div class="logo logo5"></div> -->
+<!--                             <div> -->
+<!--                                 <h1>아스널FC</h1> -->
+<!--                                 <span>대전 유성구</span><span>(14/30)</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                         <button>+가입</button> -->
+<!--                     </div> -->
+                    <div class="page">
+                        <div class="page_left"></div>
+                        <div class="page_numer show">1</div>
+                        <div class="page_numer">2</div>
+                        <div class="page_right"><div class="arrow"></div></div>
+
                  <div class="channel_index">
                     <div th:if="${not #lists.isEmpty(channelList)}" th:each="channel : ${channelList}" class="channel_index_logo">
                         <div class="channel_contents">
@@ -57,6 +172,7 @@
                         		<a th:href="@{/main/channel?page=} + ${page.page + 1} + @{&searchWord=} + ${page.searchWord}" class="page_right"></a>
                         	</div>
                         </div>
+
                     </div>
                  </div>
              </div>
@@ -71,6 +187,7 @@
            </div>
         </div>
     </section>
+
 
     <script th:src="@{/js/search.js}"></script>
     <script>

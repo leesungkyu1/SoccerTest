@@ -203,7 +203,7 @@ public class ChannelController {
 		
 		model.addAttribute("channelInfo", channelInfoVO);
 		
-		return "";
+		return "channel_sign_up";
 	}
 	
 	//결과 컬럼 설정

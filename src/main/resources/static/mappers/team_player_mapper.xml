@@ -36,6 +36,7 @@
 		<result property="playresultSuccesspass" column="playresult_successpass"/>
 		<result property="playresultTotalcontention" column="playresult_totalcontention"/>
 		<result property="playresultSuccesscontention" column="playresult_successcontention"/>
+		<result property="teamPlayerName" column="team_player_name"/>
 	</resultMap>
 	
 	<!-- 경기에 선수 리스트를 가져오는 쿼리문 -->
@@ -47,6 +48,7 @@
 			team_player.channel_play_idx,
 			team_player.team_player_position,
 			team_player.team_player_formation_number,
+			team_player.team_player_name,
 			member.member_image
 		FROM team_player
 		INNER JOIN member
@@ -64,6 +66,7 @@
 									WHERE channel_play_idx = CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER)
 										AND team_type = #{teamType}
 							)
+		ORDER BY team_player_formation_number
 	</select>
 	
 	<!-- 경기에 선수 리스트에 해당하는 playresult를 가져오는 쿼리문 -->
@@ -89,12 +92,10 @@
 	    	playresult.playresult_successpass,
 	    	playresult.playresult_totalcontention,
 	    	playresult.playresult_successcontention,
-	    	member.member_nick
-	    FROM playresult
-	    INNER JOIN team_player
-	    	ON playresult.team_player_idx = team_player.team_player_idx
-	    RIGHT JOIN member
-	    	ON team_player.user_idx = member.user_idx
+	    	team_player.team_player_name
+	    FROM playresult 
+	    INNER JOIN team_player 
+	    	ON playresult.team_player_idx = team_player.team_player_idx 
 	    WHERE playresult.channel_play_idx = #{channelPlayIdx}
 	</select>
 	
@@ -218,7 +219,7 @@
 	<update id="updateTeamPlayerFormation" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO">
 		UPDATE team_player
 		SET 
-			team_player_position = #{teamPlayerPosition}
+			team_player_position = #{teamPlayerPosition},
 			team_player_formation_number = #{teamPlayerFormationNumber} 
 		WHERE team_player_idx = #{teamPlayerIdx}
 	</update>

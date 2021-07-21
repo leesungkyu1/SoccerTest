@@ -8,4 +8,8 @@ public @Data class TeamVO {
 	private int channelIdx;
 	private String teamName;
 	private String teamType;
+	
+	private String channelName;
+	private String channelImage;
+	private String regionName;
 }

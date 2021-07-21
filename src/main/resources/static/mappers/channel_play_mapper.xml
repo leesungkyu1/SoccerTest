@@ -23,6 +23,10 @@
 		<result property="channelIdx" column="channel_idx"/>
 		<result property="teamName" column="team_name"/>
 		<result property="teamType" column="team_type"/>
+		
+		<result property="channelName" column="channel_name"/>
+		<result property="channelImage" column="channel_image"/>
+		<result property="regionName" column="region_name"/>
 	</resultMap>
 
 	<resultMap type="com.soccer.web.channel.play.vo.ChannelPlayGoalVO" id="channelPlayGoalVO">
@@ -193,7 +197,30 @@
 	
 	<!-- channelPlayIdx에 연관된 팀을 불러오는 쿼리문 -->
 	<select id="selectTeamList" parameterType="int" resultMap="teamVO">
-		SELECT * FROM team 
+		SELECT 
+				team_idx, 
+				channel_play_idx,
+				channel_idx,
+				team_name,
+				team_type,
+				channel_name,
+				channel_image,
+				region_name
+		FROM (	SELECT 
+					team.team_idx, 
+					team.channel_play_idx,
+					team.channel_idx,
+					team.team_name,
+					team.team_type,
+					channel.channel_name,
+					channel.channel_image,
+					region.region_idx,
+					region.region_name
+				FROM team
+			  	RIGHT JOIN channel
+			  		ON team.channel_idx = channel.channel_idx
+			  	RIGHT JOIN region
+			  		ON channel.region_idx = region.region_idx) a
 		WHERE channel_play_idx = #{channelPlayIdx}
 	</select>
 	

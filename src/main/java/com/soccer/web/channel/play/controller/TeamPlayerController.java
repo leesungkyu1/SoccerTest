@@ -1,5 +1,6 @@
 package com.soccer.web.channel.play.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.member.service.MemberService;
@@ -22,7 +23,6 @@ import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelService;
-import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.user.service.UserService;
 import com.soccer.web.user.vo.UserVO;
 
@@ -124,22 +124,114 @@ public class TeamPlayerController {
 			awayTeamInfo.put("channelPlayIdx", Integer.toString(channelPlayIdx));
 			awayTeamInfo.put("teamType", "A");
 			
-			List<ChannelVO> channelVOList = channelService.selectChannelList(channelPlayIdx);
 			List<TeamVO> teamVOList = channelPlayService.selectTeamList(channelPlayIdx);
+			
+			TeamVO homeTeam = new TeamVO();
+			TeamVO awayTeam = new TeamVO();
+			
+			for (TeamVO item : teamVOList) {
+				if (item.getTeamType().equals("H")) {
+					homeTeam = item;
+				} else {
+					awayTeam = item;
+				}
+			}
+			
+			ChannelPlayVO channelPlayVO = channelPlayService.selectChannelPlayDetail(channelPlayIdx);
+			String homeFormation = channelPlayVO.getChannelPlayHomeFormation();
+			String awayFormation = channelPlayVO.getChannelPlayAwayFormation();
+			
 			List<TeamPlayerVO> homeTeamPlayerVOList = teamPlayerService.selectHomeAwayTeamPlayerList(homeTeamInfo);
 			List<TeamPlayerVO> awayTeamPlayerVOList = teamPlayerService.selectHomeAwayTeamPlayerList(awayTeamInfo);
 			
-			model.addAttribute("channelVOList", channelVOList);
-			model.addAttribute("teamVOList", teamVOList);
-			model.addAttribute("homeTeamPlayerVOList", homeTeamPlayerVOList);
-			model.addAttribute("awayTeamPlayerVOList", awayTeamPlayerVOList);
+			int homeGoalkeeper = 1;
+			int homeDefender = 0;
+			int homeMidfilder = 0;
+			int homeForward = 0;
+			
+			if (homeFormation.length() == 1) {
+				homeForward = Integer.parseInt(homeFormation);
+			} else if (homeFormation.length() == 2) {
+				homeDefender = Character.getNumericValue(homeFormation.charAt(0));
+				homeForward = Character.getNumericValue(homeFormation.charAt(1));
+			} else if (homeFormation.length() >= 3) {
+				homeDefender = Character.getNumericValue(homeFormation.charAt(0));
+				homeMidfilder = Character.getNumericValue(homeFormation.charAt(1));
+				for (int i = 3; i <= homeFormation.length(); i++) {
+					homeForward += Character.getNumericValue(homeFormation.charAt(i - 1));
+				}
+			}
+			
+			int awayGoalkeeper = 1;
+			int awayDefender = 0;
+			int awayMidfilder = 0;
+			int awayForward = 0;
+			
+			if (awayFormation.length() == 1) {
+				awayForward = Integer.parseInt(awayFormation);
+			} else if (awayFormation.length() == 2) {
+				awayDefender = Character.getNumericValue(awayFormation.charAt(0));
+				awayForward = Character.getNumericValue(awayFormation.charAt(1));
+			} else if (awayFormation.length() >= 3) {
+				awayDefender = Character.getNumericValue(awayFormation.charAt(0));
+				awayMidfilder = Character.getNumericValue(awayFormation.charAt(1));
+				for (int i = 3; i <= awayFormation.length(); i++) {
+					awayForward += Character.getNumericValue(awayFormation.charAt(i - 1));
+				}
+			}
+			
+			TeamPlayerVO homeGoalkeeperVO = homeTeamPlayerVOList.get(0);
+			List<TeamPlayerVO> homeDefenderVOList = new ArrayList<>();
+			List<TeamPlayerVO> homeMidfilderVOList = new ArrayList<>();
+			List<TeamPlayerVO> homeForwardVOList = new ArrayList<>();
+			for (int i = 0; i < homeTeamPlayerVOList.size(); i++) {
+				TeamPlayerVO tmpVO = homeTeamPlayerVOList.get(i);
+				if (i == 0) {
+					continue;
+				} else if ( 1 <= i && i <=homeDefender) {
+					homeDefenderVOList.add(tmpVO);
+				} else if ( homeDefender < i && i <= homeDefender + homeMidfilder) {
+					homeMidfilderVOList.add(tmpVO);
+				} else if (homeDefender + homeMidfilder < i && i <= homeDefender + homeMidfilder + homeForward) {
+					homeForwardVOList.add(tmpVO);
+				}
+			}
+			
+			TeamPlayerVO awayGoalkeeperVO = awayTeamPlayerVOList.get(0);
+			List<TeamPlayerVO> awayDefenderVOList = new ArrayList<>();
+			List<TeamPlayerVO> awayMidfilderVOList = new ArrayList<>();
+			List<TeamPlayerVO> awayForwardVOList = new ArrayList<>();
+			for (int i = 0; i < awayTeamPlayerVOList.size(); i++) {
+				TeamPlayerVO tmpVO = awayTeamPlayerVOList.get(i);
+				if (i == 0) {
+					continue;
+				} else if ( 1 <= i && i <=awayDefender) {
+					awayDefenderVOList.add(tmpVO);
+				} else if ( awayDefender < i && i <= awayDefender + awayMidfilder) {
+					awayMidfilderVOList.add(tmpVO);
+				} else if (awayDefender + awayMidfilder < i && i <= awayDefender + awayMidfilder + awayForward) {
+					awayForwardVOList.add(tmpVO);
+				}
+			}
+			
+			model.addAttribute("homeTeam", homeTeam);
+			model.addAttribute("awayTeam", awayTeam);
+			model.addAttribute("homeGoalkeeperVO", homeGoalkeeperVO);
+			model.addAttribute("homeDefenderVOList", homeDefenderVOList);
+			model.addAttribute("homeMidfilderVOList", homeMidfilderVOList);
+			model.addAttribute("homeForwardVOList", homeForwardVOList);
+			model.addAttribute("awayGoalkeeperVO", awayGoalkeeperVO);
+			model.addAttribute("awayDefenderVOList", awayDefenderVOList);
+			model.addAttribute("awayMidfilderVOList", awayMidfilderVOList);
+			model.addAttribute("awayForwardVOList", awayForwardVOList);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", "에러가 발생했습니다.");
 //			return "index";
 		}
-		return "";
+		return "channel/channel_formation";
 //		return "test";
 	}
 	
@@ -162,15 +254,56 @@ public class TeamPlayerController {
 			}
 			List<TeamPlayerVO> teamPlayerVOList = teamPlayerService.selectHomeAwayTeamPlayerList(teamInfo);
 			
+			
+			int goalkeeper = 1;
+			int defender = 0;
+			int midfilder = 0;
+			int forward = 0;
+			
+			if (formation.length() == 1) {
+				forward = Integer.parseInt(formation);
+			} else if (formation.length() == 2) {
+				defender = Character.getNumericValue(formation.charAt(0));
+				forward = Character.getNumericValue(formation.charAt(1));
+			} else if (formation.length() >= 3) {
+				defender = Character.getNumericValue(formation.charAt(0));
+				midfilder = Character.getNumericValue(formation.charAt(1));
+				for (int i = 3; i <= formation.length(); i++) {
+					forward += Character.getNumericValue(formation.charAt(i - 1));
+				}
+			}
+			
+			TeamPlayerVO goalkeeperVO = teamPlayerVOList.get(0);
+			List<TeamPlayerVO> defenderVOList = new ArrayList<>();
+			List<TeamPlayerVO> midfilderVOList = new ArrayList<>();
+			List<TeamPlayerVO> forwardVOList = new ArrayList<>();
+			for (int i = 0; i < teamPlayerVOList.size(); i++) {
+				TeamPlayerVO tmpVO = teamPlayerVOList.get(i);
+				if (i == 0) {
+					continue;
+				} else if ( 1 <= i && i <=defender) {
+					defenderVOList.add(tmpVO);
+				} else if ( defender < i && i <= defender + midfilder) {
+					midfilderVOList.add(tmpVO);
+				} else if (defender + midfilder < i && i <= defender + midfilder + forward) {
+					forwardVOList.add(tmpVO);
+				}
+			}
+			
+			model.addAttribute("teamType", teamType);
 			model.addAttribute("formation", formation);
 			model.addAttribute("channelPlayVO", channelPlayVO);
 			model.addAttribute("teamPlayerVOList", teamPlayerVOList);
+			model.addAttribute("goalkeeperVO", goalkeeperVO);
+			model.addAttribute("defenderVOList", defenderVOList);
+			model.addAttribute("midfilderVOList", midfilderVOList);
+			model.addAttribute("forwardVOList", forwardVOList);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", "에러가 발생했습니다.");
 //			return "index";
 		}
-		return "";
+		return "channel/channel_formation_modify";
 //		return "test";
 	}
 	
@@ -183,6 +316,20 @@ public class TeamPlayerController {
 												TeamPlayerVO teamPlayerVO,
 												RedirectAttributes attributes) throws Exception{
 		try {
+			// 잘 들어왔는지 확인
+			System.out.println("==========파라미터 확인=============");
+			System.out.println("channelIdx : " + channelIdx);
+			System.out.println("channelPlayIdx : " + channelPlayIdx);
+			System.out.println("teamType : " + teamType);
+			System.out.println("formation : " + formation); //?
+			int x = 0;
+			for (TeamPlayerVO item : teamPlayerVO.getTeamPlayerVOList()) {
+				System.out.println(x + "번째");
+				System.out.println("teamPlayerIdx : " + item.getTeamPlayerIdx());
+				System.out.println("teamPlayerFormationNumber : " + item.getTeamPlayerFormationNumber());
+				x++;
+			}
+			
 			HashMap<String, String> updateFormationInfoMap = new HashMap<>();
 			updateFormationInfoMap.put("teamType", teamType);
 			updateFormationInfoMap.put("formation", formation);
@@ -236,15 +383,17 @@ public class TeamPlayerController {
 							tmpVO.setTeamPlayerPosition(forward);
 						}
 					}
+					System.out.println("tmpVO - position : " + tmpVO.getTeamPlayerPosition());
 					teamPlayerService.updateTeamPlayerFormation(tmpVO); // 선수의 formation 변경 메서드
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
+			return "index";
 		}
 		attributes.addAttribute("message", "포메이션이 변경되었습니다");
-		return "redirect:/";
+		return "redirect:/channel/play/formation/" + channelIdx + "/" + channelPlayIdx;
 	}
 	
 	// 영상 게시글에서 Player를 삭제하는 메서드

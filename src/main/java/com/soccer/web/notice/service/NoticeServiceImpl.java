@@ -31,6 +31,11 @@ public class NoticeServiceImpl implements NoticeService{
 		
 		return diffDay(selectImportantNoticeList);
 	}
+	
+	@Override
+	public List<NoticeVO> selectImportantNoticeList(NoticeVO noticeVO) throws Exception {
+		return noticeMapper.selectImportantNoticeList(noticeVO);
+	}
 
 	@Override
 	public int selectNoticeListTotCnt(NoticeVO noticeVO) throws Exception {
