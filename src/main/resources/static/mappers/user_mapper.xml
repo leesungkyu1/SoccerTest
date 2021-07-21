@@ -11,6 +11,8 @@
 		<result property="userMobile" column="user_mobile" />
 		<result property="userName" column="user_name" />
 		<result property="userNick" column="user_nick" />
+		
+		<result property="regionName" column="region_name" />
 	</resultMap>
 	
 	<resultMap id="channel" type="com.soccer.web.channel.vo.ChannelVO">
@@ -42,8 +44,19 @@
 	</select>
 	
 	<select id="userInfo" parameterType="Integer" resultMap="user">
-		SELECT * FROM user 
-		WHERE user_idx = #{userIdx} 
+		SELECT 
+			user.user_idx,
+			user.user_id,
+			user.user_password,
+			user.region_idx,
+			user.user_mobile,
+			user.user_name,
+			user.user_nick,
+			region.region_name
+		FROM user
+		INNER JOIN region
+			ON user.region_idx = region.region_idx
+		WHERE user.user_idx = #{userIdx} 
 	</select>
 	
 	<update id="userInfoUpdate" parameterType="com.soccer.web.user.vo.UserVO">
@@ -63,7 +76,12 @@
 	
 	<select id="joinChannelList" parameterType="integer" resultMap="channel">
 		SELECT * FROM channel
-		WHERE channel_idx IN (SELECT channel_idx FROM member
-							  WHERE user_idx = #{userIdx})
+		WHERE channel_idx IN (SELECT member.channel_idx FROM member
+							  INNER JOIN apply
+							  	ON member.user_idx = apply.user_idx
+							  		AND member.channel_idx = apply.channel_idx
+							  WHERE member.user_idx = #{userIdx}
+							  	AND apply.apply_step = 'ok'
+							 )
 	</select>
 </mapper>

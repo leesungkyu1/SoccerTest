@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
     <title>축구 플랫폼</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
            <header>
                <div class="row">
                     <div class="lefrarrow"></div>
-                    <a href=""><div class="my">MY</div></a>
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
                </div>
            </header>
            <div id="event">
@@ -33,102 +33,59 @@
                     <div class="subtitle_line">
                         <h1 class="subtitle">채널목록</h1>
                         <div class="search_input">
-                            <input type="text">
-                            <div class="search"></div>
-                        </div>
+                            <input type="text" name="searchWord" id="searchWord">
+                            <div class="search" id="serach_btn"></div>
+                        </div>                        
                     </div>
                 </div>
                 <div class="channel_index_logo slide">
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바로나</h1>
-                    </div>
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바로셀로나</h1>
-                    </div>
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바로셀나</h1>
-                    </div>
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바로셀로나</h1>
-                    </div>
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바dd로셀로나</h1>
-                    </div>
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바로셀로나</h1>
-                    </div>
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바로셀로나</h1>
-                    </div>
-                    <div>
-                        <div class="logo logo1"></div>
-                        <h1>FC바로셀로나</h1>
+                    <div th:each="channel : ${channelList}">
+                        <div class="logo" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${channel.channelImage} + ');'">
+                        </div>
+                        <h1 th:text="${channel.channelName}"></h1>
                     </div>
                 </div>
            </div>
            
             <!-- 광고 -->
             <div id="bar">
-                <img src="img/event2.svg" alt="경기분석 시스템 도입">
+                <img th:src="@{/img/event2.svg}" alt="경기분석 시스템 도입">
             </div>
           
-           
            <!-- 채널게시판 -->
            <div id="board" class="notice">
                <div class="row">
                    <h1>공지사항</h1>
                     <ul>
-                        <li>
+           				<!-- 상위 노출 건 -->         	
+                    	<li th:each="notice : ${importantNoticeList}">
                             <div class="title">
-                                <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
-                                <div class="new">N</div>
+                                <h2 th:text="${notice.noticeTitle}"></h2>
+                                <div th:if="${notice.newNotice != 'N'}" class="new">N</div>
                             </div>
-                            <p><span>2021.10.02</span><span>관리자</span></p>
+                            <p><span th:text="${#strings.substring(notice.noticeDate,0,10)}">2021.10.02</span><span>관리자</span></p>
                         </li>
-                        <li>
+                        <!-- 일반 게시글 -->
+                        <li th:each="notice : ${noticeList}">
                             <div class="title">
-                                <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
+                                <h2 th:text="${notice.noticeTitle}"></h2>
                                 <div class="new">N</div>
                             </div>
-                            <p><span>2021.10.02</span><span>관리자</span></p>
-                        </li><li>
-                            <div class="title">
-                                <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
-                                <div class="new">N</div>
-                            </div>
-                            <p><span>2021.10.02</span><span>관리자</span></p>
-                        </li><li>
-                            <div class="title">
-                                <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
-                                <div class="new">N</div>
-                            </div>
-                            <p><span>2021.10.02</span><span>관리자</span></p>
-                        </li><li>
-                            <div class="title">
-                                <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
-                                <div class="new">N</div>
-                            </div>
-                            <p><span>2021.10.02</span><span>관리자</span></p>
-                        </li><li>
-                            <div class="title">
-                                <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
-                                <div class="new">N</div>
-                            </div>
-                            <p><span>2021.10.02</span><span>관리자</span></p>
+                            <p><span th:text="${#strings.substring(notice.noticeDate,0,10)}">2021.10.02</span><span>관리자</span></p>
                         </li>
                     </ul>
-                    <div class="page">
-                        <div class="page_left"></div>
-                        <div class="page_numer show">1</div>
-                        <div class="page_numer">2</div>
-                        <div class="page_right"><div class="arrow"></div></div>
+                    <div class="page" th:with="start = ${page.startPage}, end = ${page.endPage}">
+                        <div th:if="${1 < page.page}">
+                        	<a th:href="@{/main?page=} + ${page.page - 1}" class="page_left"></a>
+                        </div>
+                        <div th:each="pageNum : ${#numbers.sequence(start, end)}">
+                        	<a th:href="@{/main?page=} + ${pageNum}" th:classappend="${pageNum == page.page} ? show" th:text=${pageNum} class="page_numer"></a>
+                        </div>
+                        <div th:if="${page.page < page.totalPageCnt}">
+                        	<div class="arrow">
+                        		<a th:href="@{/main?page=} + ${page.page + 1}" class="page_right"></a>
+                        	</div>
+                        </div>
                     </div>
                </div>
            </div>
@@ -143,7 +100,47 @@
         </div>
     </section>
 
-    <script src="js/slide.js"></script>
-    <script src="js/search.js"></script>
+    <script th:src="@{/js/slide.js}"></script>
+    <script th:src="@{/js/search.js}"></script>
+    <script>
+    	const main = {
+            mainView: {
+                init: () => {
+                    //뒤로가기 버튼 이벤트
+    				const leftArrow = document.getElementsByClassName('lefrarrow')[0];
+    				leftArrow.addEventListener('click', () => main.mainEvent.movePage('/'));
+    				
+    				//검색버튼 이벤트
+					const serachBtn = document.getElementById('serach_btn');
+					serachBtn.addEventListener('click', (e) => main.mainEvent.keywordSearch(e));     				
+                },
+            },
+
+            // 이벤트 정의
+    		mainEvent: {
+                movePage : (loc) => {
+                    location.href=loc;
+                },
+                
+                //검색버튼 이벤트
+                keywordSearch : (e) => {
+                	const parentDiv = e.target.parentNode;
+                	const searchWord = document.getElementById('searchWord').value;
+                	
+                	if(!parentDiv.classList.contains('search_show')){
+                		if(searchWord !== ''){
+                			e.preventDefault();
+                			
+                			document.getElementById('searchWord').value = '';
+                			
+                			main.mainEvent.movePage('/main/channel?searchWord=' + searchWord);
+                		}
+                	}
+                },
+    		},
+    	};
+		
+        main.mainView.init();
+    </script>
 </body>
 </html>

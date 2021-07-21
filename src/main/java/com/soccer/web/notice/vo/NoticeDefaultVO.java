@@ -6,108 +6,39 @@ import lombok.Data;
 
 public @Data class NoticeDefaultVO {
 
-	/** 검색조건 */
-    private String searchCondition = "";
-    
-    /** 검색Keyword */
-    private String searchKeyword = "";
-    
-    /** 검색사용여부 */
-    private String searchUseYn = "";
-    
-    /** 현재페이지 */
-    private int pageIndex = 1;
-    
-    /** 페이지갯수 */
-    private int pageUnit = 10;
-    
-    /** 페이지사이즈 */
-    private int pageSize = 10;
+	/** 1. 페이지 당 보여지는 게시글의 최대 개수 **/
+	private int pageSize = 10;
 
-    /** firstIndex */
-    private int firstIndex = 0;
+	/** 2. 페이징된 버튼의 블럭당 최대 개수 **/
+	private int blockSize = 10;
 
-    /** lastIndex */
-    private int lastIndex = 1;
+	/** 3. 현재 페이지 **/
+	private int page = 1;
 
-    /** recordCountPerPage */
-    private int recordCountPerPage = 10;
-    
-        
-//	public int getFirstIndex() {
-//		return firstIndex;
-//	}
-//
-//	public void setFirstIndex(int firstIndex) {
-//		this.firstIndex = firstIndex;
-//	}
-//
-//	public int getLastIndex() {
-//		return lastIndex;
-//	}
-//
-//	public void setLastIndex(int lastIndex) {
-//		this.lastIndex = lastIndex;
-//	}
-//
-//	public int getRecordCountPerPage() {
-//		return recordCountPerPage;
-//	}
-//
-//	public void setRecordCountPerPage(int recordCountPerPage) {
-//		this.recordCountPerPage = recordCountPerPage;
-//	}
-//
-//	public String getSearchCondition() {
-//        return searchCondition;
-//    }
-//
-//    public void setSearchCondition(String searchCondition) {
-//        this.searchCondition = searchCondition;
-//    }
-//
-//    public String getSearchKeyword() {
-//        return searchKeyword;
-//    }
-//
-//    public void setSearchKeyword(String searchKeyword) {
-//        this.searchKeyword = searchKeyword;
-//    }
-//
-//    public String getSearchUseYn() {
-//        return searchUseYn;
-//    }
-//
-//    public void setSearchUseYn(String searchUseYn) {
-//        this.searchUseYn = searchUseYn;
-//    }
-//
-//    public int getPageIndex() {
-//        return pageIndex;
-//    }
-//
-//    public void setPageIndex(int pageIndex) {
-//        this.pageIndex = pageIndex;
-//    }
-//
-//    public int getPageUnit() {
-//        return pageUnit;
-//    }
-//
-//    public void setPageUnit(int pageUnit) {
-//        this.pageUnit = pageUnit;
-//    }
-//
-//    public int getPageSize() {
-//        return pageSize;
-//    }
-//
-//    public void setPageSize(int pageSize) {
-//        this.pageSize = pageSize;
-//    }
+	/** 4. 현재 블럭 **/
+	private int block = 1;
 
-//    public String toString() {
-//        return ToStringBuilder.reflectionToString(this);
-//    }
+	/** 5. 총 게시글 수 **/
+	private int totalListCnt;
 
+	/** 6. 총 페이지 수 **/
+	private int totalPageCnt;
+
+	/** 7. 총 블럭 수 **/
+	private int totalBlockCnt;
+
+	/** 8. 블럭 시작 페이지 **/
+	private int startPage = 1;
+
+	/** 9. 블럭 마지막 페이지 **/
+	private int endPage = 1;
+
+	/** 10. DB 접근 시작 index **/
+	private int startIndex = 0;
+
+	/** 11. 이전 블럭의 마지막 페이지 **/
+	private int prevBlock;
+
+	/** 12. 다음 블럭의 시작 페이지 **/
+	private int nextBlock;	
 }

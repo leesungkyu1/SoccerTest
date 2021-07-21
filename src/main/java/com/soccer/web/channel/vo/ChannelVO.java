@@ -6,6 +6,7 @@ import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 public @Data class ChannelVO extends ChannelDefaultVO{
 	private int channelIdx;
@@ -15,6 +16,11 @@ public @Data class ChannelVO extends ChannelDefaultVO{
 	private int regionIdx;
 	private int channelMax;
 	
+	private String regionName;
+	private int channelMemberCount;
+	
 	private List<ChannelBoardVO> channelBoardList;
 	private List<ChannelPlayVO> channelPlayList;
+	
+	private String searchWord;
 }

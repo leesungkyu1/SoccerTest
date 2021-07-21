@@ -84,9 +84,8 @@
     text-overflow: ellipsis;
     font-weight: 200;
 }
-.logo1 {
+.logo {
     background-size: cover;
-    background-color: #fff;
     border-radius: 16px;
 }
 
@@ -137,6 +136,22 @@
     width: 28px;
     height: 28px;
 }
+
+.page > div > .arrow {
+	width: 28px;
+    height: 28px;
+}
+
+.page > div > .arrow > a{
+	width: 28px;
+    height: 28px;
+}
+
+.page > div > a {
+	width: 28px;
+    height: 28px;
+}
+
 #notice .title {
     display: flex;
     align-items: center;
@@ -155,10 +170,11 @@
 }
 .page_left {
     background: url(../img/pageleft.png);
-    display: none;
+    display: block;
 }
 .page_right {
     background: url(../img/pageright.png);
+    display: block;
 }
 .page_numer {
     display: flex;

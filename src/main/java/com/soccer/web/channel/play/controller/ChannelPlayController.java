@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -141,7 +142,7 @@ public class ChannelPlayController {
 //				out.write(buf, 0, len);
 //				partSize -= block;
 //			} while(partSize>0);
-			
+//			
 			model.addAttribute("channelPlayVO", channelPlayVO);
 			model.addAttribute("teamPlayerVOList", teamPlayerVOList);
 			model.addAttribute("playerResultVOList", playerResultVOList);
@@ -161,17 +162,22 @@ public class ChannelPlayController {
 	
 	
 	// 영상 게시글을 추가하는 메서드channel/play/{channelIdx}
-	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
+	@RequestMapping(value = "/channel/play/{channelIdx}/10/20", method = RequestMethod.GET)
 	public String insertChannelPlay(@PathVariable int channelIdx,
 									@RequestParam("multipartFile")
 									ChannelPlayVO channelPlayVO,
-									RedirectAttributes attributes, MultipartFile multipartFile) throws Exception {
+									RedirectAttributes attributes, MultipartFile multipartFile,
+									HttpServletRequest request) throws Exception {
 		int channelPlayIdx = 0;
+		String root_path = request.getSession().getServletContext().getRealPath("");
+		String root_path2 = request.getSession().getServletContext().getRealPath("resources/static/video");
 		try {
-			String root_path = Paths.get("C:", "downloads","upload").toString(); 
+			
+//			Paths.get("C:","downloads","upload").toString(); 
 			
 			File targetFile = new File(root_path + multipartFile.getOriginalFilename());
 		
+			System.out.println("root_path2 의 경로는 "+ root_path2);
 			System.out.println("경로는 "+root_path);
 			InputStream fileStream;
 			
@@ -189,7 +195,7 @@ public class ChannelPlayController {
 			attributes.addAttribute("message", "에러가 발생했습니다");
 		}
 		attributes.addAttribute("message", "영상이 성공적으로 등록되었습니다.");
-		return "";
+		return "channel/channel_video_index";
 	}
 	
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)
@@ -241,20 +247,19 @@ public class ChannelPlayController {
 		
 		attributes.addAttribute("message", "득점 정보를 입력했습니다.");
 				
-		return "channel/channel_game_record";
+		return "";
 	}
 	
 	//우리팀, 상대팀 득점 정보 얻어오기
-	@ResponseBody
 	@RequestMapping(value = "/channel/play/goal/{channelPlayIdx}", method = RequestMethod.GET)
-	public List<ChannelPlayGoalVO> goalList(@PathVariable int channelPlayIdx, Model model) throws Exception {
+	public String goalList(@PathVariable int channelPlayIdx, Model model) throws Exception {
 		//프론트에서 뿌릴때 나눌필요 없이 순서대로 뿌리되 타입에 따라 위치 조절
 		List<ChannelPlayGoalVO> sortedByTimeGoalList = channelPlayService.goalList(channelPlayIdx);
 		
 		model.addAttribute("goalList", sortedByTimeGoalList);
 		
 		System.out.println(sortedByTimeGoalList);
-		return sortedByTimeGoalList;
+		return "channel/channel_game_record";
 	}
 	
 	//득점 기록 수정
@@ -323,6 +328,6 @@ public class ChannelPlayController {
 		
 		
 		attributes.addAttribute("message", "선수 기록을 수정했습니다.");
-		return "channel/channel_game_record";
+		return "";
 	}
 }

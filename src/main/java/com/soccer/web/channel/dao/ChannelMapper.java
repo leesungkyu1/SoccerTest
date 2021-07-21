@@ -36,4 +36,6 @@ public interface ChannelMapper {
 
 	// channelPlayIdx로 채널 리스트를 가져옴
 	List<ChannelVO> selectChannelList(int channelPlayIdx);
+
+	int selectChannelListTotCnt(ChannelVO channelVO) throws Exception;
 }

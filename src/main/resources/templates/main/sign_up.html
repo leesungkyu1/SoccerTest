@@ -22,28 +22,28 @@
                 <div class="row">
                     <h1 class="header_center">회원가입</h1>
                     <div class="sign_up_num">
-                        <div class="sign_compl">1</div>
+                        <div class="sign_compl sing_number_toggle">1</div>
                         <span class="sign_up_dot"></span>
-                        <div>2</div>
+                        <div class="sing_number_toggle">2</div>
                     </div>
-                    <form action="/user" method="post">
+                    <form action="/user" method="post" id="singUp_form">
                         <input class="main_input sing_page_1" id="userId" title="영어 + 숫자 조합" name="userId" type="text" placeholder="아이디 입력해주세요." required pattern="^[a-zA-Z0-9]*$">
-                        <span class="sing_page_1">영어와 숫자 조합으로 입력하세요.</span>
+                        <span th:if="${message} == null" class="sing_page_1">영어와 숫자 조합으로 입력하세요.</span>
+                        <span th:unless="${message} == null" th:text="${message}" class="sing_page_1"></span>
                         <input class="main_input sing_page_1" id="userPassword" title="최소 6자리의 영어,숫자 조합" name="userPassword" type="password" placeholder="비밀번호를 입력해주세요." minlength="6" required pattern="^[a-zA-Z0-9]*$">
                         <span class="sing_page_1">6자리의 숫자,영어로 입력하세요.</span>
                         <input class="main_input sing_page_1" id="userPasswordCheck" title="최소 6자리의 영어,숫자 조합" name="userPasswordCheck" type="password" placeholder="비밀번호를 다시 입력해주세요." required minlength="6" pattern="^[a-zA-Z0-9]*$">
-                        
+                        <span class="sing_page_1" id="checkMessage">비밀번호를 다시 입력하세요.</span>
                         <input class="main_input sing_page_2" id="userName" title="한글로 입력하세요" name="userName" type="text" placeholder="이름을 입력해주세요." minlength="2" required pattern="^[가-힣]*$">
                         <span class="sing_page_2">한글로 입력하세요.</span>
                         <input class="main_input sing_page_2" id="userNick" name="userNick" type="text" placeholder="닉네임을 입력해주세요." required>
-                        <select class="select main_select sing_page_2" name="regionIdx" aria-placeholder="활동지역을 선택해주세요.">
+                        <select class="select main_select sing_page_2" th:name="regionIdx" aria-placeholder="활동지역을 선택해주세요." required>
                             <option value="" disabled selected hidden>활동지역을 선택해주세요.</option>
-                            <option value="서울">서울</option>
-                            <option value="대전">대전</option>
-                            <option value="대구">대구</option>
-                            <option value="부산">부산</option>
+                            <option th:each="region : ${regionList}"
+                            	th:value="${region.regionIdx}"
+                            	th:text="${region.regionName}"></option>
                         </select>
-                        <input class="main_input sing_page_2" id="userMobile" name="userMobile" type="text" placeholder="휴대전화번호를 입력해주세요." required pattern="^(?:(010-\d{4})|(01[1|6|7|8|9]-\d{3,4}))-(\d{4})$">
+                        <input class="main_input sing_page_2" id="userMobile" name="userMobile" type="text" placeholder="휴대전화번호를 입력해주세요." required pattern="^(?:(010\d{4})|(01[1|6|7|8|9]\d{3,4}))(\d{4})$">
                         <span class="sing_page_2">- 를 뺴고 입력하세요.</span>
                         <button type="button" class="main_btn sing_page_1" id="nextBtn">다음</button>
                         <button type="button" class="main_btn sing_page_2" id="preBtn">이전</button>
@@ -66,40 +66,104 @@
     	const singUp = {
     		singUpView: {
     			init: () => {
+    				//2page 숨김
+    				const singPage2 = document.getElementsByClassName('sing_page_2');
+    				Array.from(singPage2).forEach(el => {
+    					el.style.display = 'none';
+    				});
+    			
     				//다음 버튼 이벤트
     				const nextBtn = document.getElementById('nextBtn');
-    				nextBtn.addEventListener('click', () => singUp.singUpEvent.movePage('next'));
+    				nextBtn.addEventListener('click', () => {
+    					singUp.singUpData.switch = 'next';
+    					singUp.singUpEvent.singToggle();
+    				});
     				
     				//이전 버튼 이벤트
     				const preBtn = document.getElementById('preBtn');
-    				preBtn.addEventListener('click', () => singUp.singUpEvent.movePage('pre'));
+    				preBtn.addEventListener('click', () => {
+    					singUp.singUpData.switch = 'pre';
+    					singUp.singUpEvent.singToggle();
+    				});
+    				
+    				//뒤로가기 버튼 이벤트
+    				const leftArrow = document.getElementsByClassName('lefrarrow')[0];
+    				leftArrow.addEventListener('click', () => singUp.singUpEvent.movePage('/'));
+    				
+    				//submit시 페이지 전환 이벤트
+                    const singPage1 = document.getElementsByClassName('sing_page_1');
+                    Array.from(singPage1).forEach(el => {
+                        el.addEventListener('invalid', singUp.singUpEvent.moveValidation);
+                    });
+                    
+                    //submit시 비밀번호 체크 이벤트
+                    const singUpForm = document.getElementById('singUp_form');
+                    singUpForm.addEventListener('submit', (e) => singUp.singUpEvent.passwordCheck(e));
     			},
     		},
+    		
     		singUpEvent: {
-    			//페이지 이동시 보여줄 Element
-    			movePage: (switch) => {
-    				console.log('test');
-   					const nextElement = document.getElementsByClassName('sing_page_1');
-   					const previousElement = document.getElementsByClassName('sing_page_2');
-    				if(switch === 'next'){
-    					nextElement.forEach(el => {
-    						el.style.display = block;
+    			//회원가입 1,2페이지 이동
+    			singToggle: () => {
+   					const previousElement = document.getElementsByClassName('sing_page_1');
+   					const nextElement = document.getElementsByClassName('sing_page_2');
+    				const circleNumber = document.getElementsByClassName('sing_number_toggle');
+   					
+    				if(singUp.singUpData.switch === 'next'){
+    					Array.from(nextElement).forEach(el => {
+    						el.style.display = 'block';
     					});
     					
-    					previousElement.forEach(el => {
-    						el.style.display = none;
+    					Array.from(previousElement).forEach(el => {
+    						el.style.display = 'none';
     					});
+    					
+    					circleNumber[1].classList.add('sign_compl');
+    					circleNumber[0].classList.remove('sign_compl');
     				}else{
-    					nextElement.forEach(el => {
-    						el.style.display = none;
+    					Array.from(nextElement).forEach(el => {
+    						el.style.display = 'none';
     					});
     					
-    					previousElement.forEach(el => {
-    						el.style.display = block;
+    					Array.from(previousElement).forEach(el => {
+    						el.style.display = 'block';
     					});
+    					
+    					circleNumber[0].classList.add('sign_compl');
+    					circleNumber[1].classList.remove('sign_compl');
     				}
-    			}
-    		}
+    			},
+    			
+    			//페이지 이동
+    			movePage : (loc) => {
+                    location.href=loc;
+                },
+                
+                //submit시 페이지 전환 이벤트
+                moveValidation: () => {
+                    singUp.singUpData.switch = 'pre';
+                    singUp.singUpEvent.singToggle();
+                },
+                
+                //비밀번호 체크 이벤트
+                passwordCheck: (e) => {
+                	const password = document.getElementById('userPassword').value;
+                	const passwordCheck = document.getElementById('userPasswordCheck').value;
+                	
+                	if(password !== passwordCheck){
+                		e.preventDefault();
+                		
+                		const checkMessage = document.getElementById('checkMessage');
+                		checkMessage.textContent = '비밀번호가 다릅니다.';
+                		
+                		singUp.singUpEvent.moveValidation();
+                	}
+                },
+    		},
+    		
+    		singUpData:{
+    			switch: null,
+    		},
     	}
     	
     	singUp.singUpView.init();

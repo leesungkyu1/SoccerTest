@@ -1,0 +1,35 @@
+#information_modify {
+    padding-top: 50px;
+    height: calc(100vh - 50px);
+}
+#information_modify .row {
+    height: auto;
+}
+form {
+    margin-top: 20px;
+}
+.line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    margin-left: 16px;
+}
+.line :first-child {
+    width: 86px;
+    font-size: 14px;
+}
+.select {
+    margin-bottom: 0px;
+}
+.main_input {
+    margin-bottom: 0;
+}
+.main_select {
+    color: #fff;
+}
+.main_btn {
+    margin-top: 60px;
+}
+#footer {
+    margin-top: 0;
+}
