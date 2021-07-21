@@ -83,8 +83,6 @@ public class UserController {
 				
 				return "main/log_in";
 			}else {
-				//attributes.addAttribute("message", "로그인 하셨습니다.");
-				
 				session.setAttribute("loginUser", authUser);
 				
 				return "redirect:/main";
