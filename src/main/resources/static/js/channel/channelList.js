@@ -11,8 +11,8 @@ function goDetailView(channelIdx, channelPlayIdx){
 //
 //})
 
-function playResultMove(channelIdx){
-	location.href='/channel/play/goal/'+channelIdx;
+function playResultMove(channelPlayIdx){
+	location.href='/channel/play/goal/'+channelPlayIdx;
 }
 //
 //function testAjax(channelPlayIdx) {

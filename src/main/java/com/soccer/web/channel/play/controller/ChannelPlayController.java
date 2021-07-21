@@ -1,6 +1,8 @@
 package com.soccer.web.channel.play.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
@@ -61,8 +63,8 @@ public class ChannelPlayController {
 			List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
 			model.addAttribute("channelPlayList", channelPlayList);
 			
-//			System.out.println(channelPlayList.get(channelPlayVO.getChannelPlayIdx()));
-			model.addAttribute("channelPlayList", channelPlayList);
+			System.out.println(channelPlayList);
+//			model.addAttribute("channelPlayList", channelPlayList);
 		} catch (Exception e) {
 			e.printStackTrace();
 //			return "index";
@@ -163,43 +165,48 @@ public class ChannelPlayController {
 	
 	
 	// 영상 게시글을 추가하는 메서드channel/play/{channelIdx}
-	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
-	public String insertChannelPlay(
-									@PathVariable int channelIdx,
-									@RequestParam("file")
-									ChannelPlayVO channelPlayVO,
-									RedirectAttributes attributes, MultipartFile multipartFile,
-									HttpServletRequest request) throws Exception {
-		
-		System.out.println(multipartFile);
-		int channelPlayIdx = 0;
-//		String root_path = request.getSession().getServletContext().getRealPath("");
-//		String root_path2 = request.getSession().getServletContext().getRealPath("resources/static/video");
-		try {
-			
-			String root_path = Paths.get("C:","downloads","upload").toString(); 
-			System.out.println(root_path);
-			File targetFile = new File(root_path + multipartFile.getOriginalFilename());
-		
-			System.out.println("경로는 "+root_path);
-			InputStream fileStream;
-			
-//			channelPlayVO.setChannelPlayTitle(multipartFile.getOriginalFilename());
-//			channelPlayVO.setChannelPlayVideo(root_path);
-			channelPlayVO.setChannelPlayVideo((root_path.toString()+multipartFile.getOriginalFilename()));
-			channelPlayService.insertChannelPlay(channelPlayVO);
-//			channelPlayVO.setChannelIdx(channelIdx); // 혹시나 필요할 때 사용하기
-//			channelPlayIdx = channelPlayService.insertChannelPlay(channelPlayVO);
-			
-			fileStream = multipartFile.getInputStream();
-			FileUtils.copyInputStreamToFile(fileStream, targetFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-			attributes.addAttribute("message", "에러가 발생했습니다");
-		}
-		attributes.addAttribute("message", "영상이 성공적으로 등록되었습니다.");
-		return "channel/channel_video_index";
-	}
+//	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
+//	public String insertChannelPlay(
+//									@PathVariable int channelIdx,
+//									@RequestParam("file")
+//									ChannelPlayVO channelPlayVO,
+//									RedirectAttributes attributes, MultipartFile file,
+//									HttpServletRequest request) throws Exception {
+//		
+//		String channelPlayTitle = request.getParameter("channelPlayTitle");
+//		String channelPlayVideo=request.getParameter("channelPlayVideo");
+//		
+//		System.out.println(channelPlayTitle);
+//		System.out.println(channelPlayVideo);
+//		System.out.println(file);
+//		int channelPlayIdx = 0;
+////		String root_path = request.getSession().getServletContext().getRealPath("");
+////		String root_path2 = request.getSession().getServletContext().getRealPath("resources/static/video");
+//		try {
+//			
+//			String root_path = Paths.get("C:","downloads","upload").toString(); 
+//			System.out.println(root_path);
+//			File targetFile = new File(root_path + file.getOriginalFilename());
+//		
+//			System.out.println("경로는 "+root_path);
+//			InputStream fileStream;
+//			
+////			channelPlayVO.setChannelPlayTitle(multipartFile.getOriginalFilename());
+////			channelPlayVO.setChannelPlayVideo(root_path);
+//			channelPlayVO.setChannelPlayVideo((root_path.toString()+file.getOriginalFilename()));
+//			channelPlayService.insertChannelPlay(channelPlayVO);
+////			channelPlayVO.setChannelIdx(channelIdx); // 혹시나 필요할 때 사용하기
+////			channelPlayIdx = channelPlayService.insertChannelPlay(channelPlayVO);
+//			
+//			fileStream = file.getInputStream();
+//			FileUtils.copyInputStreamToFile(fileStream, targetFile);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			attributes.addAttribute("message", "에러가 발생했습니다");
+//		}
+//		attributes.addAttribute("message", "영상이 성공적으로 등록되었습니다.");
+//		return "channel/channel_video_index";
+//	}
 	
 	//영상 게시글 추가하는 화면
 	@RequestMapping(value="/channel/play/{channelIdx}/form", method=RequestMethod.GET)
@@ -213,6 +220,51 @@ public class ChannelPlayController {
 		return "channel/channel_video_upload";
 		
 	}
+	
+	//영상 추가 테스트 화면
+	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
+	public String upload(@RequestParam("file") MultipartFile multipartFile, 
+			@PathVariable int channelIdx,
+			HttpServletRequest request, ChannelPlayVO channelPlayVO, Model model) throws Exception {
+		System.out.println(multipartFile.getOriginalFilename());
+		
+		System.out.println(channelIdx);
+		System.out.println(request.getParameter("title"));
+		
+		String path = Paths.get("C:","downloads","upload").toString();
+		String fileName= request.getParameter("title");
+		
+		
+		InputStream fileStream;
+		
+		channelPlayVO.setChannelPlayTitle(fileName);
+		channelPlayVO.setChannelPlayVideo((path.toString()+multipartFile.getOriginalFilename()));
+		channelPlayService.insertChannelPlay(channelPlayVO);
+		try {
+			
+//			String path = new ClassPathResource("/static/upload").getFile().getAbsolutePath();
+			System.out.println(path);
+			File targetFile = new File(multipartFile.getOriginalFilename());
+			
+			
+//			channelPlayVO.setChannelPlayTitle();
+			channelPlayVO.setChannelPlayVideo(path.toString() + multipartFile.getOriginalFilename());
+			
+			fileStream = multipartFile.getInputStream();
+			FileUtils.copyInputStreamToFile(fileStream, targetFile);
+			System.out.println("업로드에 성공했습니다.");
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("업로드에 실패했습니다.");
+		}
+				
+		
+		return "channel/channel_video_index";
+	}
+	
+	
+	
 	
 	
 	// 영상 게시글을 수정하는 메서드 (게시글을 수정할 때 승인중 단계로 다시 돌아감)
@@ -269,13 +321,17 @@ public class ChannelPlayController {
 	
 	//우리팀, 상대팀 득점 정보 얻어오기
 	@RequestMapping(value = "/channel/play/goal/{channelPlayIdx}", method = RequestMethod.GET)
-	public String goalList(@PathVariable int channelPlayIdx, Model model) throws Exception {
+	public String goalList(@PathVariable int channelPlayIdx, Model model, ChannelPlayVO channelPlayVO) throws Exception {
 		//프론트에서 뿌릴때 나눌필요 없이 순서대로 뿌리되 타입에 따라 위치 조절
 		List<ChannelPlayGoalVO> sortedByTimeGoalList = channelPlayService.goalList(channelPlayIdx);
 		
+		ChannelPlayVO goalListVideo = channelPlayService.selectChannelPlayDetail(channelPlayIdx);
+		
 		model.addAttribute("goalList", sortedByTimeGoalList);
 		
+		model.addAttribute("videoList", goalListVideo);
 		System.out.println(sortedByTimeGoalList);
+		System.out.println("======================================"+goalListVideo);
 		return "channel/channel_game_record";
 	}
 	

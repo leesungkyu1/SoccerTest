@@ -14,17 +14,17 @@
         <div class="container">
            <header>
                <div class="row">
-                    <div class="lefrarrow"></div>
-                    <a href=""><div class="my">MY</div></a>
+                    <a th:href="@{/channel/play/}+${channelPlayVO.channelIdx}"><div class="lefrarrow"></div></a>
+                    <div class="my">MY</div>
                </div>
            </header>
            <!-- 메인영상 -->
-<!--            <div id="video_index"> -->
-<!--                 <div class="video_index"> -->
-<!--                     <div class="row"> -->
-<!--                     </div> -->
-<!--                     <div class="videos"> -->
-                        <video class = "video" autoplay="autoplay">
+           <div id="video_index">
+                <div class="video_index">
+                    <div class="row">
+                    </div>
+                    <div class="videos">
+                        <video class = "video" autoplay="autoplay" controls="controls">
                         	<source th:src="${channelPlayVO.channelPlayVideo}" type="video/mp4">
                         </video>
                        	<div class="video_name">
@@ -33,11 +33,11 @@
                                 <span th:text="${channelPlayVO.channelPlayDate}">2021.07.21</span>
                                 <span th:text="${channelPlayVO.memberNick}">관리자</span>
                          </div>
-<!--                         </div> -->
-<!--                     </div> -->
+                        </div>
+                    </div>
                     
-<!--                 </div> -->
-<!--            </div> -->
+                </div>
+           </div>
            <!-- 선수목록 -->
            <div id="player_index">
             <div class="row">
@@ -89,7 +89,7 @@
                  <div class="subtitle_line">
                      <h1 class="subtitle">선수별기록</h1>
 <!--                      	<a th:onclick = "testAjax([[${channelPlayVO.channelPlayIdx}]])">경기기록<div class="right_arrow"></div></a> -->
-                     <a th:onclick ="playResultMove([[${channelPlayVO.channelIdx}]])" >경기기록<div class="right_arrow"></div></a>
+                     <a th:onclick ="playResultMove([[${channelPlayVO.channelPlayIdx}]])" >경기기록<div class="right_arrow"></div></a>
                  </div>
              </div>
              <div class="player_record_table">

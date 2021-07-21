@@ -122,13 +122,13 @@
 		VALUES 
 				(
 					default,
-					#{memberIdx},
+					3, <!-- 테스트용 Member Idx -->
 					#{channelIdx},
 					#{channelPlayTitle},
 					default,
-					#{channelPlayImage},
+					default,
 					#{channelPlayVideo},
-					#{channelPlayStep},
+					default,
 					<!-- 테스트를 위해 ok로 처리 -->
 					<!-- default, -->
 					<if test="channelPlayHomeFormation == null">
