@@ -219,7 +219,7 @@
 	<update id="updateTeamPlayerFormation" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO">
 		UPDATE team_player
 		SET 
-			team_player_position = #{teamPlayerPosition}
+			team_player_position = #{teamPlayerPosition},
 			team_player_formation_number = #{teamPlayerFormationNumber} 
 		WHERE team_player_idx = #{teamPlayerIdx}
 	</update>

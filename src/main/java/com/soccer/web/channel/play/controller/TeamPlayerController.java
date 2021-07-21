@@ -1,7 +1,6 @@
 package com.soccer.web.channel.play.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.member.service.MemberService;
@@ -24,7 +23,6 @@ import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelService;
-import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.user.service.UserService;
 import com.soccer.web.user.vo.UserVO;
 
@@ -233,7 +231,7 @@ public class TeamPlayerController {
 			model.addAttribute("message", "에러가 발생했습니다.");
 //			return "index";
 		}
-		return "/channel/channel_formation";
+		return "channel/channel_formation";
 //		return "test";
 	}
 	
@@ -292,6 +290,7 @@ public class TeamPlayerController {
 				}
 			}
 			
+			model.addAttribute("teamType", teamType);
 			model.addAttribute("formation", formation);
 			model.addAttribute("channelPlayVO", channelPlayVO);
 			model.addAttribute("teamPlayerVOList", teamPlayerVOList);
@@ -304,7 +303,7 @@ public class TeamPlayerController {
 			model.addAttribute("message", "에러가 발생했습니다.");
 //			return "index";
 		}
-		return "/channel/channel_formation_modify";
+		return "channel/channel_formation_modify";
 //		return "test";
 	}
 	
@@ -317,6 +316,20 @@ public class TeamPlayerController {
 												TeamPlayerVO teamPlayerVO,
 												RedirectAttributes attributes) throws Exception{
 		try {
+			// 잘 들어왔는지 확인
+			System.out.println("==========파라미터 확인=============");
+			System.out.println("channelIdx : " + channelIdx);
+			System.out.println("channelPlayIdx : " + channelPlayIdx);
+			System.out.println("teamType : " + teamType);
+			System.out.println("formation : " + formation); //?
+			int x = 0;
+			for (TeamPlayerVO item : teamPlayerVO.getTeamPlayerVOList()) {
+				System.out.println(x + "번째");
+				System.out.println("teamPlayerIdx : " + item.getTeamPlayerIdx());
+				System.out.println("teamPlayerFormationNumber : " + item.getTeamPlayerFormationNumber());
+				x++;
+			}
+			
 			HashMap<String, String> updateFormationInfoMap = new HashMap<>();
 			updateFormationInfoMap.put("teamType", teamType);
 			updateFormationInfoMap.put("formation", formation);
@@ -370,15 +383,17 @@ public class TeamPlayerController {
 							tmpVO.setTeamPlayerPosition(forward);
 						}
 					}
+					System.out.println("tmpVO - position : " + tmpVO.getTeamPlayerPosition());
 					teamPlayerService.updateTeamPlayerFormation(tmpVO); // 선수의 formation 변경 메서드
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			attributes.addAttribute("message", "에러가 발생했습니다.");
+			return "index";
 		}
 		attributes.addAttribute("message", "포메이션이 변경되었습니다");
-		return "redirect:/";
+		return "redirect:/channel/play/formation/" + channelIdx + "/" + channelPlayIdx;
 	}
 	
 	// 영상 게시글에서 Player를 삭제하는 메서드

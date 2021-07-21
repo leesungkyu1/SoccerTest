@@ -277,7 +277,7 @@ public class ChannelPlayController {
 		PlayresultVO totalScoreAndTeamInfo = channelPlayService.totalScore(channelPlayIdx);
 		
 		model.addAttribute("totalScoreAndTeamInfo", totalScoreAndTeamInfo);
-		return "/channel/channel_team_performance";
+		return "channel/channel_team_performance";
 //		return "test";
 	}
 	

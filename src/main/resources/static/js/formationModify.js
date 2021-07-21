@@ -1,316 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/css/reset.css">
-<link rel="stylesheet" href="/css/common.css">
-<link rel="stylesheet" href="/css/channel_formation_modify.css">
-<title>축구 플랫폼</title>
-</head>
-<body>
-	<section id="full">
-		<div class="container">
-			<header>
-				<div class="row">
-					<a th:href="|@{/channel/play/formation/}${channelIdx}/${channelPlayIdx}|"><div class="lefrarrow"></div></a>
-					<a href=""><div class="my">MY</div></a>
-				</div>
-			</header>
-
-			<!-- 포메이션 변경 -->
-			<div id="formation">
-				<div class="row">
-					<div class="subtitle_line">
-						<h1 class="subtitle">포메이션</h1>
-						<a href="javascript:formationModify.modifyView.modifyFormationView();">변경
-							<div class="right_arrow"></div>
-						</a>
-					</div>
-
-					<!-- 위의 변경을 눌렀을 때 포메이션에 맞게 아래 뷰가 생성되야 함 - 공간의 선수들은 초기화 -->
-					<input class="main_input" id="formation_modify" th:value=${formation}>
-
-					<!-- <select class="formation_modify select" name="formation_modify" form="myForm">
-                        <option value="443">4 : 4 : 3</option>
-                        <option value="434">4 : 3 : 4</option>
-                        <option value="344">3 : 4 : 4</option>
-                    </select> -->
-                    <input type="hidden" id="channelIdx" th:value="${channelPlayVO.channelIdx}">
-                    <input type="hidden" id="channelPlayIdx" th:value="${channelPlayVO.channelPlayIdx}">
-                    <input type="hidden" id="teamType" th:value="${teamType}">
-
-					<div class="ground">
-						<div class="bg">
-							<div class="player">
-								<div class="lin1" th:object="${goalkeeperVO}">
-									<div>
-										<div class="player0"></div>
-										<!-- 이미지 -->
-										<h1 th:text="*{teamPlayerName}"></h1>
-										<input id="teamPlayerFormationNumber" type="hidden" th:value="0"> <input id="teamPlayerIdx" type="hidden"
-											th:value="*{teamPlayerIdx}">
-									</div>
-								</div>
-								<div class="lin2">
-									<div th:each="defender, i : ${defenderVOList}">
-										<div class="player0"></div>
-										<!-- 이미지 -->
-										<h1 th:text="${defender.teamPlayerName}"></h1>
-										<input id="teamPlayerFormationNumber" type="hidden" th:value="${i.index} + 1"> <input id="teamPlayerIdx" type="hidden"
-											th:value="${defender.teamPlayerIdx}">
-									</div>
-									<!-- <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div>
-                                    <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div>
-                                    <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div> -->
-								</div>
-								<div class="lin3">
-									<div th:each="midfilder, i : ${midfilderVOList}">
-										<div class="player0"></div>
-										<!-- 이미지 -->
-										<h1 th:text="${midfilder.teamPlayerName}"></h1>
-										<input id="teamPlayerFormationNumber" type="hidden" th:value="${i.index} + ${defenderVOList.size} + 1"> <input id="teamPlayerIdx"
-											type="hidden" th:value="${midfilder.teamPlayerIdx}">
-									</div>
-									<!-- <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div>
-                                    <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div>
-                                    <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div> -->
-								</div>
-								<div class="lin4">
-									<div th:each="forward, i : ${forwardVOList}">
-										<div class="player0"></div>
-										<!-- 이미지 -->
-										<h1 th:text="${forward.teamPlayerName}"></h1>
-										<input id="teamPlayerFormationNumber" type="hidden" th:value="${i.index} + ${defenderVOList.size} + ${midfilderVOList.size} + 1"> <input
-											id="teamPlayerIdx" type="hidden" th:value="${forward.teamPlayerIdx}">
-									</div>
-									<!-- <div>
-                                        <div class="player0"></div>
-                                        <h1></h1>
-                                    </div> -->
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="main_btn btn_yellow">수정완료</div>
-				</div>
-			</div>
-
-			<div class="popup">
-				<div class="down-btn"></div>
-				<div class="popup_players">
-					<div th:each="teamPlayer : ${teamPlayerVOList}">
-						<div class="popup_player player1"></div>
-						<!-- 이미지 -->
-						<div>
-							<input type="hidden" id="memberTeamPlayerIdx" th:value="${teamPlayer.teamPlayerIdx}">
-							<h1 th:text="${teamPlayer.teamPlayerName}">홍길동</h1>
-							<h2>미드필더(MF)</h2>
-						</div>
-					</div>
-					<!-- <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player1"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player1"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="popup_player player2"></div>
-                        <div>
-                            <h1>홍길동</h1>
-                            <h2>미드필더(MF)</h2>
-                        </div>
-                    </div> -->
-
-				</div>
-
-			</div>
-			<form th:action="|@{/channel/play/formation/}${channelIdx}/${channelPlayIdx}/${teamType}|" id="updateForm" method="post">
-				<input type="hidden" name="formation" value="${formation}"/>
-				<input type="hidden" name="_method" value="put"/>
-			</form>
-			<div class="shadow"></div>
-			<div id="footer">
-				<div class="footer_line"></div>
-				<div class="row">
-					<h1>사업자등록증 :</h1>
-					<h1>대표이름 :</h1>
-					<h1>전화번호 :</h1>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- <script src="/js/popup.js"></script> -->
-	<!-- <script src="/js/formationModify.js"></script> -->
-	<script type="text/javascript">
-	class playerObject {
+class playerObject {
 		constructor() {
 			teamPlayerIdx: 0;
 			teamPlayerFormationNumber: 0;
@@ -351,18 +39,53 @@
 		modifyRequest: {
 			// 포메이션 변경 및 선수들의 포메이션 항목 변경 (여기 할 차례)
 			updateFormation: ()=>{
+				/* let teamPlayerVOList = formationModify.modifyData.playerArr;
+				let formation = document.getElementById("formation_modify").value;
+				let channelIdx = (Number)(document.getElementById("channelIdx").value);
+				let channelPlayIdx = (Number)(document.getElementById("channelPlayIdx").value);
+				let teamType = document.getElementById("teamType").value;
 				
+				try {
+					let resp = await fetch('localhost:8080/channel/play/formation/' + channelIdx + '/' + channelPlayIdx + '/' + teamType, {
+						method:'PUT',
+						headers:{
+							'Content-Type':'application/json;charset=utf-8'
+						},
+						body: JSON.stringify({
+							'formation': formation,
+							'channelIdx': channelIdx,
+							'channelPlayIdx': channelPlayIdx,
+							'teamType': teamType,
+							'teamPlayerVOList': teamPlayerVOList
+						})
+					});
+					let result = await resp.text();
+					console.log(result);
+					if (result == 'success') {
+						return 
+					} else {
+						return ;
+					}
+				} catch (error){
+					console.log(error);
+				} */
 				const updateBtn = document.querySelector('.main_btn')
 				updateBtn.addEventListener('click', () => {
 					
 					console.log("javascript 진입");
-					const teamPlayerVOList = formationModify.modifyData.playerArr;
-					const formation = document.getElementById("formation_modify").value;
-					const channelIdx = (Number)(document.getElementById("channelIdx").value);
-					const channelPlayIdx = (Number)(document.getElementById("channelPlayIdx").value);
-					const teamType = document.getElementById("teamType").value;
+					let teamPlayerVOList = formationModify.modifyData.playerArr;
+					let formation = document.getElementById("formation_modify").value;
+					let channelIdx = (Number)(document.getElementById("channelIdx").value);
+					let channelPlayIdx = (Number)(document.getElementById("channelPlayIdx").value);
+					let teamType = document.getElementById("teamType").value;
 					
 					let formData = document.getElementById('updateForm');
+					
+					let input2El = document.createElement('input');
+					input2El.setAttribute('name', 'formation');
+					input2El.setAttribute('type', 'hidden');
+					input2El.setAttribute('value', formation);
+					formData.appendChild(input2El);
 					
 					let input3El = document.createElement('input');
 					input3El.setAttribute('name', 'channelIdx');
@@ -381,12 +104,12 @@
 					input5El.setAttribute('type', 'hidden');
 					input5El.setAttribute('value', teamType);
 					formData.appendChild(input5El);
-
-					/* let input2El = document.createElement('input');
-					input2El.setAttribute('name', 'formation');
-					input2El.setAttribute('type', 'hidden');
-					input2El.setAttribute('value', formation);
-					formData.appendChild(input2El); */
+					
+					/* let input6El = document.createElement('input');
+					input6El.setAttribute('type', 'hidden');
+					input6El.setAttribute('name', '_method');
+					input6El.setAttribute('value', 'put');
+					formData.appendChild(input6El); */
 					
 					for (let i = 0; i < teamPlayerVOList.length; i++){
 						let inputEl1 = document.createElement('input');
@@ -403,6 +126,14 @@
 						
 					}
 					
+					/* formData.append('teamPlayerVOList', teamPlayerVOList);
+					formData.append('formation', formation);
+					formData.append('channelIdx', channelIdx);
+					formData.append('channelPlayIdx', channelPlayIdx);
+					formData.append('teamType', teamType);
+					formData.action='/channel/play/formation/' + channelIdx + '/' + channelPlayIdx + '/' + teamType;
+					formData.method='PUT'; */
+					console.log(formData.action);
 					formData.submit();
 				});
 				
@@ -420,7 +151,6 @@
 			},
 			modifyFormationView: () => {
 				const formation = document.getElementById("formation_modify").value;
-				console.log(formation);
 				let goalkeeper = 1;
 				let defender = 0;
 				let midfilder = 0;
@@ -544,8 +274,6 @@
 					const tmpClass = new playerObject();
 					formationModify.modifyData.playerArr[i] = tmpClass;
 				}
-				document.getElementById("formation_modify").value = formation;
-				document.getElementById("updateForm").children[0].value = formation;
 
 				formationModify.modifyView.init();
 			},
@@ -557,7 +285,7 @@
 				let downBtn = document.querySelector('.down-btn');
 				downBtn.addEventListener('click', () => {
 					document.querySelector('.popup').classList.remove('popup_up');
-					shadow.classList.remove('shadow_show');
+					shadow.classList.toggle('shadow_show');
 				});
 
 				// 맴버 누르면 팝업 업
@@ -747,6 +475,3 @@
 
 	formationModify.modifyView.init();
 			        
-    </script>
-</body>
-</html>
