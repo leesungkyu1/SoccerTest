@@ -24,12 +24,15 @@
                     <div class="row">
                     </div>
                     <div class="videos">
-                        <video src="img/Soccer.mp4#t=10" controls></video>
-                        <div class="video_name">
+                        <video class = "video" autoplay="autoplay" controls="controls">
+                        	<source th:src="${videoList.channelPlayVideo}" type="video/mp4">
+                        </video>
+                       	<div class="video_name">
                             <div class="row">
-                                <h1>FC바르셀로나 VS 리버풀FC</h1>
-                                <span>2021.07.21</span> <span>관리자</span>
-                            </div>
+                                <h1 th:text="${videoList.channelPlayTitle}">FC바르셀로나 VS 리버풀FC</h1>
+                                <span th:text="${videoList.channelPlayDate}">2021.07.21</span>
+                                <span th:text="${videoList.memberNick}">관리자</span>
+                         </div>
                         </div>
                     </div>
                     
@@ -42,7 +45,7 @@
                         <h1 class="subtitle">경기기록</h1>
                         <a href="#">기록추가<div class="right_arrow"></div></a>
                     </div>
-                    <div class="game_record" id="game_record" th:each="record :${goalList}">
+                    <div class="game_record" id="game_record" th:each="record :${goalList}" th:if="${record}=null"> 값이 비어있습니다.
 	                        <div class="team1">
 	                        	<div th:if="${record.channelPlayGoalType}=='H'" th:text="|${record.channelPlayGoalName} ${record.channelPlayGoalTime}|"></div>
               				</div>

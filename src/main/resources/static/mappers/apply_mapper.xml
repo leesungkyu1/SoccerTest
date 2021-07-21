@@ -36,7 +36,7 @@
 		INNER JOIN member
 			ON apply.user_idx = member.user_idx
 				AND apply.channel_idx = member.channel_idx
-		WHERE apply.channel_idx = 1
+		WHERE apply.channel_idx = #{channelIdx}
 			AND apply.apply_step = 'applying';
 	</select>
 	

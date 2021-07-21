@@ -9,9 +9,9 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.soccer.web.common.interceptor.AdminAuthorityInterceprot;
-import com.soccer.web.common.interceptor.LoginAuthorityInterceptor;
-import com.soccer.web.common.interceptor.UserAutoInterceptor;
+//import com.soccer.web.common.interceptor.AdminAuthorityInterceprot;
+//import com.soccer.web.common.interceptor.LoginAuthorityInterceptor;
+//import com.soccer.web.common.interceptor.UserAutoInterceptor;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_video_upload.css">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <div class="lefrarrow"></div>
+                    <a href=""><div class="my">MY</div></a>
+                </div>
+            </header>
+            
+            <!-- 비디오업로드 -->
+            <div id="video_upload">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">업로드</h1>
+                    </div>
+               		<form th:action="@{/channel/play/}+${channelIdx}" method="post" enctype="multipart/form-data">
+                        <div class="line1">
+                            <h1>제목</h1>
+                            <input type="text" name="title" class="main_input" placeholder="제목을 입력해주세요">
+                        </div> 
+                        <div class="line2">
+                            <input type="text" class="main_input filetag" placeholder="이미지나 영상을 첨부해주세요" readonly="readonly">
+                            <input type="file" id="file" name="file" required><label for="file">파일찾기</label>
+                        </div>
+                        <button type="submit" class="main_btn btn_yellow">업로드</button>
+                    </form>
+                </div> 
+            </div>
+            
+            
+           
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+    <script src="/js/file_upload.js"></script>
+</body>
+</html>

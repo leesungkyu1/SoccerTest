@@ -35,15 +35,15 @@
 	</select>
 	
 	<select id="selectChannelMainBoardList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelBoardVO">
-		SELECT * 
+		SELECT channel_board.* 
 		FROM channel_board 
 		INNER JOIN member 
 			ON channel_board.member_idx = member.member_idx 
-		WHERE channel_idx = #{channelIdx} 
+		WHERE channel_board.channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY channel_board_idx DESC
+		ORDER BY channel_board.channel_board_idx DESC
 		LIMIT 10		
 	</select>
 	

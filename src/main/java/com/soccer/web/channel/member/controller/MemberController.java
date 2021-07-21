@@ -46,10 +46,13 @@ public class MemberController {
 		List<MemberVO> memberList = memberService.memberList(channelVO); 
 		List<ApplyVO> applyList = applyService.applyList(channelVO);
 		
+		System.out.println(memberList.toString());
+		
 		model.addAttribute("memberList", memberList);
 		model.addAttribute("applyList", applyList);
+		model.addAttribute("channelIdx", channelIdx);
 				
-		return "test";
+		return "channel/channal_player_manager";
 	}
 	
 	//회원 강퇴
@@ -82,7 +85,7 @@ public class MemberController {
 			return "redirect:";
 		}
 		
-		return "redirect:";
+		return "redirect:/channel/member/" + channelIdx;
 	}
 	
 	//회원가입 신청 뷰
@@ -192,12 +195,12 @@ public class MemberController {
 			return "redirect:";
 		}
 		
-		return "test";
+		return "redirect:/channel/member/" + channelIdx;
 	}
 	
 	//회원 가입신청 거절 
 	@RequestMapping(value = "/channel/apply/{channelIdx}/{applyIdx}" , method = RequestMethod.DELETE)
-	public String memberDenie (@PathVariable("applyIdx") Integer applyIdx, RedirectAttributes attributes) throws Exception{
+	public String memberDenie (@PathVariable("channelIdx") Integer channelIdx, @PathVariable("applyIdx") Integer applyIdx, RedirectAttributes attributes) throws Exception{
 		try {
 			applyService.memberDenie(applyIdx);
 			
@@ -209,7 +212,7 @@ public class MemberController {
 			attributes.addAttribute("message", "회원가입 거절 중 에러가 발생했습니다.");
 		}
 		
-		return "channel/channel_sign_up";
+		return "redirect:/channel/member/" + channelIdx;
 	}
 	
 	//경기용 채널로 회원목록 가져오기
