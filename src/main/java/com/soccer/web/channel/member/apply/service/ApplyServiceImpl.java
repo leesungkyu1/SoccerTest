@@ -49,7 +49,7 @@ public class ApplyServiceImpl implements ApplyService{
 	//멤버 가입 거절
 	public void memberDenie(Integer applyIdx) throws Exception{
 		MemberVO searchMember = applyDAO.searchMember(applyIdx);
-		memberDAO.memberDelete(searchMember.getMemberIdx(), searchMember.getChannelIdx());
+		memberDAO.memberDelete(searchMember.getUserIdx(), searchMember.getChannelIdx());
 		
 		applyDAO.memberDenie(applyIdx);
 	}

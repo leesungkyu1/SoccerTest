@@ -25,7 +25,7 @@
 	
 	<delete id="memberDelete" parameterType="integer">
 		DELETE FROM member
-		WHERE member_idx = #{memberIdx}
+		WHERE user_idx = #{userIdx}
 			AND channel_idx = #{channelIdx}
 	</delete>
 	

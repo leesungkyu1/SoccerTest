@@ -24,18 +24,19 @@ public class MvcConfig implements WebMvcConfigurer {
 		return registrationBean;
 	}
 	
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		//로그인 권한 인터셉터
-		registry.addInterceptor(new LoginAuthorityInterceptor())
-			.addPathPatterns("/user/login");
-		
-		//로그인 했는지 체크
-		registry.addInterceptor(new UserAutoInterceptor())
-			.excludePathPatterns("/", "/css/*", "/js/*", "/img/*", "/user/login/view");
-		
-		//관리자 체크 인터셉터
-		registry.addInterceptor(new AdminAuthorityInterceprot())
-			.addPathPatterns("적용할 주소");
-	}
+	// test를 위해 주석처리
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//		//로그인 권한 인터셉터
+//		registry.addInterceptor(new LoginAuthorityInterceptor())
+//			.addPathPatterns("/user/login");
+//		
+//		//로그인 했는지 체크
+//		registry.addInterceptor(new UserAutoInterceptor())
+//			.excludePathPatterns("/", "/css/*", "/js/*", "/img/*", "/user/login/view");
+//		
+//		//관리자 체크 인터셉터
+//		registry.addInterceptor(new AdminAuthorityInterceprot())
+//			.addPathPatterns("적용할 주소");
+//	}
 }
