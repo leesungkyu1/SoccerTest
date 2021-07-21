@@ -1,39 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/channal_player_manager.css">
-    <title>축구 플랫폼</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/channal_player_manager.css">
+<title>축구 플랫폼</title>
 </head>
 <body>
-    <section id="full">
-        <div class="container">
-            <header>
-                <div class="row">
-                    <div class="lefrarrow"></div>
-                    <a href=""><div class="my">MY</div></a>
-                </div>
-            </header>
-            <div class="logo_header">
-                <div class="channel_sign_up_logo">
-                    <div class="logo logo1"></div>
-                    <h1>FC바로셀로나</h1>
-                    <h2><span>대전 유성구</span><span>(14/30)</span></h2>
-                </div>
-                <div class="right_menu ">
-                        <a href="#">채널수정<div class="right_arrow right_arrowb"></div></a>
-                        <a href="#">영상 업로드<div class="right_arrow"></div></a>
-                </div>
-            </div>
-            <div class="row">
-                <!-- 가입신청회원 -->
-                <h1 class="subtitle">가입신청 회원</h1>
-                <div class="manager">
-                    <div class="line">
+	<input type="hidden" id="channelIdx" name="channelIdx" th:value="${channelIdx}"/>
+	<section id="full">
+		<div class="container">
+			<header>
+				<div class="row">
+					<!-- 경로 지정해줘야 함 -->
+					<a href="#"><div class="lefrarrow"></div></a>
+					<!-- 경로 지정해줘야 함 -->
+					<a href="#"><div class="my">MY</div></a>
+				</div>
+			</header>
+			<div class="logo_header">
+				<div class="channel_sign_up_logo">
+					<div class="logo logo1"></div>
+					<h1>FC바로셀로나</h1>
+					<h2>
+						<span>대전 유성구</span><span>(14/30)</span>
+					</h2>
+				</div>
+				<div class="right_menu ">
+					<!-- 경로 지정해줘야 함 -->
+					<a href="#">채널수정
+						<div class="right_arrow right_arrowb"></div>
+					</a>
+					<!-- 경로 지정해줘야 함 -->
+					<a href="#">영상 업로드
+						<div class="right_arrow"></div>
+					</a>
+				</div>
+			</div>
+			<div class="row">
+				<!-- 가입신청회원 -->
+				<h1 class="subtitle">가입신청 회원</h1>
+				<div class="manager" th:each="apply: ${applyList}">
+					<div class="line">
+						<h1 th:text="${apply.memberNick}">홍길동</h1>
+						<div class="btns">
+							<input type="hidden" th:value="${apply.applyIdx}">
+							<button id="applyBtn">승인</button>
+							<button id="denieBtn">거절</button>
+						</div>
+					</div>
+					<!--<div class="line">
                         <h1>홍길동</h1>
                         <div class="btns">
                             <button>승인</button>
@@ -60,75 +79,203 @@
                             <button>승인</button>
                             <button>거절</button>
                         </div>
-                    </div>
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>승인</button>
-                            <button>거절</button>
-                        </div>
-                    </div>
-                </div>
+                    </div> -->
+				</div>
 
 
-                <!-- 기존회원 -->
-                <h1 class="subtitle">기존 회원</h1>
-                <div class="manager">
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>강퇴</button>
-                        </div>
-                    </div>
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>강퇴</button>
-                        </div>
-                    </div>
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>강퇴</button>
-                        </div>
-                    </div>
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>강퇴</button>
-                        </div>
-                    </div>
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>강퇴</button>
-                        </div>
-                    </div>
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>강퇴</button>
-                        </div>
-                    </div>
-                    <div class="line">
-                        <h1>홍길동</h1>
-                        <div class="btns">
-                            <button>강퇴</button>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-            <div id="footer">
-                <div class="footer_line"></div>
-                <div class="row">
-                    <h1>사업자등록증 : </h1>
-                    <h1>대표이름 : </h1>
-                    <h1>전화번호 : </h1>
-                </div>
-            </div>
-        </div>
-    </section>
-    <script src="js/select.js"></script>
+				<!-- 기존회원 -->
+				<h1 class="subtitle">기존 회원</h1>
+				<div class="manager" th:each="member: ${memberList}">
+					<div class="line">
+						<h1 th:value="${member.memberNick}">홍길동</h1>
+						<div class="btns">
+							<input type="hidden" th:value="${member.memberIdx}">
+							<button id="expulsionBtn">강퇴</button>
+						</div>
+					</div>
+					<!-- <div class="line">
+						<h1>홍길동</h1>
+						<div class="btns">
+							<button>강퇴</button>
+						</div>
+					</div>
+					<div class="line">
+						<h1>홍길동</h1>
+						<div class="btns">
+							<button>강퇴</button>
+						</div>
+					</div>
+					<div class="line">
+						<h1>홍길동</h1>
+						<div class="btns">
+							<button>강퇴</button>
+						</div>
+					</div>
+					<div class="line">
+						<h1>홍길동</h1>
+						<div class="btns">
+							<button>강퇴</button>
+						</div>
+					</div>
+					<div class="line">
+						<h1>홍길동</h1>
+						<div class="btns">
+							<button>강퇴</button>
+						</div>
+					</div>
+					<div class="line">
+						<h1>홍길동</h1>
+						<div class="btns">
+							<button>강퇴</button>
+						</div>
+					</div> -->
+
+				</div>
+			</div>
+			<div id="footer">
+				<div class="footer_line"></div>
+				<div class="row">
+					<h1>사업자등록증 :</h1>
+					<h1>대표이름 :</h1>
+					<h1>전화번호 :</h1>
+				</div>
+			</div>
+		</div>
+	</section>
+	<form name="commonForm" id="commonForm" method="post">
+		<!-- <input type="hidden" id="channelIdx" name="channelIdx" value="${channelIdx}"/> -->
+	</form>
+	<script src="/js/select.js"></script>
+	<script type="text/javascript">
+		const manager = {
+				managerView: {
+					init: () => {
+						manager.managerEvent.managerDenie();
+						
+						manager.managerEvent.managerApply();
+						
+						manager.managerEvent.managerExpulsion();
+					}
+				},
+				
+				managerEvent: {
+					managerApply: () => {
+						const applyBtn = document.querySelectorAll('#applyBtn');
+						for (let i = 0; i < applyBtn.length; i++){
+							applyBtn[i].addEventListener('click', () => manager.managerRequest.requestApply(applyBtn[i]));
+						}
+					},
+					
+					managerDenie: () => {
+						const denieBtn = document.querySelectorAll('#denieBtn');
+						for (let i = 0; i < denieBtn.length; i++){
+							denieBtn[i].addEventListener('click', () => manager.managerRequest.requestDenie(denieBtn[i]));
+						}
+					},
+					
+					managerExpulsion: () => {
+						const expulsionBtn = document.querySelectorAll('#expulsionBtn');
+						for (let i = 0; i < expulsionBtn.length; i++){
+							expulsionBtn[i].addEventListener('click', () => manager.managerRequest.requestExpulsion(expulsionBtn[i]));
+						}
+					},
+				},
+				
+				managerRequest: {
+					requestApply: (el) => {
+						const applyIdx = el.previousElementSibling.value;
+						const channelIdx = (Number)(document.getElementById('channelIdx').value);
+						
+						const applyForm = document.getElementById('commonForm');
+						//applyForm.setAttribute('th:action', "|@{/channel/apply/}" + channelIdx + "/" + applyIdx + "|");
+						applyForm.setAttribute('action', "/channel/apply/" + channelIdx + "/" + applyIdx);
+						
+						const inputApplyIdxEl = document.createElement('input');
+						inputApplyIdxEl.setAttribute('name', 'applyIdx');
+						inputApplyIdxEl.setAttribute('type', 'hidden');
+						inputApplyIdxEl.setAttribute('value', applyIdx);
+						
+						const inputChannelIdxEl = document.createElement('input');
+						inputChannelIdxEl.setAttribute('name', 'channelIdx');
+						inputChannelIdxEl.setAttribute('type', 'hidden');
+						inputChannelIdxEl.setAttribute('value', channelIdx);
+						
+						const inputPutEl = document.createElement('input');
+						inputPutEl.setAttribute('type', 'hidden');
+						inputPutEl.setAttribute('name', '_method');
+						inputPutEl.setAttribute('value', 'put');
+						
+						applyForm.appendChild(inputApplyIdxEl);
+						applyForm.appendChild(inputChannelIdxEl);
+						applyForm.appendChild(inputPutEl);
+						
+						applyForm.submit();
+						
+					},
+					
+					requestDenie: (el) => {
+						const applyIdx = el.previousElementSibling.previousElementSibling.value;
+						const channelIdx = document.getElementById('channelIdx').value;
+						
+						const denieForm = document.getElementById('commonForm');
+						denieForm.setAttribute('action', "/channel/apply/" + channelIdx + "/" + applyIdx);
+						
+						const inputApplyIdxEl = document.createElement('input');
+						inputApplyIdxEl.setAttribute('name', 'applyIdx');
+						inputApplyIdxEl.setAttribute('type', 'hidden');
+						inputApplyIdxEl.setAttribute('value', applyIdx);
+						
+						const inputChannelIdxEl = document.createElement('input');
+						inputChannelIdxEl.setAttribute('name', 'channelIdx');
+						inputChannelIdxEl.setAttribute('type', 'hidden');
+						inputChannelIdxEl.setAttribute('value', channelIdx);
+						
+						const inputDeleteEl = document.createElement('input');
+						inputDeleteEl.setAttribute('name', '_method');
+						inputDeleteEl.setAttribute('type', 'hidden');
+						inputDeleteEl.setAttribute('value', 'delete');
+						
+						denieForm.appendChild(inputApplyIdxEl);
+						denieForm.appendChild(inputChannelIdxEl);
+						denieForm.appendChild(inputDeleteEl);
+						
+						denieForm.submit();
+						
+					},
+					
+					requestExpulsion: (el) => {
+						const memberIdx = el.previousElementSibling.value;
+						const channelIdx = document.getElementById('channelIdx').value;
+						
+						const expulsionForm = document.getElementById('commonForm');
+						expulsionForm.setAttribute('action', "/channel/member/" + channelIdx + "/" + memberIdx);
+						
+						const inputMemberIdxEl = document.createElement('input');
+						inputMemberIdxEl.setAttribute('name', 'memberIdx');
+						inputMemberIdxEl.setAttribute('type', 'hidden');
+						inputMemberIdxEl.setAttribute('value', memberIdx);
+						
+						const inputChannelIdxEl = document.createElement('input');
+						inputChannelIdxEl.setAttribute('name', 'channelIdx');
+						inputChannelIdxEl.setAttribute('type', 'hidden');
+						inputChannelIdxEl.setAttribute('value', channelIdx);
+						
+						const inputDeleteEl = document.createElement('input');
+						inputDeleteEl.setAttribute('name', '_method');
+						inputDeleteEl.setAttribute('type', 'hidden');
+						inputDeleteEl.setAttribute('value', 'delete');
+						
+						expulsionForm.appendChild(inputMemberIdxEl);
+						expulsionForm.appendChild(inputChannelIdxEl);
+						expulsionForm.appendChild(inputDeleteEl);
+						
+						expulsionForm.submit();
+						
+					},
+				}
+		}
+		
+		manager.managerView.init();
+	</script>
 </body>
 </html>

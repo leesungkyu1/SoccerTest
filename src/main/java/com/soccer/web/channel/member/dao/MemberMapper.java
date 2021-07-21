@@ -14,7 +14,7 @@ public interface MemberMapper {
 	List<MemberVO> memberList(ChannelVO channelVO) throws Exception;
 	
 	//채널 회원삭제
-	void memberDelete(Integer memberIdx, Integer channelIdx) throws Exception;
+	void memberDelete(Integer userIdx, Integer channelIdx) throws Exception;
 	
 	//채널 회원 존재여부
 	int memberCheck(MemberVO memberVO) throws Exception;
