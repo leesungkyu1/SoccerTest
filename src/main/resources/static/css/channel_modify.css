@@ -61,3 +61,10 @@ form > div:nth-last-child(2) {
 .header_center {
     margin-bottom: 70px;
 }
+.main_select {
+	text-align: center;
+    background-color: rgb(25, 25, 25);
+    text-align-last: center;
+    color: rgb(255, 255, 255);
+    padding-right: 60px;
+}

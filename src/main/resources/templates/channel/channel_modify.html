@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_modify.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <div class="lefrarrow"></div>
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
+                </div>
+            </header>
+            <div id="channel_modify">
+                <div class="row">
+                    <h1 class="header_center">채널수정</h1>
+                    <div class="channel_sign_up_content">
+                        <div class="channel_sign_up_profile" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${channelVO.channelImage} + ');'">
+                            <div class="channel_sign_up_profile_add"></div>
+                        </div>
+                        <form th:action="@{/channel/} + ${channelVO.channelIdx}" method="post" enctype="multipart/form-data">
+                            <div>
+                                <span>채널이름</span>
+                                <input class="main_input" type="text" name="channelName" placeholder="채널이름을 입력해주세요" th:value="${channelVO.channelName}" required>
+                            </div>
+                            <div>
+                                <span>최대인원</span>
+                                <input class="main_input" type="text" name="channelMax" placeholder="최대인원을 입력해주세요" title="숫자만 입력 가능합니다." th:value="${channelVO.channelMax}" required pattern="^[0-9]*$">
+                                <span th:if="${message != null}" th:text=${message}></span>
+                            </div>
+                            <div>
+                                <span>활동지역</span>
+                                <select class="select main_select" style="margin-bottom:0px" th:name="regionIdx" aria-placeholder="활동지역을 선택해주세요." required>
+	                            <option th:each="region : ${regionList}"
+	                            	th:value="${region.regionIdx}"
+	                            	th:selected="${region.regionIdx == channelVO.regionIdx}"
+	                            	th:text="${region.regionName}"></option>
+                        		</select>
+                            </div>
+    						<input type="file" name="imageFile" id="file" accept="image/*" style="display:none;">
+    						<input type="hidden" name="_method" value="put"/>
+                            <button type="submit" class="main_btn btn_yellow">채널수정하기</button>
+                        </form>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:src="@{/js/select.js}"></script>
+    <script th:inline="javascript">
+    	const channelModify = {
+            channelModifyView: {
+                init: () => {
+                    //뒤로가기 버튼 이벤트
+    				const leftArrow = document.getElementsByClassName('lefrarrow')[0];
+    				leftArrow.addEventListener('click', () => channelModify.channelModifyEvent.movePage('/channel/member/' + [[${channelVO.channelIdx}]]));
+    				
+    				//파일 버튼 클릭
+    				const fileBtn = document.getElementsByClassName('channel_sign_up_profile_add')[0];
+    				fileBtn.addEventListener('click', (e) => channelModify.channelModifyEvent.inputFileOpen(e));
+    				
+    				//파일 미리보기
+    				const inputImage = document.getElementById('file');
+    				inputImage.addEventListener('change', e => channelModify.channelModifyEvent.inputImageView(e));
+                },
+            },
+
+            // 이벤트 정의
+    		channelModifyEvent: {
+                movePage : (loc) => {
+                    location.href=loc;
+                },
+                
+                inputFileOpen: (e) => {
+                	e.preventDefault();
+                	
+                	const inputFile = document.getElementById('file');
+                	inputFile.click();
+                },
+                
+                inputImageView: (e) => {
+                	const image = e.target;
+                	
+                	if(image.files && image.files[0]){
+                		const reader = new FileReader();
+                		
+                		reader.onload = e => {
+                			const previewImage = document.getElementsByClassName('channel_sign_up_profile')[0];
+                			previewImage.style.background = 'url(' + e.target.result + ')';
+                			previewImage.style.backgroundSize = '';                			
+                		}
+                		
+                			
+                		reader.readAsDataURL(image.files[0]);
+                	}
+                },
+    		},
+    	};
+		
+        channelModify.channelModifyView.init();
+    </script>
+</body>
+</html>

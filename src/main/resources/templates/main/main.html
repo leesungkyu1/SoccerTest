@@ -55,26 +55,30 @@
            <!-- 채널게시판 -->
            <div id="board" class="notice">
                <div class="row">
-                   <h1>공지사항</h1>
+                   <a th:href="@{/main/notice}"><h1>공지사항</h1></a>
                     <ul>
            				<!-- 상위 노출 건 -->         	
                     	<li th:each="notice : ${importantNoticeList}">
-                            <div class="title">
-                                <h2 th:text="${notice.noticeTitle}"></h2>
-                                <div th:if="${notice.newNotice != 'N'}" class="new">N</div>
-                            </div>
+                            <a th:href="|@{/main/notice/}${notice.noticeIdx}|">
+	                            <div class="title">
+	                                <h2 th:text="${notice.noticeTitle}"></h2>
+	                                <div th:if="${notice.newNotice != 'N'}" class="new">N</div>
+	                            </div>
+                            </a>
                             <p><span th:text="${#strings.substring(notice.noticeDate,0,10)}">2021.10.02</span><span>관리자</span></p>
                         </li>
                         <!-- 일반 게시글 -->
                         <li th:each="notice : ${noticeList}">
-                            <div class="title">
-                                <h2 th:text="${notice.noticeTitle}"></h2>
-                                <div class="new">N</div>
-                            </div>
+                        	<a th:href="|@{/main/notice/}${notice.noticeIdx}|">
+	                            <div class="title">
+	                                <h2 th:text="${notice.noticeTitle}"></h2>
+	                                <div class="new">N</div>
+	                            </div>
+                            </a>
                             <p><span th:text="${#strings.substring(notice.noticeDate,0,10)}">2021.10.02</span><span>관리자</span></p>
                         </li>
                     </ul>
-                    <div class="page" th:with="start = ${page.startPage}, end = ${page.endPage}">
+                    <div th:if="${not #lists.isEmpty(noticeList)}" class="page" th:with="start = ${page.startPage}, end = ${page.endPage}">
                         <div th:if="${1 < page.page}">
                         	<a th:href="@{/main?page=} + ${page.page - 1}" class="page_left"></a>
                         </div>

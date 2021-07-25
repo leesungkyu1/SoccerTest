@@ -14,8 +14,8 @@
         <div class="container">
            <header>
                <div class="row">
-                    <a th:href="|@{/main/notice}|"><div class="lefrarrow"></div></a>
-                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --><!-- mypage url 연결 필요 -->
+                    <a href="javascript:history.back();"><div class="lefrarrow"></div></a>
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
                </div>
            </header>
            <!-- 채널게시판 -->

@@ -91,7 +91,9 @@
 	<update id="channelUpdate" parameterType="com.soccer.web.channel.vo.ChannelVO">
 		UPDATE channel
 			SET channel_name = #{channelName},
-				channel_image = #{channelImage},
+			<if test="channelImage != null">
+					channel_image = #{channelImage},
+			</if>
 				region_idx = #{regionIdx},
 				channel_max = #{channelMax}
 		WHERE channel_idx = #{channelIdx}

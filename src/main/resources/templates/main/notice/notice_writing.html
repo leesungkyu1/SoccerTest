@@ -16,7 +16,7 @@
             <header>
                 <div class="row">
                     <a th:href="|@{/main/notice}|"><div class="lefrarrow"></div></a>
-                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --> <!-- mypage url 연결 필요 -->
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
                 </div>
             </header>
             <!-- 마이페이지 -->
@@ -37,8 +37,7 @@
                                 <input type="radio" id="away" name="noticeType" value="Y"><label class="main_btn" for="away">공지사항</label>
                             </div>
                         </div>
-                        <input type="hidden" name="userIdx" value="16"> <!-- 세션의 userIdx 넣어야함 -->
-                        <!-- <input type="hidden" name="userIdx" th:value="{session.loginUser.userIdx}"> --> 
+                        <input type="hidden" name="userIdx" th:value="{session.loginUser.userIdx}">
                         <button type="submit" class="main_btn btn_yellow">작성완료</button>
                     </form>
                 </div> 
@@ -61,7 +60,7 @@
             <header>
                 <div class="row">
                     <a th:href="|@{/main/notice/}*{noticeIdx}|"><div class="lefrarrow"></div></a>
-                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --> <!-- mypage url 연결 필요 -->
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
                 </div>
             </header>
             <!-- 마이페이지 -->

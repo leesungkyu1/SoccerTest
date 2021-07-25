@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
+import com.sun.org.apache.xalan.internal.lib.Extensions;
 
 @Mapper
 public interface TeamPlayerMapper {
@@ -55,6 +56,7 @@ public interface TeamPlayerMapper {
 	// 선수의 경기 결과를 수정하기 전 들고오는 메서드
 	PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception;
 
+	List<PlayresultVO> resultList(Integer playIdx) throws Exception;
 	List<TeamPlayerVO> selectHomeAwayTeamPlayerNotLinkedList(HashMap<String, String> teamInfoMap) throws Exception;
 
 	//선수 등록

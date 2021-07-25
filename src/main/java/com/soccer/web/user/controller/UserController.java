@@ -30,12 +30,21 @@ public class UserController {
 	
 	//회원가입 뷰
 	@RequestMapping(value = "/user/view", method = RequestMethod.GET)
-	public String userJoinView(Model model) throws Exception {
-		List<RegionVO> regionList = regionService.regionList();
-		
-		model.addAttribute("regionList", regionList);
-		
-		return "main/sign_up";
+	public String userJoinView(Model model, RedirectAttributes attributes) throws Exception {
+		try {
+			List<RegionVO> regionList = regionService.regionList();
+			
+			model.addAttribute("regionList", regionList);
+			
+			return "main/sign_up";
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("code", 101);
+			attributes.addAttribute("message", "에러가 발생했습니다.");
+			
+			return "redirect:/error/errorMessage";
+		}
 	}
 	
 	//회원가입
@@ -61,13 +70,14 @@ public class UserController {
 			model.addAttribute("code", 101);
 			model.addAttribute("message", "회원가입이 실패했습니다.");
 			
-			return "main/sign_up";
+			return "redirect:/error/errorMessage";
 		}		
 	}
 	
 	//로그인 페이지 뷰
 	@RequestMapping(value = "/user/login/view", method = RequestMethod.GET)
 	public String userLoginView() throws Exception {
+		
 		return "main/log_in";
 	}
 	
@@ -90,62 +100,100 @@ public class UserController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			model.addAttribute("code", 102);
-			model.addAttribute("message", "에러가 발생했습니다.");
+			attributes.addAttribute("code", 102);
+			attributes.addAttribute("message", "에러가 발생했습니다.");
 			
-			return "main/log_in";
+			return "redirect:/error/errorMessage";
 		}		
 	}
 	
 	//정보 조회
 	@RequestMapping(value = "/user/{userIdx}", method = RequestMethod.GET)
 	public String userInfo(@PathVariable("userIdx") Integer userIdx, Model model,
-			HttpSession session) throws Exception{
-		UserVO loginUser = (UserVO)session.getAttribute("loginUser");
-		
-		if(userIdx == null || userIdx != loginUser.getUserIdx()) {
-			model.addAttribute("code", 103);
-			model.addAttribute("message", "잘못된 접근입니다.");
-		}else {
-			UserVO userInfo = userService.userInfo(userIdx);
-			List<ChannelVO> joinChannelList = userService.joinChannelList(userIdx);
+			HttpSession session, RedirectAttributes attributes) throws Exception{
+		try {
+			UserVO loginUser = (UserVO)session.getAttribute("loginUser");
 			
-			model.addAttribute("joinChannelList",joinChannelList);
-			model.addAttribute("userInfo", userInfo);
+			if(userIdx == null || userIdx != loginUser.getUserIdx()) {
+				model.addAttribute("code", 103);
+				model.addAttribute("message", "잘못된 접근입니다.");
+			}else {
+				UserVO userInfo = userService.userInfo(userIdx);
+				List<ChannelVO> joinChannelList = userService.joinChannelList(userIdx);
+				
+				model.addAttribute("joinChannelList",joinChannelList);
+				model.addAttribute("userInfo", userInfo);
+			}
+			return "user/mypage.html";
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("code", 103);
+			attributes.addAttribute("message", "정보를 불러오는 중 에러가 발생했습니다.");
+			
+			return "redirect:/error/errorMessage";
 		}
-		return "user/mypage.html";
 	}
 	
 	//정보 수정 뷰
 	@RequestMapping(value = "/user/userView/{userIdx}", method = RequestMethod.GET)
-	public String userInfoUpdateView(@PathVariable("userIdx") Integer userIdx, Model model) throws Exception {
-		UserVO userInfo = userService.userInfo(userIdx);
-		List<RegionVO> regionList = regionService.regionList();
+	public String userInfoUpdateView(@PathVariable("userIdx") Integer userIdx, Model model,
+			RedirectAttributes attributes) throws Exception {
+		try {
+			UserVO userInfo = userService.userInfo(userIdx);
+			List<RegionVO> regionList = regionService.regionList();
+			
+			model.addAttribute("userInfo", userInfo);
+			model.addAttribute("regionList", regionList);
+			
+			return "user/information_modify";
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("code", 104);
+			attributes.addAttribute("message", "정보를 불러오는 중 에러가 발생했습니다.");
+			
+			return "redirect:/error/errorMessage";
+		}
 		
-		model.addAttribute("userInfo", userInfo);
-		model.addAttribute("regionList", regionList);
-		
-		return "user/information_modify";
 	}
 	
 	//마이페이지 정보 수정
 	@RequestMapping(value = "/user/{userIdx}", method = RequestMethod.PUT)
 	public String userInfoUpdate(@PathVariable("userIdx") Integer userIdx, RedirectAttributes attributes,
 			UserVO userVO, HttpSession session) throws Exception{
-		
-		UserVO loginUser = (UserVO)session.getAttribute("loginUser");
-		
-		if(userIdx == null || userIdx != loginUser.getUserIdx()) {
-			attributes.addAttribute("code", 104);
-			attributes.addAttribute("message", "잘못된 접근입니다.");
-		}else {
-			userVO.setUserIdx(userIdx);
-			UserVO updateUser = userService.userInfoUpdate(userVO);
+		try {
+			UserVO loginUser = (UserVO)session.getAttribute("loginUser");
 			
-			session.setAttribute("loginUser", updateUser);
-			attributes.addAttribute("message", "정보를 수정하셨습니다.");
+			if(userIdx == null || userIdx != loginUser.getUserIdx()) {
+				throw new Exception("104");
+			}else {
+				userVO.setUserIdx(userIdx);
+				UserVO updateUser = userService.userInfoUpdate(userVO);
+				
+				session.setAttribute("loginUser", updateUser);
+				attributes.addAttribute("message", "정보를 수정하셨습니다.");
+			}
+			return "redirect:/user/" + loginUser.getUserIdx();
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			if(e.getMessage().equals("104")) {
+				attributes.addAttribute("code", 104);
+				attributes.addAttribute("message", "잘못된 접근입니다.");
+			}else {
+				attributes.addAttribute("code", 105);
+				attributes.addAttribute("message", "정보 수정 중 에러가 발생했습니다.");
+			}
+			
+			return "redirect:/error/errorMessage";
 		}
+	}
+	
+	@RequestMapping(value = "/error/errorMessage")
+	public String errorPage(String message, Model model) throws Exception {
+		model.addAttribute("message", message);
 		
-		return "redirect:/user/" + loginUser.getUserIdx();
+		return "error/error";
 	}
 }
