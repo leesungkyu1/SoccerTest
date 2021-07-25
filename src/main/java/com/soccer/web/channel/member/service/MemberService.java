@@ -19,4 +19,6 @@ public interface MemberService {
 
 	MemberVO selectMemberDetail(MemberVO tmpVO) throws Exception;
 	
+	List<MemberVO> memberList (int channelIdx) throws Exception;
+	
 }

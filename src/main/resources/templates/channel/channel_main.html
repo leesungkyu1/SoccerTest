@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/channel_main.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_main.css">
     <title>축구 플랫폼</title>
 </head>
 <body>
@@ -14,8 +14,8 @@
         <div class="container">
            <header>
                <div class="row">
-                    <div class="lefrarrow"></div>
-                    <a href=""><div class="my">MY</div></a>
+                    <a href="/main"><div class="lefrarrow"></div></a>
+                    <a th:href="@{/user/}+${userIdx}"><div class="my">MY</div></a>
                </div>
            </header>
            <!-- 메인영상 -->
@@ -23,15 +23,17 @@
                 <div class="row">
                     <div class="subtitle_line">
                         <h1 class="subtitle">채널목록</h1>
-                        <a href="#">채널가입 / 관리<div class="right_arrow"></div></a>
+                        <a href="">채널가입 / 관리<div class="right_arrow"></div></a>
                     </div>
                 </div>
-                <div class="main_video">
-                </div>
+                <div class="main_video" th:onclick="goDetailView([[${channelPlayVO[0].channelIdx}]], [[${channelPlayVO[0].channelPlayIdx}]]);"></div>
                 <div class="main_video_name">
                     <div class="row">
-                        <h1>FC바르셀로나 VS 리버풀FC</h1>
-                        <span>2021.07.21</span> <span>관리자</span>
+                        <h1 th:text="${channelPlayVO[0].channelPlayTitle}" 
+                        th:onclick="goDetailView([[${channelPlayVO[0].channelIdx}]], [[${channelPlayVO[0].channelPlayIdx}]]);">
+                        FC바르셀로나 VS 리버풀FC</h1>
+                        <span th:text="${channelPlayVO[0].channelPlayDate}">2021.07.21</span> 
+                        <span th:text="${channelPlayVO[0].memberNick}">관리자</span>
                     </div>
                 </div>
             </div>
@@ -44,25 +46,11 @@
                     </div>
                 </div>
                 <div class="video_index slide">
-                    <div>
-                        <div class="video video1"></div>
-                        <h1>21년 5월 베스트 골 모음입니니다.</h1>
-                        <span>2021.06.12</span><span>관리자</span>
-                    </div>
-                    <div>
-                        <div class="video video1"></div>
-                        <h1>21년 5월입니다.</h1>
-                        <span>2021.06.12</span><span>관리자</span>
-                    </div>
-                    <div>
-                        <div class="video video1"></div>
-                        <h1>21년 5월 베스트 골 모음입니니다.</h1>
-                        <span>2021.06.12</span><span>관리자</span>
-                    </div>
-                    <div>
-                        <div class="video video1"></div>
-                        <h1>21년 5월 베스트 골 모음입니니다.</h1>
-                        <span>2021.06.12</span><span>관리자</span>
+                    <div th:each="i : ${channelPlayVO}">
+                        <div class="video video1" th:onclick="goDetailView([[${channelPlayVO.channelIdx}]], [[${channelPlayVO.channelPlayIdx}]]);"></div>
+                        <h1 th:text="${i.channelPlayTitle}" th:onclick="goDetailView([[${channelPlayVO.channelIdx}]], [[${channelPlayVO.channelPlayIdx}]]);">21년 5월 베스트 골 모음입니니다.</h1>
+                        <span>2021.06.12</span>
+                        <span>관리자</span>
                     </div>
                 </div>
             </div>
@@ -130,7 +118,10 @@
            </div>
         </div>
     </section>
-
-    <script src="js/slide.js"></script>
+	<script th:inline="javascript">
+		
+	</script>
+	<script src="/js/channel/channelList.js"></script>
+    <script src="/js/slide.js"></script>
 </body>
 </html>

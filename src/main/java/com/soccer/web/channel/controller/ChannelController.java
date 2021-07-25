@@ -206,15 +206,22 @@ public class ChannelController {
 	}
 	
 	//채널 상세
-	@RequestMapping(value = "channel/{channelIdx}", method = RequestMethod.GET)
-	public String channelInfo(@PathVariable Integer channelIdx, ChannelVO channelVO, Model model) throws Exception{
+	@RequestMapping(value = "/channel/{channelIdx}", method = RequestMethod.GET)
+	public String channelInfo(@PathVariable int channelIdx, ChannelPlayVO channelPlayVO, ChannelVO channelVO, Model model) throws Exception{
+		
+		
+		List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
 		channelVO.setChannelIdx(channelIdx);
 		
-		ChannelVO channelInfoVO = channelService.channelInfo(channelVO);
+		model.addAttribute("channelVO", channelVO);
+		model.addAttribute("channelPlayVO", channelPlayList);
+//		ChannelVO channelInfoVO = channelService.channelInfo(channelVO);
+//		
+//		model.addAttribute("channelInfo", channelInfoVO);
 		
-		model.addAttribute("channelInfo", channelInfoVO);
-		
-		return "channel_sign_up";
+		System.out.println(channelPlayList);
+		System.out.println(channelVO);
+		return "channel/channel_main";
 	}
 	
 	//결과 컬럼 설정

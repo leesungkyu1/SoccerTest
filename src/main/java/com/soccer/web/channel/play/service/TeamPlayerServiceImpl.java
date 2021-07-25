@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.soccer.web.channel.play.dao.TeamPlayerMapper;
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
+import com.soccer.web.channel.play.vo.TeamVO;
 
 @Service("teamPlayerService")
 public class TeamPlayerServiceImpl implements TeamPlayerService{
@@ -31,10 +32,10 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 		return teamPlayerMapper.selectPlayerResultList(channelPlayIdx);
 	}
 
-	@Override
-	public int insertTeamPlayer(HashMap<String, String> teamPlayParameterMap) throws Exception {
-		return teamPlayerMapper.insertTeamPlayer(teamPlayParameterMap);
-	}
+//	@Override
+//	public int insertTeamPlayer(HashMap<String, String> teamPlayParameterMap) throws Exception {
+//		return teamPlayerMapper.insertTeamPlayer(teamPlayParameterMap);
+//	}
 	
 	@Override
 	public void insertPlayresult(HashMap<String, Integer> playresultMap) throws Exception {
@@ -175,5 +176,30 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 	public PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception {
 		return teamPlayerMapper.selectPlayerresultVODetail(teamPlayerIdx);
 	}
+
+	//기존
+//	@Override
+//	public void insertTeamPlayer(TeamPlayerVO teamPlayerVO) {
+//		teamPlayerMapper.insertTeamPlayer(teamPlayerVO);
+//		
+//	}
+
+	@Override
+	public void insertTeam(TeamVO teamVO) {
+		teamPlayerMapper.insertTeam(teamVO);
+		
+	}
+
+	@Override
+	public void insertTeamPlayer(HashMap<Object, Object> map) {
+		// TODO Auto-generated method stub
+		for(int i = 0; i < (int) map.get("userIdxSize") ; i++) {
+			//teamPlayerMapper.insertTeamPlayers(map);
+			map.put("userIdx",  ((List<TeamPlayerVO>) map.get("selectPlayer")).get(i));
+			teamPlayerMapper.insertTeamPlayers(map);
+		}
+	}
+	
+	
 	
 }

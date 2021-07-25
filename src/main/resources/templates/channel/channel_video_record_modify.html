@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_video_player_record.css">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+                    <div class="lefrarrow"></div>
+                    <a href=""><div class="my">MY</div></a>
+               </div>
+           </header>
+
+            <!-- 선수별 기록 -->
+            <div id="player_record">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">선수별기록</h1>
+                        <a href="#" class="modal_open_btn">선수추가<div class="right_arrow"></div></a>
+                    </div>
+                </div>
+                <form th:action="@{/channel/play/goal/}+${channelPlayIdx}" method="post">
+                <div class="player_record_table">
+                    <div class="table slide">
+                        <ul>
+                            <li></li>
+                            <li>득점</li>
+                            <li>슈팅</li>
+                            <li>어시</li>
+                            <li>패스</li>
+                            <li>점유</li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        <ul>
+                            <li>홍길동</li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                            <li><input type="number" value="1" min='0'></li>
+                        </ul>
+                        
+                        
+                        
+                    </div>
+                    <div class="player_add">
+                        +
+                    </div>
+                </div>
+                
+	               
+	                
+	                <div class="row">
+	                    <button class="main_btn btn_yellow">수정완료</button>
+	                </div>
+                </form>
+            </div>
+
+            <!-- 입력창 -->
+            <div class="modal">
+                <input type="text" class="main_input" placeholder="선수이름을 입력해주세요">
+                <button class="main_btn btn_yellow">선수추가</button>
+            </div>
+            <div class="blur_shadow"></div>
+        
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="/js/modal.js"></script>
+    <script src="/js/slide.js"></script>
+</body>
+</html>

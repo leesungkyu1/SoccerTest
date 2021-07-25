@@ -33,4 +33,6 @@ public interface ChannelService {
 	ChannelVO selectChannel(ChannelVO channelVO) throws Exception;
 
 	List<Integer> joinChannelList(UserVO userVO) throws Exception;
+
+	List<ChannelVO> channelPlayList(String searchWord) throws Exception;
 }

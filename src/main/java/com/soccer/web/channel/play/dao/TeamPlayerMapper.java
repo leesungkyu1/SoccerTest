@@ -12,6 +12,7 @@ import com.soccer.web.channel.play.vo.TeamVO;
 @Mapper
 public interface TeamPlayerMapper {
 
+
 	// 경기의 선수 리스트를 가져오는 메서드
 	List<TeamPlayerVO> selectTeamPlayerList(int channelPlayIdx) throws Exception;
 	
@@ -57,5 +58,13 @@ public interface TeamPlayerMapper {
 
 	// 선수의 경기 결과를 수정하기 전 들고오는 메서드
 	PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception;
+
+	//선수 등록
+	void insertTeamPlayer(TeamPlayerVO teamPlayerVO);
+	
+	//팀 추가
+	void insertTeam(TeamVO teamVO);
+
+	void insertTeamPlayers(HashMap<Object, Object> map);
 	
 }

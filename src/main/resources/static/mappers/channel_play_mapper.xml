@@ -23,7 +23,6 @@
 		<result property="channelIdx" column="channel_idx"/>
 		<result property="teamName" column="team_name"/>
 		<result property="teamType" column="team_type"/>
-		
 		<result property="channelName" column="channel_name"/>
 		<result property="channelImage" column="channel_image"/>
 		<result property="regionName" column="region_name"/>
@@ -122,7 +121,7 @@
 		VALUES 
 				(
 					default,
-					3, <!-- 테스트용 Member Idx -->
+					21, <!-- 테스트용 Member Idx -->
 					#{channelIdx},
 					#{channelPlayTitle},
 					default,

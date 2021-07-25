@@ -51,4 +51,9 @@ public class MemberServiceImpl implements MemberService{
 		return memberDAO.selectMemberDetail(memberVO);
 	}
 
+	public List<MemberVO> memberList(int channelIdx) {
+		// TODO Auto-generated method stub
+		return memberDAO.memberList(channelIdx);
+	}
+
 }

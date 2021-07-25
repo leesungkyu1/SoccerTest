@@ -223,4 +223,7 @@ public class MemberController {
 		
 		return searchMemberList;
 	}
+	
+
+
 }

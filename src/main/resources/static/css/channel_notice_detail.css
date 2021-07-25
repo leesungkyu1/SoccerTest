@@ -1,0 +1,27 @@
+#notice_detail {
+    padding-top: 50px;
+    min-height: calc(100vh - 80px);
+}
+.notice_name {
+    border-bottom: 1px solid #303030;
+padding-bottom: 12px;
+}
+.notice_name h1{
+    font-size: 16px;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+}
+.notice_name span{
+    font-size: 12px;
+    letter-spacing: -0.3px;
+    color: #8C8C8C;
+    margin-right: 6px;
+}
+.notice_content {
+    padding: 20px 0;
+}
+.notice_content h1 {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 30px;
+}
