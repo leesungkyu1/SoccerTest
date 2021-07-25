@@ -18,14 +18,15 @@
 			member 
 		INNER JOIN
 			apply
-			ON member.user_idx = apply.user_idx
-		WHERE apply.channel_idx = #{channelIdx}
+			ON member.user_idx = apply.user_idx 
+				AND member.channel_idx = apply.channel_idx 
+		WHERE member.channel_idx = #{channelIdx}
 			AND apply.apply_step = 'ok'
 	</select>
 	
 	<delete id="memberDelete" parameterType="integer">
 		DELETE FROM member
-		WHERE member_idx = #{memberIdx}
+		WHERE user_idx = #{userIdx}
 			AND channel_idx = #{channelIdx}
 	</delete>
 	

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/reset.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/channel_formation_modify.css}">
+<title>축구 플랫폼</title>
+</head>
+<body>
+	<section id="full">
+		<div class="container">
+			<header>
+				<div class="row">
+					<a th:href="|@{/channel/play/formation/}${channelIdx}/${channelPlayIdx}|"><div class="lefrarrow"></div></a>
+					<!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --><!-- mypage url 연결 필요 -->
+				</div>
+			</header>
+
+			<!-- 포메이션 변경 -->
+			<div id="formation">
+				<div class="row">
+					<div class="subtitle_line">
+						<h1 class="subtitle">포메이션</h1>
+						<a href="javascript:formationModify.modifyView.modifyFormationView();">변경
+							<div class="right_arrow"></div>
+						</a>
+					</div>
+
+					<input class="main_input" id="formation_modify" th:value=${formation}>
+
+					<!-- <select class="formation_modify select" name="formation_modify" form="myForm">
+                        <option value="443">4 : 4 : 3</option>
+                        <option value="434">4 : 3 : 4</option>
+                        <option value="344">3 : 4 : 4</option>
+                    </select> -->
+                    <input type="hidden" id="channelIdx" th:value="${channelPlayVO.channelIdx}">
+                    <input type="hidden" id="channelPlayIdx" th:value="${channelPlayVO.channelPlayIdx}">
+                    <input type="hidden" id="teamType" th:value="${teamType}">
+
+					<div class="ground">
+						<div class="bg">
+							<div class="player">
+								<div class="lin1" th:object="${goalkeeperVO}">
+									<div>
+										<div class="player0" th:if="*{memberImage}==null"></div>
+										<div class="player0" th:unless="*{memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + *{memberImage} + ');'"></div>
+										<h1 th:text="*{teamPlayerName}"></h1>
+										<input id="teamPlayerFormationNumber" type="hidden" th:value="0"> <input id="teamPlayerIdx" type="hidden"
+											th:value="*{teamPlayerIdx}">
+									</div>
+								</div>
+								<div class="lin2">
+									<div th:each="defender, i : ${defenderVOList}">
+										<div class="player0" th:if="${defender.memberImage}==null"></div>
+										<div class="player0" th:unless="${defender.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${defender.memberImage} + ');'"></div>
+										<h1 th:text="${defender.teamPlayerName}"></h1>
+										<input id="teamPlayerFormationNumber" type="hidden" th:value="${i.index} + 1"> <input id="teamPlayerIdx" type="hidden"
+											th:value="${defender.teamPlayerIdx}">
+									</div>
+								</div>
+								<div class="lin3">
+									<div th:each="midfilder, i : ${midfilderVOList}">
+										<div class="player0" th:if="${midfilder.memberImage}==null"></div>
+										<div class="player0" th:unless="${midfilder.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${midfilder.memberImage} + ');'"></div>
+										<h1 th:text="${midfilder.teamPlayerName}"></h1>
+										<input id="teamPlayerFormationNumber" type="hidden" th:value="${i.index} + ${defenderVOList.size} + 1"> <input id="teamPlayerIdx"
+											type="hidden" th:value="${midfilder.teamPlayerIdx}">
+									</div>
+									
+								</div>
+								<div class="lin4">
+									<div th:each="forward, i : ${forwardVOList}">
+										<div class="player0" th:if="${forward.memberImage}==null"></div>
+										<div class="player0" th:unless="${forward.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${forward.memberImage} + ');'"></div>
+										<h1 th:text="${forward.teamPlayerName}"></h1>
+										<input id="teamPlayerFormationNumber" type="hidden" th:value="${i.index} + ${defenderVOList.size} + ${midfilderVOList.size} + 1"> <input
+											id="teamPlayerIdx" type="hidden" th:value="${forward.teamPlayerIdx}">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="main_btn btn_yellow">수정완료</div>
+				</div>
+			</div>
+
+			<div class="popup">
+				<div class="down-btn"></div>
+				<div class="popup_players">
+					<div th:each="teamPlayer : ${teamPlayerVOList}">
+						<div class="popup_player player1" th:if="${teamPlayer.memberImage}==null"></div>
+						<div class="popup_player player1" th:unless="${teamPlayer.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${teamPlayer.memberImage} + ');'"></div>
+						<div>
+							<input type="hidden" id="memberTeamPlayerIdx" th:value="${teamPlayer.teamPlayerIdx}">
+							<h1 th:text="${teamPlayer.teamPlayerName}"></h1>
+							<h2>미드필더(MF)</h2>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<form th:action="|@{/channel/play/formation/}${channelIdx}/${channelPlayIdx}/${teamType}|" id="updateForm" method="post">
+				<input type="hidden" name="formation" value="${formation}"/>
+				<input type="hidden" name="_method" value="put"/>
+			</form>
+			<div class="shadow"></div>
+			<div id="footer">
+				<div class="footer_line"></div>
+				<div class="row">
+					<h1>사업자등록증 :</h1>
+					<h1>대표이름 :</h1>
+					<h1>전화번호 :</h1>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- <script th:src="@{/js/popup.js}"></script> -->
+	<script type="text/javascript">
+	class playerObject {
+		constructor() {
+			teamPlayerIdx: 0;
+			teamPlayerFormationNumber: 0;
+			teamPlayerName: '';
+			memberImage: '';
+		}
+		get teamPlayerIdx() {
+			return this._teamPlayerIdx;
+		}
+		set teamPlayerIdx(teamPlayerIdx) {
+			this._teamPlayerIdx = teamPlayerIdx;
+		}
+		get teamPlayerFormationNumber() {
+			return this._teamPlayerFormationNumber;
+		}
+		set teamPlayerFormationNumber(teamPlayerFormationNumber) {
+			this._teamPlayerFormationNumber = teamPlayerFormationNumber;
+		}
+		get teamPlayerName() {
+			return this._teamPlayerName;
+		}
+		set teamPlayerName(teamPlayerName) {
+			if (teamPlayerName == undefined){
+				this._teamPlayerName = '';
+			} else {
+				this._teamPlayerName = teamPlayerName;
+			}
+		}
+		get memberImage() {
+			return this._memberImage;
+		}
+		set memberImage(memberImage) {
+			this._memberImage = memberImage;
+		}
+	}
+
+	const formationModify = {
+		modifyRequest: {
+			// 포메이션 변경 및 선수들의 포메이션 항목 변경 (여기 할 차례)
+			updateFormation: ()=>{
+				
+				const updateBtn = document.querySelector('.main_btn')
+				updateBtn.addEventListener('click', () => {
+					
+					console.log("javascript 진입");
+					const teamPlayerVOList = formationModify.modifyData.playerArr;
+					const formation = document.getElementById("formation_modify").value;
+					const channelIdx = (Number)(document.getElementById("channelIdx").value);
+					const channelPlayIdx = (Number)(document.getElementById("channelPlayIdx").value);
+					const teamType = document.getElementById("teamType").value;
+					
+					let formData = document.getElementById('updateForm');
+					
+					let input3El = document.createElement('input');
+					input3El.setAttribute('name', 'channelIdx');
+					input3El.setAttribute('type', 'hidden');
+					input3El.setAttribute('value', channelIdx);
+					formData.appendChild(input3El);
+					
+					let input4El = document.createElement('input');
+					input4El.setAttribute('name', 'channelPlayIdx');
+					input4El.setAttribute('type', 'hidden');
+					input4El.setAttribute('value', channelPlayIdx);
+					formData.appendChild(input4El);
+					
+					let input5El = document.createElement('input');
+					input5El.setAttribute('name', 'teamType');
+					input5El.setAttribute('type', 'hidden');
+					input5El.setAttribute('value', teamType);
+					formData.appendChild(input5El);
+
+					/* let input2El = document.createElement('input');
+					input2El.setAttribute('name', 'formation');
+					input2El.setAttribute('type', 'hidden');
+					input2El.setAttribute('value', formation);
+					formData.appendChild(input2El); */
+					
+					for (let i = 0; i < teamPlayerVOList.length; i++){
+						let inputEl1 = document.createElement('input');
+						inputEl1.setAttribute('name', 'teamPlayerVOList[' + i + '].teamPlayerIdx');
+						inputEl1.setAttribute('type', 'hidden');
+						inputEl1.setAttribute('value', teamPlayerVOList[i].teamPlayerIdx);
+						formData.appendChild(inputEl1);
+						
+						let inputEl2 = document.createElement('input');
+						inputEl2.setAttribute('name', 'teamPlayerVOList[' + i + '].teamPlayerFormationNumber');
+						inputEl2.setAttribute('type', 'hidden');
+						inputEl2.setAttribute('value', teamPlayerVOList[i].teamPlayerFormationNumber);
+						formData.appendChild(inputEl2);
+						
+					}
+					
+					formData.submit();
+				});
+				
+			},
+		},
+		modifyView: {
+			init: () => {
+				formationModify.modifyView.popupView();
+
+				formationModify.modifyView.modifyPersonView();
+				
+				// formationModify.modifyEvent.submitUpdateClick();
+				
+				formationModify.modifyRequest.updateFormation();
+			},
+			modifyFormationView: () => {
+				const formation = document.getElementById("formation_modify").value;
+				console.log(formation);
+				let goalkeeper = 1;
+				let defender = 0;
+				let midfilder = 0;
+				let forward = 0;
+
+				if (formation.length === 1) {
+					forward = (Number)(formation.charAt(0));
+				} else if (formation.length === 2) {
+					defender = (Number)(formation.charAt(0));
+					forward = (Number)(formation.charAt(1));
+				} else if (formation.length >= 3) {
+					defender = (Number)(formation.charAt(0));
+					midfilder = (Number)(formation.charAt(1));
+					for (let i = 3; i <= formation.length; i++) {
+						forward += (Number)(formation.charAt(i - 1));
+					}
+				}
+
+				const modifyFormationForm = document.getElementsByClassName("player")[0];
+
+				const lin1El = document.createElement("div");
+				const lin2El = document.createElement("div");
+				const lin3El = document.createElement("div");
+				const lin4El = document.createElement("div");
+				lin1El.setAttribute("class", "lin1");
+				lin2El.setAttribute("class", "lin2");
+				lin3El.setAttribute("class", "lin3");
+				lin4El.setAttribute("class", "lin4");
+				for (let i = 0; i < goalkeeper; i++) {
+					const divEl = document.createElement("div");
+					const player0El = document.createElement("div");
+					player0El.setAttribute("class", "player0");
+					const teamPlayerNameEl = document.createElement("h1");
+					const teamPlayerFormationNumberEl = document.createElement("input");
+					teamPlayerFormationNumberEl.setAttribute("id", "teamPlayerFormationNumber");
+					teamPlayerFormationNumberEl.setAttribute("type", "hidden");
+					teamPlayerFormationNumberEl.setAttribute("value", i);
+					const teamPlayerIdxEl = document.createElement("input");
+					teamPlayerIdxEl.setAttribute("type", "hidden");
+
+					divEl.appendChild(player0El);
+					divEl.appendChild(teamPlayerNameEl);
+					divEl.appendChild(teamPlayerFormationNumberEl);
+					divEl.appendChild(teamPlayerIdxEl);
+
+					lin1El.appendChild(divEl);
+					modifyFormationForm.innerHTML = "";
+					modifyFormationForm.appendChild(lin1El);
+				}
+
+				if (goalkeeper != goalkeeper + defender) {
+					for (let i = goalkeeper; i < goalkeeper + defender; i++) {
+						const divEl = document.createElement("div");
+						const player0El = document.createElement("div");
+						player0El.setAttribute("class", "player0");
+						const teamPlayerNameEl = document.createElement("h1");
+						const teamPlayerFormationNumberEl = document.createElement("input");
+						teamPlayerFormationNumberEl.setAttribute("id", "teamPlayerFormationNumber");
+						teamPlayerFormationNumberEl.setAttribute("value", i);
+						teamPlayerFormationNumberEl.setAttribute("type", "hidden");
+						const teamPlayerIdxEl = document.createElement("input");
+						teamPlayerIdxEl.setAttribute("type", "hidden");
+
+						divEl.appendChild(player0El);
+						divEl.appendChild(teamPlayerNameEl);
+						divEl.appendChild(teamPlayerFormationNumberEl);
+						divEl.appendChild(teamPlayerIdxEl);
+
+						lin2El.appendChild(divEl);
+						modifyFormationForm.appendChild(lin2El);
+					}
+				}
+				if (goalkeeper + defender != goalkeeper + defender + midfilder) {
+					for (let i = goalkeeper + defender; i < goalkeeper + defender + midfilder; i++) {
+						const divEl = document.createElement("div");
+						const player0El = document.createElement("div");
+						player0El.setAttribute("class", "player0");
+						const teamPlayerNameEl = document.createElement("h1");
+						const teamPlayerFormationNumberEl = document.createElement("input");
+						teamPlayerFormationNumberEl.setAttribute("id", "teamPlayerFormationNumber");
+						teamPlayerFormationNumberEl.setAttribute("value", i);
+						teamPlayerFormationNumberEl.setAttribute("type", "hidden");
+						const teamPlayerIdxEl = document.createElement("input");
+						teamPlayerIdxEl.setAttribute("type", "hidden");
+
+						divEl.appendChild(player0El);
+						divEl.appendChild(teamPlayerNameEl);
+						divEl.appendChild(teamPlayerFormationNumberEl);
+						divEl.appendChild(teamPlayerIdxEl);
+
+						lin3El.appendChild(divEl);
+						modifyFormationForm.appendChild(lin3El);
+					}
+				}
+				if (goalkeeper + defender + midfilder != goalkeeper + defender + midfilder + forward) {
+					for (let i = goalkeeper + defender + midfilder; i < goalkeeper + defender + midfilder + forward; i++) {
+						const divEl = document.createElement("div");
+						const player0El = document.createElement("div");
+						player0El.setAttribute("class", "player0");
+						const teamPlayerNameEl = document.createElement("h1");
+						const teamPlayerFormationNumberEl = document.createElement("input");
+						teamPlayerFormationNumberEl.setAttribute("id", "teamPlayerFormationNumber");
+						teamPlayerFormationNumberEl.setAttribute("value", i);
+						teamPlayerFormationNumberEl.setAttribute("type", "hidden");
+						const teamPlayerIdxEl = document.createElement("input");
+						teamPlayerIdxEl.setAttribute("type", "hidden");
+
+						divEl.appendChild(player0El);
+						divEl.appendChild(teamPlayerNameEl);
+						divEl.appendChild(teamPlayerFormationNumberEl);
+						divEl.appendChild(teamPlayerIdxEl);
+
+						lin4El.appendChild(divEl);
+						modifyFormationForm.appendChild(lin4El);
+					}
+				}
+				
+				formationModify.modifyData.playerArr.length = 0;
+				formationModify.modifyData.playerArr.length = goalkeeper + defender + midfilder + forward;
+				for (let i = 0; i < formationModify.modifyData.playerArr.length; i++){
+					const tmpClass = new playerObject();
+					formationModify.modifyData.playerArr[i] = tmpClass;
+				}
+				document.getElementById("formation_modify").value = formation;
+				document.getElementById("updateForm").children[0].value = formation;
+
+				formationModify.modifyView.init();
+			},
+
+			popupView: () => {
+				let shadow = document.querySelector('.shadow');
+
+				// 다운버튼 누르면 팝업 다운
+				let downBtn = document.querySelector('.down-btn');
+				downBtn.addEventListener('click', () => {
+					document.querySelector('.popup').classList.remove('popup_up');
+					shadow.classList.remove('shadow_show');
+				});
+
+				// 맴버 누르면 팝업 업
+				let player = Array.prototype.slice.call(document.querySelectorAll('.player > div > div > div'));
+				for (let i = 0; i < player.length; i++) {
+					const p = player[i];
+					p.addEventListener('click', () => {
+						playerClass = new playerObject();
+						playerClass.teamPlayerFormationNumber = (Number)(p.nextElementSibling.nextElementSibling.value);
+						console.log(playerClass);
+						document.querySelector('.popup').classList.add('popup_up');
+						//shadow.classList.toggle('shadow_show');
+						shadow.classList.add('shadow_show');
+					});
+				}
+
+			},
+
+			modifyPersonView: () => {
+				let shadow = document.querySelector('.shadow');
+				const popupPlayers = document.getElementsByClassName("popup_players")[0].children;
+
+				for (let i = 0; i < popupPlayers.length; i++) {
+					popupPlayers[i].addEventListener('click', () => {
+						// playerClass.memberImage = popupPlayers[i].firstChild. // 이미지
+						playerClass.teamPlayerIdx = (Number)(popupPlayers[i].lastElementChild.firstElementChild.value);
+						playerClass.teamPlayerName = popupPlayers[i].lastElementChild.firstElementChild.nextElementSibling.textContent;
+						console.log(playerClass);
+
+						const tmpClass = new playerObject();
+						let checkExistArrIndex = -1;
+						for (let j = 0; j < formationModify.modifyData.playerArr.length; j++) {
+							const tmpObject = formationModify.modifyData.playerArr[j];
+							if (tmpObject.teamPlayerIdx === playerClass.teamPlayerIdx) {
+								checkExistArrIndex = j;
+								tmpClass.teamPlayerIdx = formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber].teamPlayerIdx;
+								tmpClass.teamPlayerName = formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber].teamPlayerName;
+								tmpClass.teamPlayerFormationNumber = (Number)(j);
+								break;
+							}
+						}
+						console.log('tmpClass');
+						console.log(tmpClass);
+
+						if (checkExistArrIndex === -1) {
+							formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber] = playerClass;
+
+							//console.log(formationModify.modifyData.playerArr);
+
+							document.querySelector('.popup').classList.remove('popup_up');
+							//shadow.classList.toggle('shadow_show');
+							shadow.classList.remove('shadow_show');
+
+							const modifying = document.querySelectorAll('#teamPlayerFormationNumber')[playerClass.teamPlayerFormationNumber];
+							// modifying.previousElementSibling.previousElementSibling // 이미지 변경 부분
+
+							//console.log(modifying.previousElementSibling.innerText);
+							modifying.previousElementSibling.innerText = playerClass.teamPlayerName;
+							//console.log(playerClass.teamPlayerName);
+							//console.log(modifying.previousElementSibling.innerText);
+							modifying.nextElementSibling.value = playerClass.teamPlayerIdx;
+
+						} else {
+							formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber] = playerClass;
+							formationModify.modifyData.playerArr[tmpClass.teamPlayerFormationNumber] = tmpClass;
+
+							console.log(formationModify.modifyData.playerArr);
+
+							document.querySelector('.popup').classList.remove('popup_up');
+							//shadow.classList.toggle('shadow_show');
+							shadow.classList.remove('shadow_show');
+
+							const modifying1 = document.querySelectorAll('#teamPlayerFormationNumber')[playerClass.teamPlayerFormationNumber];
+							// modifying.previousElementSibling.previousElementSibling // 이미지 변경 부분
+
+							console.log(modifying1.previousElementSibling.innerText);
+							modifying1.previousElementSibling.innerText = playerClass.teamPlayerName;
+							console.log(playerClass.teamPlayerName);
+							console.log(modifying1.previousElementSibling.innerText);
+							modifying1.nextElementSibling.value = playerClass.teamPlayerIdx;
+
+							const modifying2 = document.querySelectorAll('#teamPlayerFormationNumber')[tmpClass.teamPlayerFormationNumber];
+							// modifying.previousElementSibling.previousElementSibling // 이미지 변경 부분
+
+							console.log(modifying2.previousElementSibling.innerText);
+							modifying2.previousElementSibling.innerText = tmpClass.teamPlayerName;
+							console.log(tmpClass.teamPlayerName);
+							console.log(modifying2.previousElementSibling.innerText);
+							modifying2.nextElementSibling.value = tmpClass.teamPlayerIdx;
+						}
+					});
+				}
+			},
+
+		},
+		modifyEvent: {
+			submitUpdateClick: () => {
+				
+				/* const updateBtn = document.querySelector('.main_btn')
+				updateBtn.addEventListener('click', formationModify.modifyRequest.updateFormation());
+				} */
+			}
+		},
+		modifyData: {
+			playerArr: [],
+
+		}
+	}
+
+
+	const formation = document.getElementById("formation_modify").value;
+	let goalkeeper = 1;
+	let defender = 0;
+	let midfilder = 0;
+	let forward = 0;
+
+	if (formation.length === 1) {
+		forward = (Number)(formation.charAt(0));
+	} else if (formation.length === 2) {
+		defender = (Number)(formation.charAt(0));
+		forward = (Number)(formation.charAt(1));
+	} else if (formation.length >= 3) {
+		defender = (Number)(formation.charAt(0));
+		midfilder = (Number)(formation.charAt(1));
+		for (let i = 3; i <= formation.length; i++) {
+			forward += (Number)(formation.charAt(i - 1));
+		}
+	}
+
+	for (let i = 0; i < goalkeeper; i++) {
+		const lin1El = document.querySelectorAll('.lin1 > div')[i];
+		playerClass = new playerObject();
+		// playerClass.memberImage = lin1El.children[i]. // 이미지
+		playerClass.teamPlayerName = lin1El.children[1].textContent;
+		playerClass.teamPlayerFormationNumber = (Number)(lin1El.children[2].value);
+		playerClass.teamPlayerIdx = (Number)(lin1El.children[3].value);
+		formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber] = playerClass;
+		console.log(playerClass);
+		console.log(formationModify.modifyData.playerArr);
+		console.log(playerClass.teamPlayerFormationNumber);
+	}
+
+	if (goalkeeper != goalkeeper + defender) {
+		for (let i = 0; i < defender; i++) {
+			const lin2El = document.querySelectorAll('.lin2 > div')[i];
+			playerClass = new playerObject();
+			// playerClass.memberImage = lin2El.children[i]. // 이미지
+			playerClass.teamPlayerName = lin2El.children[1].textContent;
+			playerClass.teamPlayerFormationNumber = (Number)(lin2El.children[2].value);
+			playerClass.teamPlayerIdx = (Number)(lin2El.children[3].value);
+			formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber] = playerClass;
+			console.log(playerClass);
+			console.log(formationModify.modifyData.playerArr);
+			console.log(playerClass.teamPlayerFormationNumber);
+		}
+	}
+
+	if (goalkeeper + defender != goalkeeper + defender + midfilder) {
+		for (let i = 0; i < midfilder; i++) {
+			const lin3El = document.querySelectorAll('.lin3 > div')[i];
+			playerClass = new playerObject();
+			// playerClass.memberImage = lin3El.children[i]. // 이미지
+			playerClass.teamPlayerName = lin3El.children[1].textContent;
+			playerClass.teamPlayerFormationNumber = (Number)(lin3El.children[2].value);
+			playerClass.teamPlayerIdx = (Number)(lin3El.children[3].value);
+			formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber] = playerClass;
+			console.log(playerClass);
+			console.log(formationModify.modifyData.playerArr);
+			console.log(playerClass.teamPlayerFormationNumber);
+		}
+	}
+
+	if (goalkeeper + defender + midfilder != goalkeeper + defender + midfilder + forward) {
+		for (let i = 0; i < forward; i++) {
+			const lin4El = document.querySelectorAll('.lin4 > div')[i];
+			playerClass = new playerObject();
+			// playerClass.memberImage = lin4El.children[i]. // 이미지
+			playerClass.teamPlayerName = lin4El.children[1].textContent;
+			playerClass.teamPlayerFormationNumber = (Number)(lin4El.children[2].value);
+			playerClass.teamPlayerIdx = (Number)(lin4El.children[3].value);
+			formationModify.modifyData.playerArr[playerClass.teamPlayerFormationNumber] = playerClass;
+			console.log(playerClass);
+			console.log(formationModify.modifyData.playerArr);
+			console.log(playerClass.teamPlayerFormationNumber);
+		}
+	}
+
+	formationModify.modifyView.init();
+			        
+    </script>
+</body>
+</html>

@@ -529,9 +529,15 @@ public class ChannelPlayController {
 		return "channel/channel_video_player_add2"; 
 	}
 	
-	@RequestMapping(value="/channel/play/record/modify")
-	public String columnModify() {
+	
+	//보여지는 컬럼 수정
+	@RequestMapping(value="/channel/play/team/{channelPlayIdx}/modify", method=RequestMethod.GET)
+	public String recordModify(@PathVariable int channelPlayIdx, Model model) throws Exception{
+		List<TeamPlayerVO> teamPlayerVOList = teamPlayerService.selectTeamPlayerList(channelPlayIdx); // player 리스트
+		List<PlayresultVO> playerResultVOList = teamPlayerService.selectPlayerResultVOList(channelPlayIdx); // player들의 playresult 리스트
 		
-		return "channel_video_record_modify";
-	}
+		System.out.println(playerResultVOList);
+		System.out.println(teamPlayerVOList);
+		return "channel/channel_video_record_modify";
+		}
 }

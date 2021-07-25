@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_notice_detail.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+                    <a th:href="|@{/main/notice}|"><div class="lefrarrow"></div></a>
+                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --><!-- mypage url 연결 필요 -->
+               </div>
+           </header>
+           <!-- 채널게시판 -->
+           <div id="notice_detail" th:object="${noticeVO}">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">공지게시판</h1>
+                        <!-- <div class="arrow2" th:if="${noticeVO.userIdx} == ${session.loginUser.userIdx}"> --> <!-- 권한 확인 -->
+                        <div class="arrow2">
+                            <a th:href="|@{/main/notice/write/}*{noticeIdx}|">글수정</a><span>|</span>
+                            <a href="javascript:deleteNotice();">글삭제<div class="right_arrow"></div></a>
+                        </div>
+                    </div>
+                    <div class="notice_name">
+                        <h1 th:if="*{noticeType}=='Y'" th:text="|[공지] *{noticeTitle}|"></h1>
+                        <h1 th:unless="*{noticeType}=='Y'" th:text="*{noticeTitle}"></h1>
+                        <span th:text="${#strings.substring(noticeVO.noticeDate,0,10)}"></span>
+                        <span>관리자</span>
+                    </div>
+                    <div class="notice_content">
+                        <h1 th:utext='${#strings.replace(noticeVO.noticeDesc, nlString, "&lt;br /&gt;")}'></h1>
+                    </div>
+                </div>
+            </div>
+
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+    
+    
+    <form id="deleteForm" name="deleteForm" th:action="|@{/main/notice/}${noticeVO.noticeIdx}|" method="post">
+    	<input name="noticeIdx" type="hidden" th:value="${noticeVO.noticeIdx}">
+    	<input name="_method" type="hidden" value="delete">
+    </form>
+
+    <script th:src="@{/js/slide.js}"></script>
+    <script type="text/javascript">
+    	function deleteNotice() {
+    		const deleteForm = document.getElementById('deleteForm');
+    		deleteForm.submit();
+    	}
+    </script>
+</body>
+</html>

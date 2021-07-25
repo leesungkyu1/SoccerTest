@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_writing.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full" th:object="${channelBoardVO}" th:if="${channelBoardVO.channelBoardTitle} == null">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <a th:href="|@{/channel/board/}${channelBoardVO.channelIdx}|"><div class="lefrarrow"></div></a>
+                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --> <!-- mypage url 연결 필요 -->
+                </div>
+            </header>
+            <!-- 마이페이지 -->
+            <div id="writing">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">글쓰기</h1>
+                    </div> 
+                    <form th:action="|@{/channel/board/}*{channelIdx}|" method="post">
+                        <div class="line">
+                            <h1>제목</h1>
+                            <input name="channelBoardTitle" type="text" class="main_input" placeholder="제목을 입력해 주세요" required>
+                        </div>
+                        <textarea name="channelBoardDesc" class="main_input textarea" placeholder="내용을 입력해주세요." required></textarea>
+                        <div class="line2">
+                            <!-- <div class="btns" th:if=""> --> <!-- 글을 쓰는 멤버가 채널장인 경우 출력하고 채널장이 아닌 경우 input태그 안에 hidden, Type = N으로 넣어야함 -->
+                            <div class="btns">
+                                <input type="radio" id="home" name="channelBoardType" value="N" checked><label class="main_btn" for="home">일반글</label>
+                                <input type="radio" id="away" name="channelBoardType" value="Y"><label class="main_btn" for="away">공지사항</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="memberIdx" value="21"><!-- session에 담긴 userIdx를 이용해서 memberIdx 도출 필요 -->
+                        <button type="submit" class="main_btn btn_yellow">작성완료</button>
+                    </form>
+                </div> 
+            </div>
+            
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+    <section id="full" th:object="${channelBoardVO}" th:unless="${channelBoardVO.channelBoardTitle} == null">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <a th:href="|@{/channel/board/}*{channelIdx}/*{channelBoardIdx}|"><div class="lefrarrow"></div></a>
+                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --> <!-- mypage url 연결 필요 -->
+                </div>
+            </header>
+            <!-- 마이페이지 -->
+            <div id="writing">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">글쓰기</h1>
+                    </div> 
+                    <form th:action="|@{/channel/board/}*{channelIdx}/*{channelBoardIdx}|" method="post">
+                        <div class="line">
+                            <h1>제목</h1>
+                            <input name="channelBoardTitle" type="text" class="main_input" placeholder="제목을 입력해 주세요" th:value="*{channelBoardTitle}" required>
+                        </div>
+                        <textarea name="channelBoardDesc" class="main_input textarea" placeholder="내용을 입력해주세요." th:utext='${#strings.replace(channelBoardVO.channelBoardDesc, nlString, nrString)}' required></textarea>
+                        <div class="line2"> <!-- 글을 쓰는 멤버가 채널장인 경우 출력하고 채널장이 아닌 경우 input태그 안에 hidden, Type = N으로 넣어야함 -->
+                            <div class="btns" th:if="${channelBoardVO.channelBoardType}=='N'">
+                                <input type="radio" id="home" name="channelBoardType" value="N" checked><label class="main_btn" for="home">일반글</label>
+                                <input type="radio" id="away" name="channelBoardType" value="Y"><label class="main_btn" for="away">공지사항</label>
+                            </div>
+                            <div class="btns" th:if="${channelBoardVO.channelBoardType}=='Y'">
+                                <input type="radio" id="home" name="channelBoardType" value="N"><label class="main_btn" for="home">일반글</label>
+                                <input type="radio" id="away" name="channelBoardType" value="Y" checked><label class="main_btn" for="away">공지사항</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="memberIdx" th:value="*{memberIdx}"> 
+                        <input type="hidden" name="channelIdx" th:value="*{channelIdx}">
+                        <input type="hidden" name="channelBoardIdx" th:value="*{channelBoardIdx}">
+                        <input type="hidden" name="_method" value="put">
+                        <button type="submit" class="main_btn btn_yellow">작성완료</button>
+                    </form>
+                </div> 
+            </div>
+            
+            
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+</body>
+</html>

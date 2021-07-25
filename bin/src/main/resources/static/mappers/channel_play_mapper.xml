@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.soccer.web.channel.play.vo.ChannelPlayVO">
 
+<mapper namespace="com.soccer.web.channel.play.dao.ChannelPlayMapper">
 	<!-- channelPlayVO resultMap -->
 	<resultMap type="com.soccer.web.channel.play.vo.ChannelPlayVO" id="channelPlayVO">
 		<result property="channelPlayIdx" column="channel_play_idx"/>
@@ -12,8 +12,11 @@
 		<result property="channelPlayImage" column="channel_play_image"/>
 		<result property="channelPlayVideo" column="channel_play_video"/>
 		<result property="channelPlayStep" column="channel_play_step"/>
-		<result property="channelPlayFormation" column="channel_play_formation"/>
+		<result property="channelPlayHomeFormation" column="channel_play_home_formation"/>
+		<result property="channelPlayAwayFormation" column="channel_play_away_formation"/>
 		<result property="memberNick" column="member_nick"/>
+		
+		<result property="channelName" column="channel_name"/>
 	</resultMap>
 	
 	<resultMap type="com.soccer.web.channel.play.vo.TeamVO" id="teamVO">
@@ -22,6 +25,10 @@
 		<result property="channelIdx" column="channel_idx"/>
 		<result property="teamName" column="team_name"/>
 		<result property="teamType" column="team_type"/>
+		
+		<result property="channelName" column="channel_name"/>
+		<result property="channelImage" column="channel_image"/>
+		<result property="regionName" column="region_name"/>
 	</resultMap>
 
 	<resultMap type="com.soccer.web.channel.play.vo.ChannelPlayGoalVO" id="channelPlayGoalVO">
@@ -66,11 +73,13 @@
 		FROM channel_play 
 		INNER JOIN member 
 			ON channel_play.member_idx = member.member_idx 
-		WHERE channel_idx = #{channelIdx}
+		WHERE 
+				channel_play.channel_idx = #{channelIdx}
+				AND channel_play.channel_play_step = "ok"
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY channel_play_idx DESC 
+		ORDER BY channel_play.channel_play_idx DESC 
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 	</select>
 	
@@ -79,11 +88,13 @@
 		FROM channel_play 
 		INNER JOIN member 
 			ON channel_play.member_idx = member.member_idx 
-		WHERE channel_idx = #{channelIdx} 
+		WHERE 
+			channel_play.channel_idx = #{channelIdx} 
+			AND channel_play.channel_play_step = "ok"
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY channel_play_idx DESC
+		ORDER BY channel_play.channel_play_idx DESC
 		LIMIT 10			
 	</select>
 	
@@ -97,12 +108,14 @@
 	</select>
 	
 	<!-- 영상 게시글의 세부사항을 출력하는 쿼리문 -->
-	<select id="selectChannelPlayDetail" parameterType="int" resultType="com.soccer.web.channel.play.vo.ChannelPlayVO">
+	<select id="selectChannelPlayDetail" parameterType="int" resultMap="channelPlayVO">
 		SELECT * 
 		FROM channel_play 
 		INNER JOIN member 
 			ON channel_play.member_idx = member.member_idx 
-		WHERE channel_play_idx = #{channelPlayIdx};
+		WHERE
+			channel_play.channel_play_idx = #{channelPlayIdx}
+			AND channel_play.channel_play_step = "ok"
 	</select>
 	
 	<!-- 영상 게시글을 추가하는 메서드(승인 전) -->
@@ -115,10 +128,23 @@
 					#{channelIdx},
 					#{channelPlayTitle},
 					default,
-					#{channelPlayImage},
+					default,
 					#{channelPlayVideo},
 					default,
-					default
+					<!-- 테스트를 위해 ok로 처리 -->
+					<!-- default, -->
+					<if test="channelPlayHomeFormation == null">
+						'0'
+					</if>
+					<if test="channelPlayHomeFormation != null">
+						#{channelPlayHomeFormation},
+					</if>
+					<if test="channelPlayAwayFormation == null">
+						'0'
+					</if>
+					<if test="channelPlayAwayFormation != null">
+						#{channelPlayAwayFormation}
+					</if>
 				)
 	</insert>
 	
@@ -136,19 +162,19 @@
 	
 	<!-- 영상 게시글을 삭제하는 메서드 -->
 	<delete id="deleteChannelPlay" parameterType="int">
-		DELETE * FROM channel_play 
+		DELETE FROM channel_play 
 		WHERE 
 			channel_play_idx = #{channelPlayIdx}
 	</delete>
 	
 	<insert id="insertGoal" parameterType="com.soccer.web.channel.play.vo.ChannelPlayGoalVO">
-		INSER INTO channel_play_goal
+		INSERT INTO channel_play_goal
 		VALUES(
 				default,
 				#{channelPlayIdx},
 				#{channelPlayGoalName},
 				#{channelPlayGoalType},
-				#{channelPlayGoalTiem}
+				#{channelPlayGoalTime}
 			   )
 	</insert>
 	
@@ -173,7 +199,36 @@
 	
 	<!-- channelPlayIdx에 연관된 팀을 불러오는 쿼리문 -->
 	<select id="selectTeamList" parameterType="int" resultMap="teamVO">
-		SELECT * FROM team 
+		SELECT 
+				team_idx, 
+				channel_play_idx,
+				channel_idx,
+				team_name,
+				team_type,
+				channel_name,
+				channel_image,
+				region_name
+		FROM (	SELECT 
+					team.team_idx, 
+					team.channel_play_idx,
+					team.channel_idx,
+					team.team_name,
+					team.team_type,
+					channel.channel_name,
+					channel.channel_image,
+					region.region_idx,
+					region.region_name
+				FROM team
+			  	RIGHT JOIN channel
+			  		ON team.channel_idx = channel.channel_idx
+			  	RIGHT JOIN region
+			  		ON channel.region_idx = region.region_idx) a
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</select>
+	
+	<!-- channelPlayIdx에 연관된 전체 팀을 불러오는 쿼리문 -->
+	<select id="selectNotLinkedTeamList" parameterType="int" resultMap="teamVO">
+		SELECT * FROM team
 		WHERE channel_play_idx = #{channelPlayIdx}
 	</select>
 	
@@ -203,16 +258,33 @@
 			channel_image,
 			team_name,
 			region_name
-		FROM (SELECT * FROM playresult
-			  INNER JOIN team
-			  	ON playresult.team_idx = team.team_idx
-			  RIGHT JOIN channel
-			  	ON team.channel_idx = channel.channel_idx
-			  RIGHT JOIN region
-			  	ON channel.region_idx = region.region_idx)  
-		WHERE channel_play_idx = #{channel_play_idx}
+		FROM (	SELECT 
+					playresult.playresult_totaltackle,
+					playresult.playresult_totalcross,
+					playresult.playresult_totalcornerkick,
+					playresult.playresult_totalfreekick,
+					playresult.playresult_totalshooting,
+					playresult.playresult_totalassist,
+					playresult.playresult_totalpass,
+					playresult.playresult_totalcontention,
+					playresult.channel_play_idx,
+					team.team_idx,
+					team.team_name,
+					channel.channel_idx,
+					channel.channel_name,
+					channel.channel_image,
+					region.region_idx,
+					region.region_name
+				FROM playresult
+				INNER JOIN team
+			  		ON playresult.team_idx = team.team_idx
+			  	RIGHT JOIN channel
+			  		ON team.channel_idx = channel.channel_idx
+			  	RIGHT JOIN region
+			  		ON channel.region_idx = region.region_idx) a
+		WHERE channel_play_idx = #{channelPlayIdx}
 			AND team_idx = (SELECT team_idx FROM team
-							WHERE channel_play_idx = #{channel_play_idx}
+							WHERE channel_play_idx = #{channelPlayIdx}
 							<if test='searchCode == "H"'>
 								AND team_type = 'H')
 							</if>
@@ -244,4 +316,30 @@
 				</if>
 				)
 	</insert>
+	
+	<select id="selectApplyingChannelPlayList" resultMap="channelPlayVO">
+		SELECT *
+		FROM channel_play 
+		INNER JOIN member 
+			ON channel_play.member_idx = member.member_idx 
+		INNER JOIN channel
+			ON channel_play.channel_idx = channel.channel_idx
+		WHERE channel_play.channel_play_step = "applying"
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		ORDER BY channel_play.channel_play_idx DESC 
+	</select>
+	
+	<update id="updateChannelPlayApplyOk" parameterType="int">
+		UPDATE channel_play
+		SET channel_play_step = "ok"
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</update>
+	
+	<delete id="deleteChannelPlayApply" parameterType="int">
+		DELETE FROM channel_play
+		WHERE channel_play_idx = #{channelPlayIdx}
+	</delete>
+	
 </mapper>

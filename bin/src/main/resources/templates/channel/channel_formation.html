@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/reset.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/channel_formation.css}">
+<title>축구 플랫폼</title>
+</head>
+<body>
+	<section id="full">
+		<div class="container">
+			<header>
+				<div class="row">
+					<a th:href="|@{/channel/play/}${channelIdx}/${channelPlayIdx}|"><div class="lefrarrow"></div></a>
+					<!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --><!-- mypage url 연결 필요 -->
+				</div>
+			</header>
+			<!-- 경기기록 -->
+			<div id="game_record2">
+				<div class="row">
+					<div class="subtitle_line">
+						<h1 class="subtitle">경기기록</h1>
+						<a th:href="|@{/channel/play/team/result/}${channelPlayIdx}|">팀성적
+							<div class="right_arrow"></div>
+						</a>
+					</div>
+				</div>
+				<!-- 지정된 팀이 없는 경우 -->
+				<div class="game_record2" th:if="${homeTeam}==null and ${awayTeam}==null">
+					<h1>지정된 팀이 없습니다. 새로 추가해 주시기 바랍니다.</h1>
+					<!-- 추가하는 버튼 필요..? -->
+				</div>
+				
+				<!-- 지정된 팀이 있는 경우 -->
+				<div class="game_record2" th:unless="${homeTeam}==null and ${awayTeam}==null">
+					<!-- homeTeam이 존재하지 않는 경우 -->
+					<div th:if="${homeTeam}==null">
+						<div class="game_record2_logo logo1">
+						
+						</div>
+					</div>
+					
+					<!-- homeTeam이 존재하는 경우 -->
+					<div th:unless="${homeTeam}==null">
+						<!-- homeTeam에 연결된 채널의 img가 존재하지 않는 경우 -->
+						<div class="game_record2_logo logo1" th:if="${homeTeam.channelImage}==null">
+							<div class="game_record2_name">
+								<h1 th:text="${homeTeam.teamName}">FC바로셀로나</h1>
+								<h2 th:text="${homeTeam.regionName}">대전 유성구</h2>
+							</div>
+						</div>
+						<!-- homeTeam에 연결된 채널의 img가 존재하는 경우 -->
+						<div class="game_record2_logo logo1" th:unless="${homeTeam.channelImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${homeTeam.channelImage} + ');'">
+							<div class="game_record2_name">
+								<h1 th:text="${homeTeam.teamName}">FC바로셀로나</h1>
+								<h2 th:text="${homeTeam.regionName}">대전 유성구</h2>
+							</div>
+						</div>
+					</div>
+					<input type="checkbox" id="switch1" name="switch1" class="input__on-off"> <label for="switch1" class="label__on-off"> <span
+						class="marble"></span> <span class="on"></span> <span class="off"></span>
+					</label>
+					
+					<!-- awayTeam이 존재하지 않는 경우 -->
+					<div th:if="${awayTeam}==null">
+						<div class="game_record2_logo logo1">
+						
+						</div>
+					</div>
+					
+					<!-- awayTeam이 존재하는 경우 -->
+					<div th:unless="${awayTeam}==null">
+						<!-- awayTeam에 연결된 채널의 img가 존재하지 않는 경우 -->
+						<div class="game_record2_logo logo1" th:if="${awayTeam.channelImage}==null">
+							<div class="game_record2_name">
+								<h1 th:text="${awayTeam.teamName}">리버풀FC</h1>
+								<h2 th:text="${awayTeam.regionName}">대전 유성구</h2>
+							</div>
+						</div>
+						<!-- awayTeam에 연결된 채널의 img가 존재하는 경우 -->
+						<div class="game_record2_logo logo1" th:unless="${awayTeam.channelImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${awayTeam.channelImage} + ');'">
+							<div class="game_record2_name">
+								<h1 th:text="${awayTeam.teamName}">FC바로셀로나</h1>
+								<h2 th:text="${awayTeam.regionName}">대전 유성구</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 포메이션 -->
+			<div id="formation">
+				<div class="row" id="home_team">
+					<!-- home 팀이 존재하지 않는 경우 -->
+					<div th:if="${homeTeam}==null">
+					</div>
+					<!-- home 팀이 존재하는 경우 -->
+					<div th:unless="${homeTeam}==null">
+						<div class="subtitle_line">
+							<h1 class="subtitle">포메이션</h1>
+							<a th:href="|@{/channel/play/formation/}${channelIdx}/${channelPlayIdx}/H|">변경
+								<div class="right_arrow"></div>
+							</a>
+						</div>
+						<div class="ground">
+							<div class="bg">
+								<div class="player">
+									<div class="lin1" th:object="${homeGoalkeeperVO}">
+										<div>
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="*{memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="*{memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + *{memberImage} + ');'"></div>
+											<h1 th:text="*{teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+									<div class="lin2">
+										<div th:each="defender : ${homeDefenderVOList}">
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="${defender.memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="${defender.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${defender.memberImage} + ');'"></div>
+											<h1 th:text="${defender.teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+									<div class="lin3">
+										<div th:each="midfilder : ${homeMidfilderVOList}">
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="${midfilder.memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="${midfilder.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${midfilder.memberImage} + ');'"></div>
+											<h1 th:text="${midfilder.teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+									<div class="lin4">
+										<div th:each="forward : ${homeForwardVOList}">
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="${forward.memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="${forward.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${forward.memberImage} + ');'"></div>
+											<h1 th:text="${forward.teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" id="away_team" style="display:none;">
+					<!-- away 팀이 존재하지 않는 경우 -->
+					<div th:if="${awayTeam}==null">
+					</div>
+					<!-- away 팀이 존재하는 경우 -->
+					<div th:unless="${awayTeam}==null">
+						<div class="subtitle_line">
+							<h1 class="subtitle">포메이션</h1>
+							<a th:href="|@{/channel/play/formation/}${channelIdx}/${channelPlayIdx}/A|">변경
+								<div class="right_arrow"></div>
+							</a>
+						</div>
+						<div class="ground">
+							<div class="bg">
+								<div class="player">
+									<div class="lin1" th:object="${awayGoalkeeperVO}">
+										<div>
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="*{memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="*{memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + *{memberImage} + ');'"></div>
+											<h1 th:text="*{teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+									<div class="lin2">
+										<div th:each="defender : ${awayDefenderVOList}">
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="${defender.memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="${defender.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${defender.memberImage} + ');'"></div>
+											<h1 th:text="${defender.teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+									<div class="lin3">
+										<div th:each="midfilder : ${awayMidfilderVOList}">
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="${midfilder.memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="${midfilder.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${midfilder.memberImage} + ');'"></div>
+											<h1 th:text="${midfilder.teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+									<div class="lin4">
+										<div th:each="forward : ${awayForwardVOList}">
+											<!-- 선수가 member와 연결되어 있지 않는 경우 -->
+											<div class="player1 player_selected" th:if="${forward.memberImage}==null"></div>
+											<!-- 선수가 member와 연결되어 있는 경우 -->
+											<div class="player1 player_selected" th:unless="${forward.memberImage}==null" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${forward.memberImage} + ');'"></div>
+											<h1 th:text="${forward.teamPlayerName}">홍길동</h1>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="footer">
+				<div class="footer_line"></div>
+				<div class="row">
+					<h1>사업자등록증 :</h1>
+					<h1>대표이름 :</h1>
+					<h1>전화번호 :</h1>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script type="text/javascript">
+	 	let teamType = 'H';
+	
+		const formation = {
+				formationView: {
+					init: () => {
+						formation.formationEvent.switchTeam();
+					}
+				},
+				formationEvent: {
+					switchTeam: () => {
+						document.getElementsByClassName("label__on-off")[0].addEventListener('click', e => {
+						    if (teamType == 'H'){
+						        teamType = 'A';
+						        document.getElementById('home_team').style.display = 'none';
+						        document.getElementById('away_team').style.display = 'block';
+						    } else {
+						        teamType = 'H';
+						        document.getElementById('home_team').style.display = 'block';
+						        document.getElementById('away_team').style.display = 'none';
+						    }
+						});
+					}
+				},
+		}
+		
+		formation.formationView.init();
+	</script>
+</body>
+</html>

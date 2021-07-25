@@ -46,9 +46,9 @@
                     </div>
                 </div>
                 <div class="video_index slide">
-                    <div th:each="i : ${channelPlayVO}">
-                        <div class="video video1" th:onclick="goDetailView([[${channelPlayVO.channelIdx}]], [[${channelPlayVO.channelPlayIdx}]]);"></div>
-                        <h1 th:text="${i.channelPlayTitle}" th:onclick="goDetailView([[${channelPlayVO.channelIdx}]], [[${channelPlayVO.channelPlayIdx}]]);">21년 5월 베스트 골 모음입니니다.</h1>
+                    <div th:each="channel: ${channelPlayVO}">
+                        <div class="video video1" th:onclick="goDetailView([[${channel.channelIdx}]], [[${channel.channelPlayIdx}]]);"></div>
+                        <h1 th:text="${channel.channelPlayTitle}" th:onclick="goDetailView([[${channel.channelIdx}]], [[${channel.channelPlayIdx}]]);">21년 5월 베스트 골 모음입니니다.</h1>
                         <span>2021.06.12</span>
                         <span>관리자</span>
                     </div>

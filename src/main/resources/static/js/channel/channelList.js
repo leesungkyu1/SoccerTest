@@ -16,6 +16,11 @@ function playResultMove(channelPlayIdx){
 	location.href='/channel/play/goal/'+channelPlayIdx;
 }
 
+function goChannelMain(channelIdx){
+	console.log(channelIdx);
+	location.href='/channel/'+channelIdx;
+}
+
 // 검색이벤트
 let ajaxSearch = document.querySelector('.ajaxSearch');
   

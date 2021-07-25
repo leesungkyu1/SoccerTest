@@ -1,0 +1,130 @@
+.container {
+    overflow-x: hidden;
+    position: relative;
+    height: 100%;
+}
+#player_index {
+    padding-top: 50px;
+}
+.players {
+    position: absolute;
+    left: 50%;
+    width: 150vw;
+    max-width: 700px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    transform: translateX(-50%);
+}
+.players > :first-child, .players > :last-child {
+    opacity: 0.3;
+}
+.players > div {
+    width: 32%;
+}
+.player {
+    border-radius: 100px;
+    background-size: cover;
+}
+.player::after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+}
+
+.players h1 {
+    padding-top: 10px;
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+}
+
+/* 경기기록 */
+#game_record {
+   padding-top: 270px;
+}
+.record_table{
+    display: flex;
+    flex-wrap: wrap
+}
+.record_table ul {
+    min-width: 50%;
+    display: flex;
+
+}
+.record_table ul li {
+    color: #fff;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    
+}
+.record_table ul li:first-child {
+    background-color: #303030;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+}
+
+.chart {
+    margin: 32px 32px;
+}
+
+
+/* 팝업 */
+.popup {
+    position: fixed;
+    bottom: -75vh;
+    width: 100%;
+    max-width: 480px;
+    max-height: 75vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #303030;
+    border-radius: 20px 20px 0 0;
+    z-index: 99;
+    transition: all 0.3s;
+}
+.popup_up {
+    bottom: 0;
+}
+.down-btn {
+    margin-top: 10px;
+    width: 33px;
+    height: 24px;
+   
+    background: url(../img/bottomarrow2.svg);
+    background-size: cover;
+}
+.popup_players {
+    width: calc(100% - 32px);
+    display: flex;
+    padding: 0 16px;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+.popup_players > div {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.popup_players > div > div:nth-child(2){
+    margin-left: 10px;
+}
+.popup_player {
+    width: 70px;
+    border-radius: 50px;
+    background-size: cover;
+}
+.popup_player::after {
+    display: block;
+    content: '';
+    padding-bottom: 100%;
+    width: 100%;
+}

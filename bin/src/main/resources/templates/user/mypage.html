@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <div class="lefrarrow"></div>
+                    <div class="my">MY</div>
+                </div>
+            </header>
+            <!-- 마이페이지 -->
+            <div id="mypage">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">마이페이지</h1>
+                        <a th:href="@{/user/userView/} + ${userInfo.userIdx}">개인정보수정<div class="right_arrow"></div></a>
+                    </div> 
+                    <div class="mypage">
+                        <div class="content">
+                            <div class="line">
+                                <h1>이름</h1>
+                                <h1 th:text="${userInfo.userName}"></h1>
+                            </div>
+                            <div class="line">
+                                <h1>휴대폰</h1>
+                                <h1 th:text="${userInfo.userMobile}"></h1>
+                            </div>
+                            <div class="line">
+                                <h1>활동지역</h1>
+                                <h1 th:text="${userInfo.regionName}"></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="channel_join">
+                    <h2>채널참여목록</h2>
+                    <div class="channel_index_logo slide">
+                       	<div th:if="${not #lists.isEmpty(joinChannelList)}" th:each="channel : ${joinChannelList}">
+	                        <div class="logo" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${channel.channelImage} + ');'">
+	                        </div>
+                        	<h1 th:text="${channel.channelName}"></h1>
+                    	</div>
+                    	<div th:unless="${not #lists.isEmpty(joinChannelList)}">
+                    		<h1>가입한 채널이 없습니다.</h1>
+                    	</div>
+                    </div>
+                    <div class="row">
+                        <button class="main_btn btn_yellow">채널생성</button>
+                    </div>
+                </div>
+                    
+            </div>
+            
+            
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:src="@{/js/slide.js}"></script>
+    <script>
+    	const myPage = {
+            myPageView: {
+                init: () => {
+                    //뒤로가기 버튼 이벤트
+    				const leftArrow = document.getElementsByClassName('lefrarrow')[0];
+    				leftArrow.addEventListener('click', () => myPage.myPageEvent.movePage('/main'));
+                },
+            },
+
+    		myPageEvent: {
+                movePage : (loc) => {
+                    location.href=loc;
+                },
+    		},
+    	};
+		
+        myPage.myPageView.init();
+    </script>
+</body>
+</html>

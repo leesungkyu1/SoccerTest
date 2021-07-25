@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_video_player_add2.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <div class="lefrarrow"></div>
+                    <a href=""><div class="my">MY</div></a>
+                </div>
+            </header>
+            
+            <!-- 포메이션 변경 -->
+            <div id="player_add">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">선수추가</h1>
+                    </div> 
+                    
+                   		<div class="line">
+	                        <h1>팀 이름</h1>
+	                        <div class="btns">
+	                            <input type="text" id="teamName" class="teamNameInput" placeholder="팀 이름을 입력해주세요" required="required">
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="line">
+	                        <h1>팀 선택</h1>
+	                        <div class="btns">
+	                            <input type="radio" id="home" name="team" value="H" checked><label class="main_btn" for="home">HOME</label>
+	                            <input type="radio" id="away" name="team" value="A"><label class="main_btn" for="away">AWAY</label>
+	                        </div>
+	                    </div>
+	                    <div class="line">
+	                        <h1>채널 여부</h1>
+	                        <div class="btns">
+	                            <input type="radio" id="ok" name="channel" checked><label class="main_btn" for="ok">채널있음</label>
+	                            <input type="radio" id="no" name="channel"><label class="main_btn" for="no">채널없음</label>
+	                        </div>
+	                    </div>
+	                    <div class="line" id=channelSearch>                    	                    
+	                        <h1>채널 검색</h1>
+<!-- 	                        <input class="select main_select" style="background: #303030"/>  -->
+<!-- 	                        <input type="text" class="main_input" placeholder="팀 이름을 입력해주세요"> -->
+							 <div class="search_input" style="width: 95%;">
+	                        	 <input type="text" name="searchWord" id="searchWord" style="width:inherit;">
+	                    	     <div class="search ajaxSearch" id="serach_btn"></div>
+	                	     </div>
+	                    </div>
+	                    
+
+	                    <div class="main_btn btn_yellow pop_up_btn" id="selectButton">
+	                        선수선택
+	                    </div>
+	                    
+
+                   
+                </div> 
+            </div>
+            
+            <div class="popupChannel">
+                <div class="down-btn-channel"></div>
+                <div class="popup_players">
+                    <div class="players" id="listDiv"></div>
+                </div>
+                <button class="main_btn btn_yellow" onclick="insertChannel()">채널  추가</button>
+                
+            </div>
+            
+            <div class="popup">
+                <div class="down-btn"></div>
+                <div class="popup_players" id="playersId">
+                    <button class="main_btn btn_yellow pop_up_btn modal_open_btn" >+선수추가</button>
+                    <div class="player_none">
+                        <h1>선수 추가 버튼을 눌러서<br>
+                            선수를 추가해주세요</h1>
+                    </div>
+                    
+                    <!--<div class="players" id="playersId"></div>-->            
+                    
+                    <!--<div class="players">
+                        <input type="checkbox" id="player1">
+                        <label for="player1">
+                            <div class="popup_checked"></div>
+                            <div class="popup_player player1"></div>
+                            <div class="player_name">
+                                <h1>홍길동</h1>
+                                <h2>미드필더(MF)</h2>
+                            </div>
+                        </label>
+                    </div>-->
+                    
+                    
+<!--                	<button class="main_btn btn_yellow" id="existPlayer" onclick="insertPlayer()">선택한 선수 추가</button>-->
+            	</div>
+            </div>
+            
+            <div class="shadow"></div>
+
+            <!-- 입력창 -->
+            <div class="modal">
+                <input type="text" class="main_input" placeholder="선수이름을 입력해주세요">
+                <button class="main_btn btn_yellow">선수추가</button>
+            </div>
+            <div class="blur_shadow"></div>
+
+
+
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+    
+    
+    <script>
+    
+    	
+  	var channelPlayIdx = [[${channelPlayIdx}]];
+  	var channelIdx = [[${channelIdx}]]; 
+        if(document.querySelectorAll('.players').length === 0){ //선수가 하나도 없으면 추가해달라는 메시지출력
+            document.querySelector('.player_none').style.display='flex';
+        }
+    </script>
+
+    <script src="/js/modal.js"></script>
+    <script src="/js/select.js"></script>
+    <script src="/js/popup.js"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/channel/channelList.js"></script>
+</body>
+</html>

@@ -9,6 +9,9 @@
 		<result property="channelImage" column="channel_image" />
 		<result property="regionIdx" column="region_idx" />
 		<result property="channelMax" column="channel_max" />
+		
+		<result property="regionName" column="region_name" />
+		<result property="channelMemberCount" column="channel_memberCount" />
 	</resultMap>
 	
 	<resultMap id="col" type="com.soccer.web.channel.play.vo.ViewResultColumnVO">
@@ -24,17 +27,48 @@
 		<result property="viewResultColumnContention" column="viewresultcolumn_contention" />
 	</resultMap>
 	
-	<select id="channelList" resultMap="channel">
-		SELECT * FROM channel
-		<if test='searchWord != null or searchWord != ""'>
-			<where>
-				channel_name LIKE CONCAT('%', #{searchWord}, '%')
-			</where>
-		</if>
+	<select id="channelList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channel">
+		SELECT
+			channel.channel_idx,
+			channel.user_idx,
+			channel.channel_name,
+			channel.channel_image,
+			channel.region_idx,
+			channel.channel_max,
+			region.region_name,
+			IFNULL(memberCount.channel_memberCount, 0) AS channel_memberCount
+		FROM channel
+		INNER JOIN region
+			ON channel.region_idx = region.region_idx
+		LEFT OUTER JOIN (SELECT 
+							 member.channel_idx, 
+							 COUNT(*) AS channel_memberCount 
+						 FROM member
+						 INNER JOIN apply
+						 	ON member.user_idx = apply.user_idx
+								AND member.channel_idx = apply.channel_idx
+						 WHERE apply.apply_step = 'ok'
+					     GROUP BY member.channel_idx
+						 ) AS memberCount
+			ON memberCount.channel_idx = channel.channel_idx
+			<if test='searchWord != null and searchWord != ""'>
+				<where>
+					channel.channel_name LIKE CONCAT('%', #{searchWord}, '%')
+				</where>
+			</if>
 		ORDER BY channel_idx DESC
+		limit #{startIndex}, #{pageSize}
 	</select>
 	
-	<select id="channelMemeberMax" resultType="integer">
+	<select id="selectChannelListTotCnt" parameterType="com.soccer.web.channel.vo.ChannelVO" resultType="int">
+		SELECT COUNT(*) totcnt 
+		FROM channel
+		<if test='searchWord != null and searchWord != ""'>
+			WHERE channel_name LIKE CONCAT('%', #{searchWord}, '%')
+		</if>
+	</select>
+	
+	<select id="channelMemberMax" parameterType="integer" resultType="integer">
 		SELECT channel_max FROM channel
 		WHERE channel_idx = #{channelIdx}
 	</select>
@@ -50,7 +84,7 @@
 				#{channelName},
 				#{channelImage},
 				#{regionIdx},
-				#{channelMax},
+				#{channelMax}
 				)
 	</insert>
 	
@@ -90,7 +124,7 @@
 	</select>
 	
 	<update id="viewResultColumnUpdate" parameterType="com.soccer.web.channel.play.vo.ViewResultColumnVO">
-		UPDATE viewResultColumnUpdate
+		UPDATE viewresultcolumn
 			SET viewresultcolumn_tackle = #{viewResultColumnTackle},
 				viewresultcolumn_cross = #{viewResultColumnCross},		
 				viewresultcolumn_cornerKick = #{viewResultColumnCornerKick},
@@ -111,4 +145,75 @@
 					WHERE channel_play_idx = #{channelPlayidx}
 				)
 	</select>
+	
+	<select id="selectChannel" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channel">
+		SELECT
+			channel.channel_idx,
+			channel.user_idx,
+			channel.channel_name,
+			channel.channel_image,
+			channel.region_idx,
+			channel.channel_max,
+			region.region_name,
+			IFNULL(memberCount.channel_memberCount, 0) AS channel_memberCount
+		FROM channel
+		INNER JOIN region
+			ON channel.region_idx = region.region_idx
+		LEFT OUTER JOIN (SELECT 
+							 member.channel_idx, 
+							 COUNT(*) AS channel_memberCount 
+						 FROM member
+						 INNER JOIN apply
+						 	ON member.user_idx = apply.user_idx
+								AND member.channel_idx = apply.channel_idx
+						 WHERE apply.apply_step = 'ok'
+					     GROUP BY member.channel_idx
+						 ) AS memberCount
+			ON memberCount.channel_idx = channel.channel_idx
+		WHERE channel.channel_idx = #{channelIdx}
+		ORDER BY channel_idx DESC
+		limit #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="joinChannelList" parameterType="com.soccer.web.user.vo.UserVO" resultType="integer">
+		SELECT channel_idx FROM member
+		WHERE user_idx = #{userIdx}
+	</select>
+	
+   <select id="channelPlayList" parameterType="string" resultMap="channel">
+      <!-- SELECT 
+         *
+      FROM channel
+      WHERE 1=1
+      AND channel_name LIKE CONCAT('%',#{searchWord},'%')  -->
+      SELECT
+			channel.channel_idx,
+			channel.user_idx,
+			channel.channel_name,
+			channel.channel_image,
+			channel.region_idx,
+			channel.channel_max,
+			region.region_name,
+			IFNULL(memberCount.channel_memberCount, 0) AS channel_memberCount
+		FROM channel
+		INNER JOIN region
+			ON channel.region_idx = region.region_idx
+		LEFT OUTER JOIN (SELECT 
+							 member.channel_idx, 
+							 COUNT(*) AS channel_memberCount 
+						 FROM member
+						 INNER JOIN apply
+						 	ON member.user_idx = apply.user_idx
+								AND member.channel_idx = apply.channel_idx
+						 WHERE apply.apply_step = 'ok'
+					     GROUP BY member.channel_idx
+						 ) AS memberCount
+			ON memberCount.channel_idx = channel.channel_idx
+			<if test='searchWord != null and searchWord != ""'>
+				<where>
+					channel.channel_name LIKE CONCAT('%', #{searchWord}, '%')
+				</where>
+			</if>
+		ORDER BY channel_idx DESC
+   </select>   
 </mapper>

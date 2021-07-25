@@ -11,6 +11,7 @@
 		<result property="channelBoardDesc" column="channel_board_desc" />
 		<result property="channelBoardDate" column="channel_board_date" />
 		<result property="memberNick" column="member_nick" />
+		<result property="userIdx" column="user_idx" />
 	</resultMap>
 	
 	<!-- 채널 일반 게시글의 리스트 -->
@@ -23,15 +24,22 @@
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY 
-				channel_board.channel_board_type DESC, 
-				channel_board.channel_board_idx DESC
-		<if test="recordCountPerPage != null">
-			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}		
-		</if>
-		<if test="recordCountPerPage == null">
-			LIMIT 10
-		</if>
+		ORDER BY channel_board.channel_board_idx DESC 
+		limit #{startIndex}, #{pageSize}
+	</select>
+	
+	<select id="selectImportantChannelBoardList" parameterType="com.soccer.web.channel.board.vo.ChannelBoardVO" resultMap="channelBoardVO">
+		SELECT * 
+		FROM channel_board 
+		INNER JOIN member 
+			ON channel_board.member_idx = member.member_idx 
+		<!-- <if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if> -->
+		WHERE channel_board.channel_idx = #{channelIdx} 
+			AND channel_board.channel_board_type = "Y"
+		ORDER BY channel_board.channel_board_idx DESC 
+		limit 3
 	</select>
 	
 	<select id="selectChannelMainBoardList" parameterType="com.soccer.web.channel.vo.ChannelVO" resultMap="channelBoardVO">
@@ -39,11 +47,11 @@
 		FROM channel_board 
 		INNER JOIN member 
 			ON channel_board.member_idx = member.member_idx 
-		WHERE channel_idx = #{channelIdx} 
+		WHERE channel_board.channel_idx = #{channelIdx} 
 		<!-- <if test="searchKeyword != null and searchKeyword != ''">
 			WHERE ${searchCondition} LIKE CONCAT('%', #{searchKeyword}, '%')
 		</if> -->
-		ORDER BY channel_board_idx DESC
+		ORDER BY channel_board.channel_board_idx DESC
 		LIMIT 10		
 	</select>
 	
@@ -90,7 +98,7 @@
 				channel_board_type = #{channelBoardType},
 				channel_board_desc = #{channelBoardDesc},
 				channel_board_date = default 
-				WHERE channel_board_idx=#{channelBoardIdx}
+			WHERE channel_board_idx=#{channelBoardIdx}
 		]]>
 	</update>
 	

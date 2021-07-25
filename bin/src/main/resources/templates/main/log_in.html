@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/log_in.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+            <header>
+                <div class="row">
+                    <div class="lefrarrow"></div>
+                </div>
+            </header>
+            <div id="log_in">
+                <div class="row">
+                    <div class="header_center">로그인</div>
+                    <form action="/user/login" method="post">
+                        <div class="log_in_input">
+                            <input type="text" class="main_input" name="userId" placeholder="아이디를 입력해주세요." required>
+                            <input type="password" class="main_input" name="userPassword" placeholder="비밀번호를 입력해주세요." required>
+                            <span th:if="${message == null}"></span>
+                            <span th:unless="${message == null}" th:text="${message}"></span>
+                            <button type="submit" class="main_btn btn_yellow">로그인</button>
+                            <h4><a href="#">아이디 / 비밀번호 찾기</a></h4>
+                        </div>
+                    </form>
+                    <div class="or">
+                        <div></div>
+                        <h3>또는</h3>
+                        <div></div>
+                    </div>
+                    <div class="log_in_btn">
+                        <button class="main_btn naver">네이버로 로그인</button>
+                        <button class="main_btn goggle">구글로 로그인</button>      
+                        <h4>계정이 없으신가요? <a href="/user/view">가입하기</a></h4>
+                    </div>
+                </div>
+            </div>
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:src="@{/js/select.js}"></script>
+    <script>
+    	const login = {
+            // 이벤트 핸들러 등록
+            loginView: {
+                init: () => {
+                    //뒤로가기 버튼 이벤트
+    				const leftArrow = document.getElementsByClassName('lefrarrow')[0];
+    				leftArrow.addEventListener('click', () => login.loginEvent.movePage('/'));
+                },
+            },
+
+            // 이벤트 정의
+    		loginEvent: {
+                movePage : (loc) => {
+                    location.href=loc;
+                },
+    		},
+    	};
+		
+        login.loginView.init();
+    </script>
+</body>
+</html>

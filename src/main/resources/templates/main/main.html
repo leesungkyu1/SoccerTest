@@ -39,10 +39,10 @@
                     </div>
                 </div>
                 <div class="channel_index_logo slide">
-                    <div th:each="channel : ${channelList}">
+                    <div th:each="channel: ${channelList}">
                         <div class="logo" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${channel.channelImage} + ');'">
                         </div>
-                        <h1 th:text="${channel.channelName}"></h1>
+                        <h1 th:text="${channel.channelName}" th:onclick = "goChannelMain([[${channel.channelIdx}]]);" ></h1>
                     </div>
                 </div>
            </div>
@@ -100,6 +100,8 @@
         </div>
     </section>
 
+
+    <script src="/js/channel/channelList.js"></script>
     <script th:src="@{/js/slide.js}"></script>
     <script th:src="@{/js/search.js}"></script>
     <script>

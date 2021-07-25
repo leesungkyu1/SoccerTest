@@ -88,6 +88,7 @@ public class MainController {
 		model.addAttribute("importantNoticeList",importantNoticeList);
 		model.addAttribute("page", pageVO);
 		
+		System.out.println(channelList);
 		return "main/main";
 	}
 	

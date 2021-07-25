@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_main.css">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+                    <a href="/main"><div class="lefrarrow"></div></a>
+                    <a th:href="@{/user/}+${userIdx}"><div class="my">MY</div></a>
+               </div>
+           </header>
+           <!-- 메인영상 -->
+           <div id="main_video">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">채널목록</h1>
+                        <a href="">채널가입 / 관리<div class="right_arrow"></div></a>
+                    </div>
+                </div>
+                <div class="main_video" th:onclick="goDetailView([[${channelPlayVO[0].channelIdx}]], [[${channelPlayVO[0].channelPlayIdx}]]);"></div>
+                <div class="main_video_name">
+                    <div class="row">
+                        <h1 th:text="${channelPlayVO[0].channelPlayTitle}" 
+                        th:onclick="goDetailView([[${channelPlayVO[0].channelIdx}]], [[${channelPlayVO[0].channelPlayIdx}]]);">
+                        FC바르셀로나 VS 리버풀FC</h1>
+                        <span th:text="${channelPlayVO[0].channelPlayDate}">2021.07.21</span> 
+                        <span th:text="${channelPlayVO[0].memberNick}">관리자</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 영상목록 -->
+            <div id="video_index">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">영상목록</h1>
+                    </div>
+                </div>
+                <div class="video_index slide">
+                    <div th:each="i : ${channelPlayVO}">
+                        <div class="video video1" th:onclick="goDetailView([[${channelPlayVO.channelIdx}]], [[${channelPlayVO.channelPlayIdx}]]);"></div>
+                        <h1 th:text="${i.channelPlayTitle}" th:onclick="goDetailView([[${channelPlayVO.channelIdx}]], [[${channelPlayVO.channelPlayIdx}]]);">21년 5월 베스트 골 모음입니니다.</h1>
+                        <span>2021.06.12</span>
+                        <span>관리자</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 채널게시판 -->
+            <div id="board" class="channel_board">
+                <div class="row">
+                    <h1>채널게시판</h1>
+                     <ul>
+                         <li>
+                             <div class="title">
+                                 <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
+                                 <div class="new">N</div>
+                             </div>
+                             <p><span>2021.10.02</span><span>관리자</span></p>
+                         </li>
+                         <li>
+                             <div class="title">
+                                 <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
+                                 <div class="new">N</div>
+                             </div>
+                             <p><span>2021.10.02</span><span>관리자</span></p>
+                         </li><li>
+                             <div class="title">
+                                 <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
+                                 <div class="new">N</div>
+                             </div>
+                             <p><span>2021.10.02</span><span>관리자</span></p>
+                         </li><li>
+                             <div class="title">
+                                 <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
+                                 <div class="new">N</div>
+                             </div>
+                             <p><span>2021.10.02</span><span>관리자</span></p>
+                         </li><li>
+                             <div class="title">
+                                 <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
+                                 <div class="new">N</div>
+                             </div>
+                             <p><span>2021.10.02</span><span>관리자</span></p>
+                         </li><li>
+                             <div class="title">
+                                 <h2>2021년 10월 13일 시스템 점검이 있을 예정입니다. 필독하세요.</h2>
+                                 <div class="new">N</div>
+                             </div>
+                             <p><span>2021.10.02</span><span>관리자</span></p>
+                         </li>
+                     </ul>
+                     <div class="page">
+                         <div class="page_left"></div>
+                         <div class="page_numer show">1</div>
+                         <div class="page_numer">2</div>
+                         <div class="page_right"><div class="arrow"></div></div>
+                     </div>
+                </div>
+            </div>
+
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+	<script th:inline="javascript">
+		
+	</script>
+	<script src="/js/channel/channelList.js"></script>
+    <script src="/js/slide.js"></script>
+</body>
+</html>

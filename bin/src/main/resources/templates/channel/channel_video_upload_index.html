@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_video_upload_index.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+               		<!-- 뒤로가기 경로 지정 -->
+                    <a href=""><div class="lefrarrow"></div></a>
+                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --><!-- mypage url 연결 필요 -->
+               </div>
+           </header>
+           <!-- 업로드 신청목록 -->
+           <div id="video_upload_index">
+                <div class="video_index">
+                    <div class="row">
+                        <div class="subtitle_line">
+                            <h1 class="subtitle">업로드 신청목록</h1>
+                        </div>
+                    </div>
+                    <div class="videos" th:each="channelPlay: ${channelPlayVOList}">
+                        <div class="video" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${channelPlay.channelPlayImage} + ');'"></div> <!-- 이미지 or 동영상 부분 -->
+                        <div class="video_info">
+                            <div class="row">
+                                <h1 th:text="${channelPlay.channelPlayTitle}">FC바르셀로나 VS 리버풀FC</h1>
+                                <span th:text="${#strings.substring(channelPlay.channelPlayDate,0,10)}">2021.07.21</span>
+                                <span th:text="${channelPlay.channelName}">FC바로셀로나</span>
+                                <span th:text="${channelPlay.memberNick}">관리자</span>
+                                <div class="btns">
+                                	<input type="hidden" th:value="${channelPlay.channelPlayIdx}">
+                                    <button class="main_btn" id="applyBtn">승인</button>
+                                    <button class="main_btn" id="denieBtn">거절</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+           
+
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+
+	<form id="commonForm" name="commonForm" method="post">
+		
+	</form>
+	
+	<script type="text/javascript">
+		const manage = {
+				manageView: {
+					init: () => {
+						manage.manageEvent.manageApply();
+						
+						manage.manageEvent.manageDenie();
+					}
+				},
+				manageEvent: {
+					manageApply: () => {
+							const applyBtn = document.querySelectorAll('#applyBtn');
+							for (let i = 0; i < applyBtn.length; i++){
+								applyBtn[i].addEventListener('click', () => manage.manageRequest.requestApply(applyBtn[i]));
+						}
+					},
+					manageDenie: () => {
+						const denieBtn = document.querySelectorAll('#denieBtn');
+						for (let i = 0; i < denieBtn.length; i++){
+							denieBtn[i].addEventListener('click', () => manage.manageRequest.requestDenie(denieBtn[i]));
+						}
+					},
+				},
+				manageRequest: {
+					requestApply: (el) => {
+						const channelPlayIdx = el.previousElementSibling.value;
+						
+						const applyForm = document.getElementById('commonForm');
+						applyForm.setAttribute('action', "/main/play/manage/" + channelPlayIdx);
+						
+						const inputPutEl = document.createElement('input');
+						inputPutEl.setAttribute('type', 'hidden');
+						inputPutEl.setAttribute('name', '_method');
+						inputPutEl.setAttribute('value', 'put');
+						
+						applyForm.appendChild(inputPutEl);
+						
+						applyForm.submit();
+					},
+					
+					requestDenie: (el) => {
+						const channelPlayIdx = el.previousElementSibling.previousElementSibling.value;
+						
+						const applyForm = document.getElementById('commonForm');
+						applyForm.setAttribute('action', "/main/play/manage/" + channelPlayIdx);
+						
+						const inputDeleteEl = document.createElement('input');
+						inputDeleteEl.setAttribute('type', 'hidden');
+						inputDeleteEl.setAttribute('name', '_method');
+						inputDeleteEl.setAttribute('value', 'delete');
+						
+						applyForm.appendChild(inputDeleteEl);
+						
+						applyForm.submit();
+					},
+				},
+		}
+		
+		manage.manageView.init();
+	</script>
+	
+</body>
+</html>
