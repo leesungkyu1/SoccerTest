@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_main.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_notice.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+               		<!-- 링크 연결 필요 -->
+                    <a th:href="|@{/main}|"><div class="lefrarrow"></div></a>
+                    <!-- 링크 연결 필요 -->
+                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --> <!-- mypage url 연결 필요 -->
+               </div>
+           </header>
+            <!-- 채널게시판 -->
+            <div id="board" class="channel_board">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">공지게시판</h1>
+                        <a th:href="|@{/main/notice/write}|">글쓰기<div class="right_arrow"></div></a> <!-- 세션과 관리자의 userIdx가 같으면 출력 (or 관리자 아이디면 출력) -->
+                    </div>
+                     <ul>
+                     	 <!-- 공지글인 경우 -->
+                         <li th:each="notice: ${importantNoticeList}">
+                             <a th:href="|@{/main/notice/}${notice.noticeIdx}|">
+                             	<div class="title">
+                                 	<h2 th:text="|[공지] ${notice.noticeTitle}|"></h2>
+                                 	<div th:if="${notice.newNotice != 'N'}" class="new">N</div>
+                             	</div>
+                             </a>
+                             <p>
+                             	<span th:text="${#strings.substring(notice.noticeDate,0,10)}"></span>
+                             	<span>관리자</span>
+                             </p>
+                         </li>
+                         <!-- 공지글이 아닌 경우 -->
+                         <li th:each="notice: ${noticeList}">
+                         	<a th:href="|@{/main/notice/}${notice.noticeIdx}|">
+	                             <div class="title">
+	                                 <h2 th:if="${notice.noticeType}=='Y'" th:text="|[공지] ${notice.noticeTitle}|"></h2>
+	                                 <h2 th:unless="${notice.noticeType}=='Y'" th:text="${notice.noticeTitle}"></h2>
+	                                 <div th:if="${notice.newNotice != 'N'}" class="new">N</div>
+	                             </div>
+	                         </a>
+                             <p>
+                             	<span th:text="${#strings.substring(notice.noticeDate,0,10)}"></span>
+                             	<span>관리자</span>
+                             </p>
+                         </li>
+                     </ul>
+                     <div th:if="${not #lists.isEmpty(noticeList)}" class="page" th:with="start = ${page.startPage}, end = ${page.endPage}">
+                        <div th:if="${1 < page.page}">
+                        	<a th:href="|@{/main/notice}?page=${page.page - 1}|" class="page_left"></a>
+                        </div>
+                        <div th:each="pageNum : ${#numbers.sequence(start, end)}">
+                        	<a th:href="|@{/main/notice}?page=${pageNum}|" th:classappend="${pageNum == page.page} ? show" th:text="${pageNum}" class="page_numer"></a>
+                        </div>
+                        <div th:if="${page.page < page.totalPageCnt}">
+                        	<div class="arrow">
+                        		<a th:href="|@{/main/notice}?page=${page.page + 1}|" class="page_right"></a>
+                        	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+
+    <script th:src="@{/js/slide.js}"></script>
+</body>
+</html>

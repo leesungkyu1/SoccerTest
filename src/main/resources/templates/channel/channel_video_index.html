@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_video_index.css">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+                    <div class="lefrarrow"></div>
+                    <div class="my"><a href="MyPage">MY</a></div>
+               </div>
+           </header>
+           <!-- 메인영상 -->
+           <div id="video_index">
+                <div class="video_index">
+                    <div class="row">
+                        <div class="subtitle_line">
+                            <h1 class="subtitle">영상목록</h1>
+                            <div class="search_input" id="playSearch"><a href="test"></a>
+                                <button class="search"></button>
+                                <input type="text">
+<!--                                 <div class="search"></div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="videos">
+                       <div class="row" th:each="play:${channelPlayList}">
+                       <div class="video"><img src="${play.channelPlayImage"></div>
+                       	<div class="video_name">
+                                <h1 id="test1" th:text="${play.channelPlayTitle}"
+                                th:onclick="goDetailView([[${play.channelIdx}]], [[${play.channelPlayIdx}]]);">
+                                
+                                </h1>
+                               										
+<!--                                 <span th:text="${play.channelPlaydate}"></span>  -->
+                                <span th:text="${play.memberNick}"></span>                               
+                                
+                                <span th:text="${play.channelPlayDate}"></span>
+                                <span th:text="${play.channelIdx}"></span>
+                                <span th:text="${play.channelPlayIdx}"></span>
+                            </div>
+                       	</div>
+                    </div>
+           		</div>
+           </div>
+<!--                     <div class="videos"> -->
+<!--                         <div class="video"></div> -->
+<!--                         <div class="video_name"> -->
+<!--                             <div class="row"> -->
+<!--                                 <h1>21년 6월 베스트 골 모음입니다.</h1> -->
+<!--                                 <span>2021.07.21</span> <span>관리자</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class="videos"> -->
+<!--                         <div class="video"></div> -->
+<!--                         <div class="video_name"> -->
+<!--                             <div class="row"> -->
+<!--                                 <h1>21년 6월 베스트 골 모음입니다.</h1> -->
+<!--                                 <span>2021.07.21</span> <span>관리자</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class="videos"> -->
+<!--                         <div class="video"></div> -->
+<!--                         <div class="video_name"> -->
+<!--                             <div class="row"> -->
+<!--                                 <h1>21년 6월 베스트 골 모음입니다.</h1> -->
+<!--                                 <span>2021.07.21</span> <span>관리자</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class="videos"> -->
+<!--                         <div class="video"></div> -->
+<!--                         <div class="video_name"> -->
+<!--                             <div class="row"> -->
+<!--                                 <h1>21년 6월 베스트 골 모음입니다.</h1> -->
+<!--                                 <span>2021.07.21</span> <span>관리자</span> -->
+<!--                             </div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div> -->
+<!--            </div> -->
+           
+
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+	<script src="/js/channel/channelList.js"></script>
+    <script src="/js/slide.js"></script>
+    <script src="/js/search.js"></script>
+    
+</body>
+</html>

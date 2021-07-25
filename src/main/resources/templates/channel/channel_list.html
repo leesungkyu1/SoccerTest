@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_list.css}">
+
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+                    <div class="lefrarrow"></div>
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
+               </div>
+           </header>
+           <div id="channel_index">
+            <div class="row">
+                 <div class="subtitle_line">
+                     <h1 class="subtitle">채널목록</h1>
+                     <div class="search_input">
+                         <input type="text" name="searchWord" id="searchWord">
+                         <div class="search" id="serach_btn"></div>
+                     </div>
+                 </div>
+                 <div class="channel_index">
+                    <div th:if="${not #lists.isEmpty(channelList)}" th:each="channel : ${channelList}" class="channel_index_logo">
+                        <div class="channel_contents">
+                            <div class="logo" th:style="'background-image:url(' + @{/mainChannelImage/?channelImage=} + ${channel.channelImage} + ');'"></div>
+                            <div>
+                                <h1 th:text=${channel.channelName}></h1>
+                                <span th:text=${channel.regionName}></span><span th:text="|(${channel.channelMemberCount}/${channel.channelMax})|"></span>
+                            </div>
+                        </div>
+                        <button th:if="${channel.joinCheck == 'F'}" th:id="${channel.channelIdx}" class="channelJoinBtn">+가입</button>
+                        <button th:unless="${channel.joinCheck == 'F'}">가입한 채널</button>
+                    </div>
+                    <div th:unless="${not #lists.isEmpty(channelList)}" class="channel_index_logo">
+                        <div class="channel_contents">
+                            <div>
+                                <h1>검색 결과가 없습니다.</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${not #lists.isEmpty(channelList)}" class="page" th:with="start = ${page.startPage}, end = ${page.endPage}">
+                    	<div th:if="${1 < page.page}">
+                        	<a th:href="@{/main/channel?page=} + ${page.page - 1} + @{&searchWord=} + ${page.searchWord}" class="page_left"></a>
+                        </div>
+                        <div th:each="pageNum : ${#numbers.sequence(start, end)}">
+                        	<a th:href="@{/main/channel?page=} + ${pageNum} + @{&searchWord=} + ${page.searchWord}" th:classappend="${pageNum == page.page} ? show" th:text=${pageNum} class="page_numer"></a>
+                        </div>
+                        <div th:if="${page.page < page.totalPageCnt}">
+                        	<div class="arrow">
+                        		<a th:href="@{/main/channel?page=} + ${page.page + 1} + @{&searchWord=} + ${page.searchWord}" class="page_right"></a>
+                        	</div>
+                        </div>
+
+                    </div>
+                 </div>
+             </div>
+        </div>
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+
+
+    <script th:src="@{/js/search.js}" th:inline="javascript"></script>
+    <script>
+    	const channelList = {
+            channelListView: {
+                init: () => {
+                    //뒤로가기 버튼 이벤트
+    				const leftArrow = document.getElementsByClassName('lefrarrow')[0];
+    				leftArrow.addEventListener('click', () => channelList.channelListEvent.movePage('/main'));
+    				
+    				//검색버튼 이벤트
+					const serachBtn = document.getElementById('serach_btn');
+					serachBtn.addEventListener('click', (e) => channelList.channelListEvent.keywordSearch(e));
+					
+					//가입 버튼 이벤트 등록
+					const channelJoinBtn = document.getElementsByClassName('channelJoinBtn');
+					Array.from(channelJoinBtn).forEach(el => {
+						el.addEventListener('click',() => channelList.channelListEvent.movePage('/channel/apply/' + el.getAttribute('id') + '?searchWord=[[${page.searchWord}]]&page=[[${page.page}]]'));
+					});
+                },
+            },
+
+            // 이벤트 정의
+    		channelListEvent: {
+                movePage : (loc) => {
+                    location.href=loc;
+                },
+                
+                //검색버튼 이벤트
+                keywordSearch : (e) => {
+                	const parentDiv = e.target.parentNode;
+                	const searchWord = document.getElementById('searchWord').value;
+                	
+                	if(!parentDiv.classList.contains('search_show')){
+                		if(searchWord !== ''){
+                			e.preventDefault();
+                			
+                			document.getElementById('searchWord').value = '';
+                			
+                			channelList.channelListEvent.movePage('/main/channel?searchWord=' + searchWord);
+                		}
+                	}
+                },
+    		},
+    	};
+		
+        channelList.channelListView.init();
+    </script>
+</body>
+</html>

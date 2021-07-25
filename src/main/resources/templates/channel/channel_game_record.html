@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/channel_game_record.css">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+                    <div class="lefrarrow"></div>
+                    <a href=""><div class="my">MY</div></a>
+               </div>
+           </header>
+           <!-- 메인영상 -->
+           <div id="video_index">
+                <div class="video_index">
+                    <div class="row">
+                    </div>
+                    <div class="videos">
+                        <video class = "video" autoplay="autoplay" controls="controls">
+                        	<source th:src="${videoList.channelPlayVideo}" type="video/mp4">
+                        </video>
+                       	<div class="video_name">
+                            <div class="row">
+                                <h1 th:text="${videoList.channelPlayTitle}">FC바르셀로나 VS 리버풀FC</h1>
+                                <span th:text="${videoList.channelPlayDate}">2021.07.21</span>
+                                <span th:text="${videoList.memberNick}">관리자</span>
+                         </div>
+                        </div>
+                    </div>
+                    
+                </div>
+           </div>
+           <!-- 경기기록 -->
+            <div id="game_record">
+                <div class="row">
+                    <div class="subtitle_line">
+                        <h1 class="subtitle">경기기록</h1>
+                        <a href="#">기록추가<div class="right_arrow"></div></a>
+                    </div>
+                    <div class="game_record" id="game_record" th:object="${goalList}" th:if="${#arrays.isEmpty(goalList)}">
+                    	<h1>값이 비어있습니다.</h1>
+                    </div>
+                    <div class="game_record" id="game_record" th:each="record :${goalList}" th:unless="${#arrays.isEmpty(goalList)}">
+                        <div class="team1">
+                        	<h1 th:if="${record.channelPlayGoalType}=='H'" th:text="|${record.channelPlayGoalName} ${record.channelPlayGoalTime}|"></h1>
+             				</div>
+                        <div class="team2">
+                        	<h1 th:if="${record.channelPlayGoalType}=='A'" th:text="|${record.channelPlayGoalName} ${record.channelPlayGoalTime}|"></h1>
+                        </div>
+                    </div>
+                </div>
+               
+           	</div>
+           <div id="footer">
+               <div class="footer_line"></div>
+               <div class="row">
+                   <h1>사업자등록증 : </h1>
+                   <h1>대표이름 : </h1>
+                   <h1>전화번호 : </h1>
+               </div>
+           </div>
+        </div>
+    </section>
+
+    <script src="/js/channel/channelList.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+.logo_header{
+    height: 108px;
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+}
+.channel_sign_up_logo {
+    position: absolute;
+    top: 57px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.logo {
+    width: 98px;
+    height: 101px;
+    background-size: cover;
+}
+.channel_sign_up_logo h1 {
+    font-size: 16px;
+    text-align: center;
+}
+.channel_sign_up_logo h2 span{
+    font-size: 12px;
+}
+.channel_sign_up_logo h2 span:nth-child(1){
+    color: #8C8C8C;
+    margin-right: 5px;
+}
+.channel_sign_up_content {
+    margin-top: 120px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.channel_sign_up_profile {
+    width: 105px;
+    height: 105px;
+    position: relative;
+    background: url(../img/photoman.png);
+    background-size: cover;
+    margin-bottom: 36px;
+}
+.channel_sign_up_profile_add {
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-size: cover;
+    background: url(../img/photo.png);
+}
+.main_btn {
+    margin-top: 60px;
+}
+.container > .row {
+    height: auto;
+}
+.main_input {
+    background-color: #191919;
+    border-top: 1px solid #303030;
+    border-bottom: 1px solid #303030;
+    border-radius: 0;
+    text-align: center;
+}
+.main_select {
+    background-color: #191919;
+    text-align-last: center;
+    text-align: center;
+    -ms-text-align-last: center;
+    -moz-text-align-last: center;
+}
+form {
+    width: 100%;
+}
