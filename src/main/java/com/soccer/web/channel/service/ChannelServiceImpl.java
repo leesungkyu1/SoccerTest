@@ -103,4 +103,14 @@ public class ChannelServiceImpl implements ChannelService{
 	public List<Integer> joinChannelList(UserVO userVO) throws Exception {
 		return channelDAO.joinChannelList(userVO);
 	}
+
+	@Override
+	public List<ChannelVO> channelPlayList(String searchWord) throws Exception {
+		// TODO Auto-generated method stub
+		return channelDAO.channelPlayList(searchWord);
+	}
+
+	
+	//채널 목록
+
 }

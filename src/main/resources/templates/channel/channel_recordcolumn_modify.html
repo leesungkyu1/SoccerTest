@@ -25,7 +25,7 @@
 					<div class="row"></div>
 					<div class="videos">
 						<video class="video" autoplay="autoplay" controls="controls">
-							<source th:src="{channelPlayVO.channelPlayVideo}"
+							<source th:src="|@{localhost:8080/video}${channelPlayVO.channelPlayVideo}|"
 								type="video/mp4">
 						</video>
 						<div class="video_name">

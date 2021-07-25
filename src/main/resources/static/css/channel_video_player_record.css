@@ -1,0 +1,72 @@
+
+/* 선수별기록 */
+
+#player_record {
+    padding-top: 50px;
+    min-height: calc(100vh - 60px);
+}
+.player_record_table {
+    display: flex;
+
+}
+.player_record_table .table{
+    padding-left: 16px;
+    position: relative;
+    width: calc(100% - 32px);
+    overflow: hidden;
+}
+.player_record_table ul {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+.player_record_table ul li {
+    color: #fff;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.3);
+    width: 16%;
+    min-width: 50px;
+
+}
+
+li input {
+    width: 80%;
+    height: 80%;
+    text-align: center;
+    font-size: 13px;
+    background-color: #191919;
+    color: #fff;
+}
+
+.player_record_table ul:last-child {
+    border-bottom: none;
+}
+.player_record_table ul li:last-child {
+    border-right: none;
+}
+.player_record_table ul li:nth-child(1) {
+    width: 20%;
+    min-width: 60px;
+    border-right: 1px solid #fff;
+    background-color: #303030;
+}
+.player_record_table ul:nth-child(1){
+    border-bottom: 1px solid #fff;
+    background-color: #303030;
+}
+
+.player_add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    background-color: #303030;
+    color: #fff;
+    right: 0;
+    border-radius: 0 12px 12px 0;
+    z-index: 2;
+}

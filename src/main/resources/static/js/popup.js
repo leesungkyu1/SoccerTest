@@ -7,7 +7,7 @@ downBtn.addEventListener('click', ()=> {
     shadow.classList.toggle('shadow_show')
 })
 // 맴버 누르면 팝업 업
-let player = Array.prototype.slice.call(document.querySelectorAll('.player > div > div > div'));
+let player = Array.prototype.slice.call(document.querySelectorAll('.pop_up_btn'));
 for (let i = 0; i < player.length; i++) {
     const p = player[i];
     p.addEventListener('click', ()=> {

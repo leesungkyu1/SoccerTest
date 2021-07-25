@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
+import com.soccer.web.channel.play.vo.TeamVO;
 
 public interface TeamPlayerService {
 	
@@ -14,7 +15,7 @@ public interface TeamPlayerService {
 	
 	List<PlayresultVO> selectPlayerResultVOList(int channelPlayIdx) throws Exception;
 
-	int insertTeamPlayer(HashMap<String, String> teamPlayParameterMap) throws Exception;
+//	int insertTeamPlayer(TeamPlayerVO teamPlayerVO) throws Exception;
 	
 	void insertPlayresult(HashMap<String, Integer> playresultMap) throws Exception;
 	
@@ -35,4 +36,11 @@ public interface TeamPlayerService {
 	void resultUpdate(List<PlayresultVO> resultVO) throws Exception;
 
 	PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception;
+
+	//추가하는것
+	void insertTeamPlayer(HashMap<Object, Object> map);
+
+	void insertTeam(TeamVO teamVO);
+
+	
 }

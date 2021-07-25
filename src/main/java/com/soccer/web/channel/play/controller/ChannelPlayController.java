@@ -7,18 +7,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpRequest;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.soccer.web.channel.member.service.MemberServiceImpl;
+import com.soccer.web.channel.member.vo.MemberVO;
 import com.soccer.web.channel.play.service.ChannelPlayService;
 import com.soccer.web.channel.play.service.TeamPlayerService;
 import com.soccer.web.channel.play.vo.ChannelPlayGoalVO;
@@ -35,10 +42,14 @@ import com.soccer.web.channel.play.vo.PlayresultVO;
 import com.soccer.web.channel.play.vo.TeamPlayerVO;
 import com.soccer.web.channel.play.vo.TeamVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
+import com.soccer.web.channel.vo.ChannelVO;
+import com.soccer.web.user.vo.UserVO;
 
 @Component("streamView")
 @Controller
 public class ChannelPlayController {
+	
+	private final String PLAY_VIDEO_DIR = "C:/user/lsk/video";
 
 	@Autowired
 	private ChannelPlayService channelPlayService;
@@ -49,6 +60,8 @@ public class ChannelPlayController {
 	@Autowired
 	ChannelServiceImpl channelService;
 	
+	@Autowired
+	MemberServiceImpl memberService;
 	// 채널 게시글의 리스트를 보여주는 메서드 (페이징처리는 나중에)
 	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.GET)
 	public String selectChannelPlayList(@PathVariable int channelIdx,
@@ -63,7 +76,7 @@ public class ChannelPlayController {
 			List<ChannelPlayVO> channelPlayList = channelPlayService.selectChannelPlayList(channelPlayVO);
 			model.addAttribute("channelPlayList", channelPlayList);
 			
-			System.out.println(channelPlayList);
+			System.out.println("====================="+channelPlayList);
 //			model.addAttribute("channelPlayList", channelPlayList);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,33 +235,40 @@ public class ChannelPlayController {
 	}
 	
 	//영상 추가 테스트 화면
+	
 	@RequestMapping(value = "/channel/play/{channelIdx}", method = RequestMethod.POST)
 	public String upload(@RequestParam("file") MultipartFile multipartFile, 
 			@PathVariable int channelIdx,
 			HttpServletRequest request, ChannelPlayVO channelPlayVO, Model model) throws Exception {
+		
+//		FileUtils saveDir = new FileUtils();
 		System.out.println(multipartFile.getOriginalFilename());
 		
-		System.out.println(channelIdx);
 		System.out.println(request.getParameter("title"));
 		
-		String path = Paths.get("C:","downloads","upload").toString();
-		String fileName= request.getParameter("title");
+//		String videoFileDir = PLAY_VIDEO_DIR + "/" + channelIdx+"/"+channelPlayVO.getChannelPlayIdx();
 		
+//		saveDir.forceMkdir(new File(PLAY_VIDEO_DIR + "/" + channelIdx+"/"+channelPlayVO.getChannelPlayIdx()));
+		
+		
+		
+		System.out.println(PLAY_VIDEO_DIR);
+		String fileName= multipartFile.getOriginalFilename();
+		String fileData = PLAY_VIDEO_DIR+ "/" + fileName;
+		channelPlayVO.setChannelPlayTitle(fileName);
+		channelPlayVO.setChannelPlayVideo(fileData);
+		channelPlayService.insertChannelPlay(channelPlayVO);
 		
 		InputStream fileStream;
 		
-		channelPlayVO.setChannelPlayTitle(fileName);
-		channelPlayVO.setChannelPlayVideo((path.toString()+multipartFile.getOriginalFilename()));
-		channelPlayService.insertChannelPlay(channelPlayVO);
 		try {
 			
 //			String path = new ClassPathResource("/static/upload").getFile().getAbsolutePath();
-			System.out.println(path);
-			File targetFile = new File(multipartFile.getOriginalFilename());
+			File targetFile = new File(fileData);
 			
 			
 //			channelPlayVO.setChannelPlayTitle();
-			channelPlayVO.setChannelPlayVideo(path.toString() + multipartFile.getOriginalFilename());
+//			channelPlayVO.setChannelPlayVideo(PLAY_VIDEO_DIR+ "/" + multipartFile.getOriginalFilename());
 			
 			fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);
@@ -303,6 +323,9 @@ public class ChannelPlayController {
 		return "redirect:/channel/play/" + channelIdx;
 //		return "test";
 	}
+	
+
+
 	
 	//득점 정보 입력
 	@RequestMapping(value = "/channel/play/goal/{channelPlayIdx}", method = RequestMethod.POST)
@@ -375,23 +398,63 @@ public class ChannelPlayController {
 	//result 수정 기능 
 	//상대팀 생성 로직도 똑같음
 	
-	//팀 생성(상대팀도 같음 테스트 필요!!!)
-	@RequestMapping(value = "/channel/play/team/{channelIdx}/{playIdx}", method = RequestMethod.POST)
-	public String createPlayInfo(
-			@PathVariable int channelIdx, @PathVariable int playIdx,
-			TeamVO teamVO, List<TeamPlayerVO> playerList, RedirectAttributes attributes) throws Exception {
+	//선수 입력 GET 화면
+	@RequestMapping(value="/channel/play/team/{channelIdx}/{channelPlayIdx}", method=RequestMethod.GET)
+	public String selectTeam(@PathVariable int channelIdx, 
+							@PathVariable int channelPlayIdx, TeamVO teamVO,   ChannelVO channelVO, UserVO userVO, Model model) throws Exception {
+		
+		
+		
+	
+		List<TeamPlayerVO> playerList = teamPlayerService.selectTeamPlayerList(channelPlayIdx);
+		List<ChannelVO> channelList = channelService.channelList(channelVO);
+
+	
 		teamVO.setChannelIdx(channelIdx);
-		teamVO.setChannelPlayIdx(playIdx);
+		teamVO.setChannelPlayIdx(channelPlayIdx);
 		
-		for(int i = 0; i<playerList.size(); i++) {
-			playerList.get(i).setChannelPlayIdx(playIdx);
-		}
 		
-		channelPlayService.createPlayInfo(teamVO, playerList);
+		model.addAttribute("channelVO", channelVO);
+		model.addAttribute("channelList", channelList);
+		model.addAttribute("playerList", playerList);
+		model.addAttribute("teamVO", teamVO);
+		System.out.println(channelVO);
+		System.out.println(channelList);
+		System.out.println(playerList);
+		System.out.println(teamVO);
+		
+		model.addAttribute("channelIdx" , channelIdx);
+		model.addAttribute("channelPlayIdx" , channelPlayIdx);
+		
+		return "channel/channel_video_player_add2";
+	}
+	
+	//팀 생성(상대팀도 같음 테스트 필요!!!) 현재 사용 X
+	
+	@RequestMapping(value = "/channel/play/team/{channelIdx}/{channelPlayIdx}", method = RequestMethod.POST)
+	public String createPlayInfo(
+			@PathVariable int channelIdx, @PathVariable int channelPlayIdx,
+			TeamVO teamVO, RedirectAttributes attributes, 
+			HttpServletRequest request, UserVO userVO, Model model, @RequestParam TeamPlayerVO teamPlayerVO) throws Exception {
+			
+//		teamVO.setChannelIdx(channelIdx);
+//		teamVO.setChannelPlayIdx(channelPlayIdx);
+//	
+//		for(int i = 0; i<playerList.size(); i++) {
+//			playerList.get(i).setChannelPlayIdx(channelPlayIdx);
+//		}
+//		
+//	
+//		
+//		
+//		channelPlayService.createPlayInfo(teamVO, playerList);
+
+		
+		
 		
 		attributes.addAttribute("message", "경기 기록을 등록했습니다.");
 		
-		return "";
+		return "channel/channel_video_player_add2";
 	}
 	
 	//선수 개별 기록 한번에 수정
@@ -402,5 +465,73 @@ public class ChannelPlayController {
 		
 		attributes.addAttribute("message", "선수 기록을 수정했습니다.");
 		return "";
+	}
+	
+	
+	//팀 생성시 채널검색
+	@ResponseBody
+	@RequestMapping(value="/channel/play/team/search", method = RequestMethod.POST)
+	public List<ChannelVO> teamCreate(HttpServletRequest request, ChannelVO channelVO, Model model) throws Exception {
+		String searchWord = request.getParameter("searchWord");
+		System.out.println(searchWord);
+		List<ChannelVO> channelList = channelService.channelPlayList(searchWord);
+
+//		System.out.println(channelList);
+		return channelList;
+	}
+
+	//팀 추가화면 및 멤버 리스트 받아오기
+	
+	@ResponseBody
+	@RequestMapping(value="/channel/play/team/teaminsert", method = RequestMethod.POST)
+	public HashMap<Object, Object> testInsertCode1(@RequestBody TeamVO teamVO, Model model, HttpServletRequest request) throws Exception {
+//		System.out.println("==========================");
+//		System.out.println("=================================="+teamVO);
+//		System.out.println(teamPlayerVO);
+		
+		System.out.println(request.getParameter("selectPlayer"));
+		
+		teamPlayerService.insertTeam(teamVO);
+		List<MemberVO> searchMemberList = memberService.searchByChannel(teamVO.getChannelIdx());
+		
+		
+		System.out.println(teamVO);
+		System.out.println(searchMemberList);
+		
+		HashMap<Object, Object> map = new HashMap<>();
+		map.put("teamVO", teamVO);
+		map.put("searchMemberList", searchMemberList);
+		return map; 
+		
+	}
+	
+	
+	//선수 등록
+	@RequestMapping(value="/channel/play/team/playerinsert", method = RequestMethod.POST)
+	public String testInsertCode(@RequestBody HashMap<Object, Object> map, TeamPlayerVO teamPlayerVO) throws Exception {
+		
+		teamPlayerService.insertTeamPlayer(map);
+		System.out.println(map);
+		//System.out.println(map.get("teamIdx"));
+//		teamPlayerVO.setTeamIdx((int)map.get("teamIdx") );
+//		teamPlayerVO.setChannelPlayIdx((int)map.get("channelPlayIdx") );
+		
+//		List<TeamPlayerVO> playerList = new ArrayList<TeamPlayerVO>();
+//		
+//		
+//		
+//		
+//		for(int i = 0; i <= (int) map.get("userIdxSize") ; i++) {
+//			playerList.get(i).setChannelPlayIdx((int)map.get("channelPlayIdx")); 
+//		}
+		
+		
+		return "channel/channel_video_player_add2"; 
+	}
+	
+	@RequestMapping(value="/channel/play/record/modify")
+	public String columnModify() {
+		
+		return "channel_video_record_modify";
 	}
 }

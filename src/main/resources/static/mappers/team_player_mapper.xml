@@ -39,6 +39,18 @@
 		<result property="teamPlayerName" column="team_player_name"/>
 	</resultMap>
 	
+	<resultMap type="com.soccer.web.channel.play.vo.TeamVO" id="teamVO">
+		<result property="teamIdx" column="team_idx"/>
+		<result property="channelPlayIdx" column="channel_play_idx"/>
+		<result property="channelIdx" column="channel_idx"/>
+		<result property="teamName" column="team_name"/>
+		<result property="teamType" column="team_type"/>
+	</resultMap>
+
+		
+	
+
+	
 	<!-- 경기에 선수 리스트를 가져오는 쿼리문 -->
 	<select id="selectTeamPlayerList" parameterType="int" resultMap="teamPlayerVO">
 		SELECT 
@@ -114,15 +126,16 @@
 	    WHERE playresult.channel_play_idx = #{channelPlayIdx}
 	</select>
 	
+	
 	<!-- 경기에 선수를 추가할 때 사용되는 쿼리문 (play_idx, channel_play_idx 와 연결) -->
 	<!-- 채널의 전체 멤버에서 하나를 선택  -->
-	<insert id="insertTeamPlayer" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="teamPlayerIdx">
+	<insert id="insertTeamPlayer" parameterType="com.soccer.web.channel.play.vo.TeamPlayerVO" useGeneratedKeys="true" keyProperty="teamPlayerIdx">
 		INSERT INTO team_player 
 		VALUES 
 				(
 					default, 
-					CONVERT(#{userIdx}, UNSIGNED INTEGER), 
-					CONVERT(#{teamIdx}, UNSIGNED INTEGER), 
+					CONVERT(#{userIdx}, UNSIGNED INTEGER), <!-- userIdx 정보 받아와야함 -->
+					CONVERT(#{teamIdx}, UNSIGNED INTEGER), <!-- teamIdx 정보 받아와야함 -->
 					CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER), 
 					<!-- #{teamPlayerPosition} -->
 					null, 
@@ -131,8 +144,23 @@
 				)
 	</insert> 
 	
+	<!-- 팀을 추가하는 쿼리문 -->
+	<insert id="insertTeam" parameterType="com.soccer.web.channel.play.vo.TeamVO" useGeneratedKeys="true" keyProperty="teamIdx">
+		INSERT INTO team
+		VALUES 
+				(
+					default,
+					CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER), <!-- teamIdx 정보 받아와야함 -->
+					CONVERT(#{channelIdx}, UNSIGNED INTEGER), 
+					<!-- #{teamPlayerPosition} -->
+					#{teamName}, 
+					#{teamType} 
+					
+				)
+	</insert> 
+	
 	<!-- 경기에 선수를 추가할 때 playresult를 추가하는 쿼리문 -->
-	<insert id="insertPlayresult" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="playresultIdx">
+	<insert id="insertPlayresult" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="playResultIdx">
 		INSERT INTO playresult 
 		VALUES 
 				(
@@ -241,25 +269,25 @@
 	
 	<!-- 채널의 member를 눌렀을 때 --> <!-- member쪽에서 쓰는게 더 좋을듯 -->
 	
-	<insert id="insertPlayerList" parameterType="List">
-		<foreach item="item" collection="list">
-			INSERT INTO team_player
-			VALUES(
-				default,
-				#{item.userIdx},
-				#{item.teamIdx},
-				#{item.channelPlayIdx},
-				null,
-				null,
-				<if test="teamPlayerName != null">
-					#{item.teamPlayerName}
-				</if>
-				<if test="teamPlayerName == null">
-					null
-				</if>
-			)
-		</foreach>
-	</insert>
+<!-- 	<insert id="insertPlayerList" parameterType="List"> -->
+<!-- 		<foreach item="item" collection="list"> -->
+<!-- 			INSERT INTO team_player -->
+<!-- 			VALUES( -->
+<!-- 				default, -->
+<!-- 				#{item.userIdx}, -->
+<!-- 				#{item.teamIdx}, -->
+<!-- 				#{item.channelPlayIdx}, -->
+<!-- 				null, -->
+<!-- 				null, -->
+<!-- 				<if test="teamPlayerName != null"> -->
+<!-- 					#{item.teamPlayerName} -->
+<!-- 				</if> -->
+<!-- 				<if test="teamPlayerName == null"> -->
+<!-- 					null -->
+<!-- 				</if> -->
+<!-- 			) -->
+<!-- 		</foreach> -->
+<!-- 	</insert> -->
 	
 	<select id="playerIndexList" parameterType="com.soccer.web.channel.play.vo.TeamVO" resultType="integer">
 		SELECT team_player_idx FROM team_player
@@ -322,4 +350,19 @@
 		SELECT * FROM playresult 
 		WHERE team_player_idx = #{teamPlayeridx}
 	</select>
+	
+	<select id="insertTeamPlayers" parameterType="java.util.HashMap">
+		INSERT INTO team_player 
+		VALUES 
+				(
+					default, 
+					CONVERT(#{userIdx}, UNSIGNED INTEGER), <!-- userIdx 정보 받아와야함 -->
+					CONVERT(#{teamIdx}, UNSIGNED INTEGER), <!-- teamIdx 정보 받아와야함 -->
+					CONVERT(#{channelPlayIdx}, UNSIGNED INTEGER), 
+					<!-- #{teamPlayerPosition} -->
+					null, 
+					null, 
+					#{teamPlayerName}
+				)
+	</select>	
 </mapper>

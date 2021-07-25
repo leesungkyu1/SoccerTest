@@ -15,9 +15,6 @@ public interface TeamPlayerMapper {
 	// 경기의 선수 리스트를 가져오는 메서드
 	List<TeamPlayerVO> selectTeamPlayerList(int channelPlayIdx) throws Exception;
 	
-	// 경기에서 선수를 추가할 때 사용되는 메서드 (player 추가)
-	int insertTeamPlayer(HashMap<String, String> teamPlayParameterMap) throws Exception;
-	
 	// 경기에서 선수를 추가할 때 사용되는 메서드 (playresult 추가)
 	void insertPlayresult(HashMap<String, Integer> playresultMap) throws Exception;
 	
@@ -59,5 +56,13 @@ public interface TeamPlayerMapper {
 	PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception;
 
 	List<TeamPlayerVO> selectHomeAwayTeamPlayerNotLinkedList(HashMap<String, String> teamInfoMap) throws Exception;
+
+	//선수 등록
+	void insertTeamPlayer(TeamPlayerVO teamPlayerVO);
+	
+	//팀 추가
+	void insertTeam(TeamVO teamVO);
+
+	void insertTeamPlayers(HashMap<Object, Object> map);
 	
 }
