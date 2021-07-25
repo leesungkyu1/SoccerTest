@@ -37,6 +37,7 @@ public interface TeamPlayerService {
 
 	PlayresultVO selectPlayerresultVODetail(int teamPlayerIdx) throws Exception;
 
+	PlayresultVO resultList(Integer playIdx) throws Exception;
 	//추가하는것
 	void insertTeamPlayer(HashMap<Object, Object> map);
 

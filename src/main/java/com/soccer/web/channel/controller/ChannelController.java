@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.soccer.web.channel.board.service.ChannelBoardServiceImpl;
-import com.soccer.web.channel.board.vo.ChannelBoardVO;
 import com.soccer.web.channel.member.service.MemberServiceImpl;
 import com.soccer.web.channel.play.service.ChannelPlayServiceImpl;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
@@ -27,6 +26,8 @@ import com.soccer.web.channel.service.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
 import com.soccer.web.payment.service.PaymentServiceImpl;
 import com.soccer.web.payment.vo.PaymentVO;
+import com.soccer.web.region.service.RegionServiceImpl;
+import com.soccer.web.region.vo.RegionVO;
 import com.soccer.web.user.vo.UserVO;
 
 @Controller
@@ -47,52 +48,64 @@ public class ChannelController {
 	@Autowired
 	ChannelPlayServiceImpl channelPlayService;
 	
+	@Autowired
+	RegionServiceImpl regionService;
+	
 	//추후 채널용 이미지 파일 경로
 	private final String CHANNEL_IMAGE_DIR = "c:"; 
 	
 	//채널 목록, 검색 목록 (페이징 처리 안했음) 쿼리 전달
 	@RequestMapping(value = "/main/channel", method = RequestMethod.GET)
-	public String channelList(ChannelVO channelVO, Model model, HttpSession session) throws Exception {
-		int totcnt = channelService.selectChannelListTotCnt(channelVO);
-		//총 게시물
-		channelVO.setTotalListCnt(totcnt);
-		//총 페이지
-		channelVO.setTotalPageCnt((int) Math.ceil(channelVO.getTotalListCnt() * 1.0 / channelVO.getPageSize()));
-		//게시글 번호
-		channelVO.setStartIndex((channelVO.getPage() - 1) * channelVO.getBlockSize()); 
-		//시작 페이지 번호
-		channelVO.setStartPage(channelVO.getPage() - (channelVO.getPage() - 1) % channelVO.getBlockSize());
-		//끌 페이지 번호
-		channelVO.setEndPage(channelVO.getStartPage() + channelVO.getBlockSize() - 1);
-		//가져오는 게시물 인덱스 시작번호
-		channelVO.setStartIndex((channelVO.getPage() - 1) * channelVO.getPageSize());
-		
-		if(channelVO.getEndPage() > channelVO.getTotalPageCnt()) {
-			channelVO.setEndPage(channelVO.getTotalPageCnt());
-		}
-		
-		List<ChannelVO> channelList = channelService.channelList(channelVO);
-		
-		UserVO userVO = (UserVO)session.getAttribute("loginUser");
-		
-		List<Integer> joinChannelList = channelService.joinChannelList(userVO);
-		
-		if(channelList == null) {
-			model.addAttribute("message", "검색 결과가 없습니다.");
-		}else {
-			for(int i=0; i<channelList.size(); i++) {
-				boolean joinSw = joinChannelList.contains(channelList.get(i).getChannelIdx());
-				
-				if(joinSw) {
-					channelList.get(i).setJoinCheck("T");
-				}
+	public String channelList(ChannelVO channelVO, Model model, HttpSession session, RedirectAttributes attributes) throws Exception {
+		try {
+			int totcnt = channelService.selectChannelListTotCnt(channelVO);
+			//총 게시물
+			channelVO.setTotalListCnt(totcnt);
+			//총 페이지
+			channelVO.setTotalPageCnt((int) Math.ceil(channelVO.getTotalListCnt() * 1.0 / channelVO.getPageSize()));
+			//게시글 번호
+			channelVO.setStartIndex((channelVO.getPage() - 1) * channelVO.getBlockSize()); 
+			//시작 페이지 번호
+			channelVO.setStartPage(channelVO.getPage() - (channelVO.getPage() - 1) % channelVO.getBlockSize());
+			//끌 페이지 번호
+			channelVO.setEndPage(channelVO.getStartPage() + channelVO.getBlockSize() - 1);
+			//가져오는 게시물 인덱스 시작번호
+			channelVO.setStartIndex((channelVO.getPage() - 1) * channelVO.getPageSize());
+			
+			if(channelVO.getEndPage() > channelVO.getTotalPageCnt()) {
+				channelVO.setEndPage(channelVO.getTotalPageCnt());
 			}
 			
-			model.addAttribute("page", channelVO);
-			model.addAttribute("channelList", channelList);
+			List<ChannelVO> channelList = channelService.channelList(channelVO);
+			
+			UserVO userVO = (UserVO)session.getAttribute("loginUser");
+			
+			List<Integer> joinChannelList = channelService.joinChannelList(userVO);
+			
+			if(channelList == null) {
+				model.addAttribute("message", "검색 결과가 없습니다.");
+			}else {
+				for(int i=0; i<channelList.size(); i++) {
+					boolean joinSw = joinChannelList.contains(channelList.get(i).getChannelIdx());
+					
+					if(joinSw) {
+						channelList.get(i).setJoinCheck("T");
+					}
+				}
+				
+				model.addAttribute("page", channelVO);
+				model.addAttribute("channelList", channelList);
+			}
+			
+			return "channel/channel_list";
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("code", 401);
+			attributes.addAttribute("message", "정보를 불러오는 중 에러가 발생했습니다.");
+			
+			return "redirect:/error/errorMessage";
 		}
-		
-		return "channel/channel_list";
 	}
 	
 	//경기용 채널 검색 기능
@@ -146,46 +159,71 @@ public class ChannelController {
 				deleteDir.delete();
 			}
 			
-			attributes.addAttribute("message", "채널생성 중 에러가 발생했습니다.");
+			attributes.addAttribute("code", 402);
+			attributes.addAttribute("message", "채널 생성 중 에러가 발생했습니다.");
 			
-			return "redirect:";
+			return "redirect:/error/errorMessage";
 		}
 		return "redirect:";
 	}
 	
-	//채널 수정
-	@SuppressWarnings("static-access")
-	@RequestMapping(value = "channel/{channelIdx}", method = RequestMethod.PUT)
-	public String channelUpdate(@PathVariable Integer channelIdx, ChannelVO channelVO, @RequestParam("imageFile")MultipartFile imageFile, 
-			RedirectAttributes attributes) throws Exception {
+	//채널 수정 뷰
+	@RequestMapping(value = "/channel/view/{channelIdx}", method = RequestMethod.GET)
+	public String channelUpdateView(@PathVariable Integer channelIdx, Model model,
+			@RequestParam(required = false) String message) throws Exception {
+		ChannelVO channelVO = new ChannelVO();
 		channelVO.setChannelIdx(channelIdx);
 		
-		FileUtils saveDir = new FileUtils();
+		channelVO = channelService.selectChannel(channelVO);
+		List<RegionVO> regionList = regionService.regionList();
+		
+		model.addAttribute("channelVO", channelVO);
+		model.addAttribute("regionList", regionList);
+		
+		if(message != null) {
+			model.addAttribute("message", message);
+		}
+		
+		return "channel/channel_modify";
+	}
+	
+	//채널 수정
+	@SuppressWarnings("static-access")
+	@RequestMapping(value = "/channel/{channelIdx}", method = RequestMethod.PUT)
+	public String channelUpdate(@PathVariable Integer channelIdx, ChannelVO channelVO, 
+			@RequestParam(value = "imageFile", required = false)MultipartFile imageFile,
+			RedirectAttributes attributes) throws Exception {
+		channelVO.setChannelIdx(channelIdx);
 		
 		try {
 			Integer memberCount = memberService.memberCount(channelVO.getChannelIdx());
 			
 			if(channelVO.getChannelMax() < memberCount) {
 				attributes.addAttribute("message", "채널에 가입한 회원수가 수정하신 최대 멤버수를 초과합니다.");
-				return "redirect:";
+				
+				return "redirect:/channel/view/" + channelIdx;
 			}
 			
-			File deleteDir = new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx());
-			
-			if(deleteDir.exists()) {
-				deleteDir.delete();
+			if(!imageFile.isEmpty()) {
+				FileUtils saveDir = new FileUtils();
+				
+				File deleteDir = new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx());
+				
+				if(deleteDir.exists()) {
+					deleteDir.delete();
+				}
+				
+				saveDir.forceMkdir(new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx()));
+				
+				String fileName = imageFile.getOriginalFilename();
+				String saveImageFileDir = CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx() + "/" +  fileName;
+				
+				File saveImageFile = new File(saveImageFileDir); 
+				
+				imageFile.transferTo(saveImageFile);
+				
+				channelVO.setChannelImage(saveImageFileDir);
 			}
-			
-			saveDir.forceMkdir(new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx()));
-			
-			String fileName = imageFile.getOriginalFilename();
-			String saveImageFileDir = CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx() + "/" +  fileName;
-			
-			File saveImageFile = new File(saveImageFileDir); 
-			
-			imageFile.transferTo(saveImageFile);
-			
-			channelVO.setChannelImage(saveImageFileDir);
 			
 			channelService.channelUpdate(channelVO);
 			
@@ -193,16 +231,19 @@ public class ChannelController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			
-			File deleteDir = new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx());
-			if(deleteDir.exists()) {
-				deleteDir.delete();
+			if(!imageFile.isEmpty()) {
+				File deleteDir = new File(CHANNEL_IMAGE_DIR + "/" + channelVO.getChannelIdx());
+				
+				if(deleteDir.exists()) {
+					deleteDir.delete();
+				}
 			}
+			attributes.addAttribute("code", 403);
+			attributes.addAttribute("message", "채널 수정 중 에러가 발생했습니다.");
 			
-			attributes.addAttribute("message", "채널수정 중 에러가 발생했습니다.");
-			
-			return "redirect:";
+			return "redirect:/error/errorMessage";
 		}
-		return "redirect:";
+		return "redirect:/channel/member/" + channelIdx;
 	}
 	
 	//채널 상세
@@ -228,21 +269,29 @@ public class ChannelController {
 	@RequestMapping(value ="channel/viewResultColumn/{channelIdx}", method = RequestMethod.GET)
 	public String viewResultColumn(@PathVariable Integer channelIdx, HttpSession session, 
 			Model model, RedirectAttributes attributes) throws Exception{
-		UserVO loginUser = (UserVO)session.getAttribute("loginUser");
-		
-		ChannelVO channelVO = channelService.channelSelect(channelIdx);
-		
-		if(loginUser.getUserIdx() != channelVO.getChannelIdx()) {
-			attributes.addAttribute("message", "권한이 없습니다.");
+		try {
+			UserVO loginUser = (UserVO)session.getAttribute("loginUser");
 			
-			return "redirect:";
-		}else {
-			ViewResultColumnVO colVO = channelService.selectViewResultColumn(channelIdx);
+			ChannelVO channelVO = channelService.channelSelect(channelIdx);
 			
-			model.addAttribute("viewResultColumn", colVO);
+			if(loginUser.getUserIdx() != channelVO.getChannelIdx()) {
+				throw new Exception("404");
+			}else {
+				ViewResultColumnVO colVO = channelService.selectViewResultColumn(channelIdx);
+				
+				model.addAttribute("viewResultColumn", colVO);
+				
+				return "";
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
 			
-			return "";
-		}		
+			if(e.getMessage().equals("404")){
+				attributes.addAttribute("code", 404);
+				attributes.addAttribute("message", "권한이 없습니다.");
+			}
+			return "redirect:/error/errorMessage";
+		}
 	}
 	
 	//결과 컬럼 수정
@@ -258,7 +307,10 @@ public class ChannelController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			
+			attributes.addAttribute("code", 405);
 			attributes.addAttribute("message", "에러가 발생했습니다.");
+			
+			return "redirect:/error/errorMessage";
 		}
 		
 		return "redirect:";

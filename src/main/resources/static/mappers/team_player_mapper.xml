@@ -37,6 +37,9 @@
 		<result property="playresultTotalcontention" column="playresult_totalcontention"/>
 		<result property="playresultSuccesscontention" column="playresult_successcontention"/>
 		<result property="teamPlayerName" column="team_player_name"/>
+		<result property="teamType" column="team_type"/>
+		
+		<result property="teamName" column="team_name"/>
 	</resultMap>
 	
 	<resultMap type="com.soccer.web.channel.play.vo.TeamVO" id="teamVO">
@@ -204,8 +207,6 @@
 	<!-- 선수 목록에서 선수를 눌렀을 때 선수의 정보를 받아오는 쿼리문 -->
 	<select id="selectTeamPlayerDetail" parameterType="java.util.HashMap" resultMap="teamPlayerVO">
 		SELECT * FROM team_player 
-		INNER JOIN member
-			ON team_player.user_idx = member.user_idx
 		WHERE
 			channel_play_idx = #{channelPlayIdx}
 			AND team_player_idx = #{teamPlayerIdx}
@@ -351,6 +352,38 @@
 		WHERE team_player_idx = #{teamPlayeridx}
 	</select>
 	
+	<select id="resultList" parameterType="integer" resultMap="playresultVO">
+		SELECT
+			playresult.playresult_idx,
+			playresult.playresult_totaltackle,
+			playresult.playresult_successtackle,
+			playresult.playresult_totalcross,
+			playresult.playresult_successcross,
+			playresult.playresult_totalcornerkick,
+			playresult.playresult_successcornerkick,
+			playresult.playresult_totalfreekick,
+			playresult.playresult_successfreekick,
+			playresult.playresult_totalshooting,
+			playresult.playresult_successshooting,
+			playresult.playresult_totalassist,
+			playresult.playresult_successassist,
+			playresult.playresult_totalpass,
+			playresult.playresult_successpass,
+			playresult.playresult_totalcontention,
+			playresult.playresult_successcontention,
+			team.team_name,
+			team.team_type,
+			team_player.team_player_name
+		FROM playresult
+		INNER JOIN team
+			ON playresult.channel_play_idx = team.channel_play_idx
+				AND playresult.team_idx = team.team_idx
+		INNER JOIN team_player
+			ON team.team_idx = team_player.team_idx 
+				AND team.channel_play_idx = team_player.channel_play_idx
+				AND playresult.team_player_idx = team_player.team_player_idx
+		WHERE playresult.channel_play_idx = #{playIdx}
+	</select>
 	<select id="insertTeamPlayers" parameterType="java.util.HashMap">
 		INSERT INTO team_player 
 		VALUES 

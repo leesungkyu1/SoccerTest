@@ -1,5 +1,6 @@
 package com.soccer.web.channel.play.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -143,6 +144,14 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 				resultVO.setPlayresultSuccesscontention(tmpVO.getPlayresultSuccesscontention() + resultVO.getPlayresultSuccesscontention());
 			}
 		}
+		resultVO.setPlayresultTotaltackle((resultVO.getPlayresultSuccesstackle() * 100 / resultVO.getPlayresultTotaltackle()));
+		resultVO.setPlayresultTotalcross((resultVO.getPlayresultSuccesscross() * 100 / resultVO.getPlayresultTotalcross()));
+		resultVO.setPlayresultTotalcornerkick((resultVO.getPlayresultSuccesscornerkick() * 100 / resultVO.getPlayresultTotalcornerkick()));
+		resultVO.setPlayresultTotalfreekick((resultVO.getPlayresultSuccessfreekick() * 100 / resultVO.getPlayresultTotalfreekick()));
+		resultVO.setPlayresultTotalshooting((resultVO.getPlayresultSuccessshooting() * 100 / resultVO.getPlayresultTotalshooting()));
+		resultVO.setPlayresultTotalassist((resultVO.getPlayresultSuccessassist() * 100 / resultVO.getPlayresultTotalassist()) );
+		resultVO.setPlayresultTotalpass((resultVO.getPlayresultSuccesspass() * 100 / resultVO.getPlayresultTotalpass()) );
+		resultVO.setPlayresultTotalcontention((resultVO.getPlayresultSuccesscontention() * 100 / resultVO.getPlayresultTotalcontention()));
 		return resultVO;
 	}
 	
@@ -192,6 +201,7 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 				}
 			}
 		}
+		
 		return playerResultVO;
 	}
 	
@@ -217,6 +227,29 @@ public class TeamPlayerServiceImpl implements TeamPlayerService{
 		return teamPlayerMapper.selectPlayerresultVODetail(teamPlayerIdx);
 	}
 
+	@Override
+	public PlayresultVO resultList(Integer playIdx) throws Exception {
+		List<PlayresultVO> totalList = teamPlayerMapper.resultList(playIdx);
+		
+		List<PlayresultVO> homeList = new ArrayList<PlayresultVO>();
+		List<PlayresultVO> awayList = new ArrayList<PlayresultVO>();
+		
+		PlayresultVO totalResult = new PlayresultVO();
+		
+		for(int i=0; i<totalList.size(); i++) {
+			if(totalList.get(i).getTeamType().equals("H")) {
+				homeList.add(totalList.get(i));
+			}else {
+				awayList.add(totalList.get(i));
+			}
+		}
+		
+		totalResult.setHomeList(homeList);
+		totalResult.setAwayList(awayList);
+		
+		
+		return totalResult;
+	}
 	//기존
 //	@Override
 //	public void insertTeamPlayer(TeamPlayerVO teamPlayerVO) {

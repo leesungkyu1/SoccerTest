@@ -1,5 +1,7 @@
 package com.soccer.web.channel.play.vo;
 
+import java.util.List;
+
 import lombok.Data;
 
 public @Data class PlayresultVO {
@@ -31,9 +33,14 @@ public @Data class PlayresultVO {
 	private String channelImage;
 	private String teamName;
 	private String regionName;
+	private String teamType;
 	
 	private String teamPlayerName;
 	
 	private PlayresultVO home;
 	private PlayresultVO away;
+	
+	private List<PlayresultVO> homeList;
+	private List<PlayresultVO> awayList;
+	
 }

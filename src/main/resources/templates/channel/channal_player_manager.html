@@ -26,9 +26,9 @@
                     <h1 th:text=${channelVO.channelName}></h1>
                     <h2><span th:text=${channelVO.regionName}></span><span th:text="|(${channelVO.channelMemberCount}/${channelVO.channelMax})|"></span></h2>
 				</div>
-				<div class="right_menu ">
+				<div th:if="${session.loginUser.userIdx == channelVO.userIdx}" class="right_menu ">
 					<!-- 경로 지정해줘야 함 -->
-					<a href="#">채널수정
+					<a th:href="@{/channel/view/} + ${channelIdx}">채널수정
 						<div class="right_arrow right_arrowb"></div>
 					</a>
 					<a th:href="|@{/channel/play/}${channelIdx}@{/form}|">영상 업로드

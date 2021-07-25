@@ -179,10 +179,11 @@ header .row {
 }
 .page_left {
     background: url(../img/pageleft.png);
-    display: none;
+    display: list-item;
 }
 .page_right {
     background: url(../img/pageright.png);
+    display: list-item;
 }
 .page_numer {
     display: flex;

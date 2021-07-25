@@ -484,16 +484,19 @@ public class TeamPlayerController {
 			
 			PlayresultVO currentPlayresultVO = teamPlayerService.selectTeamPlayerCurrentResult(teamPlayerVO);
 			
+			// 이름 이미지
 			model.addAttribute("teamPlayerVO", teamPlayerVO);
+			//다섯경기 
 			model.addAttribute("currentPlayresultVO", currentPlayresultVO);
+			
+			System.out.println(currentPlayresultVO.getPlayresultTotalshooting());
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("message", "오류가 발생했습니다.");
 //			return "index";
 		}
 		
-		return "";
-//		return "test";
+		return "channel/channel_player_score_info";
 	}
 	
 	// 영상 게시글에 저장된 Player의 경기 기록을 보여주는 메서드

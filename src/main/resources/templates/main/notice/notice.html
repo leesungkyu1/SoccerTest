@@ -15,10 +15,8 @@
         <div class="container">
            <header>
                <div class="row">
-               		<!-- 링크 연결 필요 -->
                     <a th:href="|@{/main}|"><div class="lefrarrow"></div></a>
-                    <!-- 링크 연결 필요 -->
-                    <!-- <a th:href="@{/user/} + ${session.loginUser.userIdx}"> --><div class="my">MY</div><!-- </a> --> <!-- mypage url 연결 필요 -->
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
                </div>
            </header>
             <!-- 채널게시판 -->

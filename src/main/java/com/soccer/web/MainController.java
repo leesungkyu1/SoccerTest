@@ -25,9 +25,7 @@ import com.soccer.web.channel.play.service.ChannelPlayServiceImpl;
 import com.soccer.web.channel.play.vo.ChannelPlayVO;
 import com.soccer.web.channel.service.ChannelServiceImpl;
 import com.soccer.web.channel.vo.ChannelVO;
-import com.soccer.web.notice.service.NoticeService;
 import com.soccer.web.notice.service.NoticeServiceImpl;
-import com.soccer.web.notice.vo.NoticeDefaultVO;
 import com.soccer.web.notice.vo.NoticeVO;
 import com.soccer.web.user.vo.UserVO;
 
@@ -43,7 +41,7 @@ public class MainController {
 	@Autowired
 	NoticeServiceImpl noticeService;
 	
-	//로그인 페이지
+	//웰컴 페이지
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpSession session) throws Exception{
 		UserVO userVO = (UserVO)session.getAttribute("loginUser");
@@ -56,39 +54,49 @@ public class MainController {
 	}
 	
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
-	public String main (Model model, NoticeVO pageVO) throws Exception {
-		ChannelVO channelVO = new ChannelVO();
-		NoticeVO noticeVO = new NoticeVO();
-		
-		int totcnt = noticeService.selectNoticeListTotCnt(noticeVO);
-		
-		//총 게시물
-		pageVO.setTotalListCnt(totcnt);
-		//총 페이지
-		pageVO.setTotalPageCnt((int) Math.ceil(pageVO.getTotalListCnt() * 1.0 / pageVO.getPageSize()));
-		//게시글 번호
-		pageVO.setStartIndex((pageVO.getPage() - 1) * pageVO.getBlockSize()); 
-		//시작 페이지 번호
-		pageVO.setStartPage(pageVO.getPage() - (pageVO.getPage() - 1) % pageVO.getBlockSize());
-		//끌 페이지 번호
-		pageVO.setEndPage(pageVO.getStartPage() + pageVO.getBlockSize() - 1);
-		//가져오는 게시물 인덱스 시작번호
-		pageVO.setStartIndex((pageVO.getPage() - 1) * pageVO.getPageSize());
-		
-		if(pageVO.getEndPage() > pageVO.getTotalPageCnt()) {
-			pageVO.setEndPage(pageVO.getTotalPageCnt());
-		}
+	public String main (Model model, NoticeVO pageVO, RedirectAttributes attributes) throws Exception {
+		try {
+			ChannelVO channelVO = new ChannelVO();
+			NoticeVO noticeVO = new NoticeVO();
 			
-		List<ChannelVO> channelList = channelService.channelList(channelVO);
-		List<NoticeVO> noticeList = noticeService.selectNoticeList(pageVO);
-		List<NoticeVO> importantNoticeList = noticeService.selectImportantNoticeList(noticeVO);
+			int totcnt = noticeService.selectNoticeListTotCnt(noticeVO);
+			
+			//총 게시물
+			pageVO.setTotalListCnt(totcnt);
+			//총 페이지
+			pageVO.setTotalPageCnt((int) Math.ceil(pageVO.getTotalListCnt() * 1.0 / pageVO.getPageSize()));
+			//게시글 번호
+			pageVO.setStartIndex((pageVO.getPage() - 1) * pageVO.getBlockSize()); 
+			//시작 페이지 번호
+			pageVO.setStartPage(pageVO.getPage() - (pageVO.getPage() - 1) % pageVO.getBlockSize());
+			//끌 페이지 번호
+			pageVO.setEndPage(pageVO.getStartPage() + pageVO.getBlockSize() - 1);
+			//가져오는 게시물 인덱스 시작번호
+			pageVO.setStartIndex((pageVO.getPage() - 1) * pageVO.getPageSize());
+			
+			if(pageVO.getEndPage() > pageVO.getTotalPageCnt()) {
+				pageVO.setEndPage(pageVO.getTotalPageCnt());
+			}
+				
+			List<ChannelVO> channelList = channelService.channelList(channelVO);
+			List<NoticeVO> noticeList = noticeService.selectNoticeList(pageVO);
+			List<NoticeVO> importantNoticeList = noticeService.selectImportantNoticeList(noticeVO);
+			
+			model.addAttribute("channelList", channelList);
+			model.addAttribute("noticeList", noticeList);
+			model.addAttribute("importantNoticeList",importantNoticeList);
+			model.addAttribute("page", pageVO);
+			
+			return "main/main";
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			attributes.addAttribute("code", 001);
+			attributes.addAttribute("message", "에러가 발생했습니다.");
+			
+			return "redirect:/error/errorMessage";
+		}
 		
-		model.addAttribute("channelList", channelList);
-		model.addAttribute("noticeList", noticeList);
-		model.addAttribute("importantNoticeList",importantNoticeList);
-		model.addAttribute("page", pageVO);
-		
-		return "main/main";
 	}
 	
 	@ResponseBody

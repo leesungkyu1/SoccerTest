@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/channel_video_player_record.css}">
+    <title>축구 플랫폼</title>
+</head>
+<body>
+    <section id="full">
+        <div class="container">
+           <header>
+               <div class="row">
+                    <div class="lefrarrow"></div>
+                    <a th:href="@{/user/} + ${session.loginUser.userIdx}"><div class="my">MY</div></a>
+               </div>
+           </header>
+			<form th:action="@{/channel/play/result/} + ${playIdx}" method="post">
+				<!-- 선수별 기록 -->
+				<div th:if="${result.homeList != null}" id="player_record">
+				    <div class="row">
+				        <div class="subtitle_line">
+				            <h1 class="subtitle">선수별기록</h1>
+				        </div>
+				        <h1 th:text=${result.homeList[0].teamName} class="subtitle"></h1>
+				    </div>
+				    <div class="player_record_table">
+				        <div class="table slide">
+				            <ul>
+				                <li></li>
+				                <li>총 태클</li>
+				                <li>성공 태클</li>
+				                <li>총 크로스</li>
+				                <li>성공 크로스</li>
+				                <li>총 코너킥</li>
+				                <li>성공 코너킥</li>
+				                <li>총 프리킥</li>
+				                <li>성공 프리킥</li>
+				                <li>총 슈팅</li>
+				                <li>성공 슈팅</li>
+				                <li>총 어시스트</li>
+				                <li>성공 어시스트</li>
+				                <li>총 패스</li>
+				                <li>성공 패스</li>
+				                <li>총 경합</li>
+				                <li>성공 경합</li>
+				            </ul>
+				            <ul th:each="player : ${result.homeList}">
+				                <li th:text=${player.teamPlayerName}></li>
+				                <li><input type="number" name="playresultTotaltackle" th:value="${player.playresultTotaltackle}" min='0'></li>
+				                <li><input type="number" name="playresultSuccesstackle" th:value="${player.playresultSuccesstackle}" min='0'></li>
+				                <li><input type="number" name="playresultTotalcross" th:value="${player.playresultTotalcross}" min='0'></li>
+				                <li><input type="number" name="playresultSuccesscross" th:value="${player.playresultSuccesscross}" min='0'></li>
+				                <li><input type="number" name="playresultTotalcornerkick" th:value="${player.playresultTotalcornerkick}" min='0'></li>
+				                <li><input type="number" name="playresultSuccesscornerkick" th:value="${player.playresultSuccesscornerkick}" min='0'></li>
+				                <li><input type="number" name="playresultTotalfreekick" th:value="${player.playresultTotalfreekick}" min='0'></li>
+				                <li><input type="number" name="playresultSuccessfreekick" th:value="${player.playresultSuccessfreekick}" min='0'></li>
+				                <li><input type="number" name="playresultTotalshooting" th:value="${player.playresultTotalshooting}" min='0'></li>
+				                <li><input type="number" name="playresultSuccessshooting" th:value="${player.playresultSuccessshooting}" min='0'></li>
+				                <li><input type="number" name="playresultTotalassist" th:value="${player.playresultTotalassist}" min='0'></li>
+				                <li><input type="number" name="playresultSuccessassist" th:value="${player.playresultSuccessassist}" min='0'></li>
+				                <li><input type="number" name="playresultTotalpass" th:value="${player.playresultTotalpass}" min='0'></li>
+				                <li><input type="number" name="playresultSuccesspass" th:value="${player.playresultSuccesspass}" min='0'></li>
+				                <li><input type="number" name="playresultTotalcontention" th:value="${player.playresultTotalcontention}" min='0'></li>
+				                <li>
+				                	<input type="number" name="playresultSuccesscontention" th:value="${player.playresultSuccesscontention}" min='0'>
+				                	<input type="hidden" name="playresultIdx" th:value="${player.playresultIdx}"/>
+				                </li>
+				            </ul>
+				        </div>
+				    </div>
+				    <div th:if="${result.awayList != null}">
+					    <div class="row">
+					        <div class="subtitle_line">
+					        </div>
+					        <h1 th:text=${result.awayList[0].teamName} class="subtitle"></h1>
+					    </div>
+					    <div class="player_record_table">
+					        <div class="table slide">
+					            <ul>
+					                <li></li>
+					                <li>총 태클</li>
+					                <li>성공 태클</li>
+					                <li>총 크로스</li>
+					                <li>성공 크로스</li>
+					                <li>총 코너킥</li>
+					                <li>성공 코너킥</li>
+					                <li>총 프리킥</li>
+					                <li>성공 프리킥</li>
+					                <li>총 슈팅</li>
+					                <li>성공 슈팅</li>
+					                <li>총 어시스트</li>
+					                <li>성공 어시스트</li>
+					                <li>총 패스</li>
+					                <li>성공 패스</li>
+					                <li>총 경합</li>
+					                <li>성공 경합</li>
+					            </ul>
+					            <ul th:each="player : ${result.awayList}">
+					                <li th:text=${player.teamPlayerName}></li>
+					                <li><input type="number" name="playresultTotaltackle" th:value="${player.playresultTotaltackle}" min='0'></li>
+					                <li><input type="number" name="playresultSuccesstackle" th:value="${player.playresultSuccesstackle}" min='0'></li>
+					                <li><input type="number" name="playresultTotalcross" th:value="${player.playresultTotalcross}" min='0'></li>
+					                <li><input type="number" name="playresultSuccesscross" th:value="${player.playresultSuccesscross}" min='0'></li>
+					                <li><input type="number" name="playresultTotalcornerkick" th:value="${player.playresultTotalcornerkick}" min='0'></li>
+					                <li><input type="number" name="playresultSuccesscornerkick" th:value="${player.playresultSuccesscornerkick}" min='0'></li>
+					                <li><input type="number" name="playresultTotalfreekick" th:value="${player.playresultTotalfreekick}" min='0'></li>
+					                <li><input type="number" name="playresultSuccessfreekick" th:value="${player.playresultSuccessfreekick}" min='0'></li>
+					                <li><input type="number" name="playresultTotalshooting" th:value="${player.playresultTotalshooting}" min='0'></li>
+					                <li><input type="number" name="playresultSuccessshooting" th:value="${player.playresultSuccessshooting}" min='0'></li>
+					                <li><input type="number" name="playresultTotalassist" th:value="${player.playresultTotalassist}" min='0'></li>
+					                <li><input type="number" name="playresultSuccessassist" th:value="${player.playresultSuccessassist}" min='0'></li>
+					                <li><input type="number" name="playresultTotalpass" th:value="${player.playresultTotalpass}" min='0'></li>
+					                <li><input type="number" name="playresultSuccesspass" th:value="${player.playresultSuccesspass}" min='0'></li>
+					                <li><input type="number" name="playresultTotalcontention" th:value="${player.playresultTotalcontention}" min='0'></li>
+					                <li>
+					                	<input type="number" name="playresultSuccesscontention" th:value="${player.playresultSuccesscontention}" min='0'>
+					                	<input type="hidden" name="playresultIdx" th:value="${player.playresultIdx}"/>
+					                </li>
+					            </ul>
+					        </div>
+						</div>
+				    </div>
+				    <div class="row">
+				    	<input type="hidden" name="_method" value="put"/>
+				        <button type="submit" class="main_btn btn_yellow">수정완료</button>
+				    </div>
+				</div>
+			</form>
+            <!-- 입력창 -->
+            <div class="modal">
+                <input type="text" class="main_input" placeholder="선수이름을 입력해주세요">
+                <button class="main_btn btn_yellow">선수추가</button>
+            </div>
+            <div class="blur_shadow"></div>
+        
+            <div id="footer">
+                <div class="footer_line"></div>
+                <div class="row">
+                    <h1>사업자등록증 : </h1>
+                    <h1>대표이름 : </h1>
+                    <h1>전화번호 : </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script th:src="@{/js/modal.js}"></script>
+    <script th:src="@{/js/slide.js}"></script>
+</body>
+</html>

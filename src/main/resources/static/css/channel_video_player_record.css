@@ -20,6 +20,7 @@
     flex-wrap: nowrap;
     flex-direction: row;
     border-bottom: 1px solid rgba(255,255,255,0.3);
+    width: fit-content;
 }
 .player_record_table ul li {
     color: #fff;
